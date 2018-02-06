@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/highlights_layout_content_padding">
+
+    <TextView
+        android:id="@+id/headline_text_id"
+        style="@style/ConstraintTopCenterHorizontalStyle"
+        android:layout_width="@dimen/match_constraint_0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/highlightsHeadlineTextColor"
+        android:textSize="@dimen/headline_text_size"
+        android:textStyle="bold"
+        tools:text="News since Yesterday" />
+
+    <View
+        android:id="@+id/content_div_id"
+        style="@style/ConstraintCenterHorizontalStyle"
+        android:layout_width="@dimen/match_constraint_0dp"
+        android:layout_height="@dimen/headline_content_div_height"
+        android:layout_marginTop="@dimen/headline_item_8dip_margin"
+        android:background="@color/highlightsHeadlineTextColor"
+        app:layout_constraintTop_toBottomOf="@+id/headline_text_id" />
+
+    <include
+        android:id="@+id/swipe_container_id"
+        style="@style/ConstraintCenterHorizontalStyle"
+        layout="@layout/refreshable_recycler_layout"
+        android:layout_width="@dimen/match_constraint_0dp"
+        android:layout_height="@dimen/match_constraint_0dp"
+        android:layout_marginTop="@dimen/headline_item_8dip_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content_div_id" />
+
+</android.support.constraint.ConstraintLayout>

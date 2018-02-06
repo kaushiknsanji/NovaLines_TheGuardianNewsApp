@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nav_header_root"
+    android:layout_width="@dimen/nav_header_width"
+    android:layout_height="@dimen/nav_header_height"
+    android:background="@drawable/novalines_header">
+
+    <TextView
+        android:id="@+id/nav_header_text_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/navHeaderTextBackgroundColor"
+        android:paddingBottom="@dimen/nav_header_text_pad_bottom"
+        android:paddingEnd="@dimen/nav_header_text_pad_right"
+        android:paddingLeft="@dimen/nav_header_text_pad_left"
+        android:paddingRight="@dimen/nav_header_text_pad_right"
+        android:paddingStart="@dimen/nav_header_text_pad_left"
+        android:paddingTop="@dimen/nav_header_text_pad_top"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small.Inverse"
+        android:textColor="@android:color/background_light" />
+
+</RelativeLayout>

@@ -1,0 +1,238 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Name of the App -->
+    <string name="app_name">NovaLines</string>
+
+    <!-- ID's of the Fixed set of News Topics -->
+    <string name="top_stories_section_id" translatable="false">editorsPicks</string>
+    <string name="most_visited_section_id" translatable="false">mostViewed</string>
+    <string name="world_news_section_id" translatable="false">world</string>
+
+    <!-- Names of the Fixed set of News Topics -->
+    <string name="top_stories_section_name">Top Stories</string>
+    <string name="most_visited_section_name">Most Visited</string>
+    <string name="world_news_section_name">World news</string>
+
+    <!-- Query Parameter Key to filter the required content from the results -->
+    <string name="show_fields_parameter" translatable="false">show-fields</string>
+    <!-- Query Parameter Key to list only the Editors' Picks -->
+    <string name="editor_picks_parameter" translatable="false">show-editors-picks</string>
+    <!-- Query Parameter Key to list only the Most Viewed content -->
+    <string name="most_viewed_parameter" translatable="false">show-most-viewed</string>
+
+    <!-- Text shown when the view/activity is not implemented -->
+    <string name="not_implemented_text_info">Not Implemented</string>
+
+    <!-- ===================================== -->
+    <!-- STRINGS USED IN THE NAVIGATION DRAWER -->
+    <!-- ===================================== -->
+
+    <!-- Title used for Settings Navigation Menu -->
+    <string name="settings_title_str">Settings</string>
+
+    <!-- Title used for About Navigation Menu -->
+    <string name="about_title_str">About</string>
+
+    <!-- Title used for Headlines Navigation Menu -->
+    <string name="headlines_title_str">Headlines</string>
+
+    <!-- Title used for Bookmarked News Navigation Menu -->
+    <string name="bookmarked_news_title_str">Bookmarked News</string>
+
+    <!-- Title used for Favorited News Navigation Menu -->
+    <string name="favorites_title_str">Favorited News</string>
+
+    <!-- A String resource to describe the "open drawer" action for accessibility -->
+    <string name="drawer_open">Open navigation drawer</string>
+
+    <!-- A String resource to describe the "close drawer" action for accessibility -->
+    <string name="drawer_close">Close navigation drawer</string>
+
+
+    <!-- =================== -->
+    <!-- PREFERENCES STRINGS -->
+    <!-- =================== -->
+
+    <!-- Title shown for the Sort Results Preference Category -->
+    <string name="pref_sort_results_category_title">Sort Results</string>
+
+    <!-- Key used for the "Sort by" Preference setting -->
+    <string name="pref_sort_by_key" translatable="false">order-by</string>
+
+    <!-- Title used for the "Sort by" Preference setting -->
+    <string name="pref_sort_by_title">Sort by</string>
+
+    <!-- Dialog Title used for the "Sort by" Preference setting -->
+    <string name="pref_sort_by_dialog_title">Select on how you wish the results to be sorted</string>
+
+    <!-- Default value for the "Sort by" Preference setting -->
+    <string name="pref_sort_by_default" translatable="false">newest</string>
+
+    <!-- Key used for the "Sort based on" Preference setting -->
+    <string name="pref_sort_on_key" translatable="false">order-date</string>
+
+    <!-- Title used for the "Sort based on" Preference setting -->
+    <string name="pref_sort_on_title">Sort based on</string>
+
+    <!-- Dialog Title used for the "Sort based on" Preference setting -->
+    <string name="pref_sort_on_dialog_title">Select the type of date used for sorting the results</string>
+
+    <!-- Default value for the "Sort based on" Preference setting -->
+    <string name="pref_sort_on_default" translatable="false">published</string>
+
+    <!-- Title shown for the Pagination Preference Category -->
+    <string name="pref_pagination_category_title">Pagination</string>
+
+    <!-- Key used for the "News items per page" Preference setting -->
+    <string name="pref_items_per_page_key" translatable="false">page-size</string>
+
+    <!-- Title used for the "News items per page" Preference setting -->
+    <string name="pref_items_per_page_title">News items per page</string>
+
+    <!-- Dialog Title used for the "News items per page" Preference setting -->
+    <string name="pref_items_per_page_dialog_title">Select the number of News items to show in a page</string>
+
+    <!-- Title shown for the Start Period Preference Category -->
+    <string name="pref_start_period_category_title">Start Period for the News</string>
+
+    <!-- Key used for the "Start Period Preset/Manual" Preference setting -->
+    <string name="pref_start_period_manual_override_key" translatable="false">start-period-manual-override</string>
+
+    <!-- Title shown for the "Start Period Preset/Manual" Preference setting -->
+    <string name="pref_start_period_manual_override_title">Start Period Preset/Manual</string>
+
+    <!-- Key used for the "Preset Start Period" Preference setting -->
+    <string name="pref_start_period_preset_key" translatable="false">start-period-preset</string>
+
+    <!-- Title shown for the "Preset Start Period" Preference setting -->
+    <string name="pref_start_period_preset_title">Preset Start Period</string>
+
+    <!-- Dialog Title used for the "Preset Start Period" Preference setting -->
+    <string name="pref_start_period_preset_dialog_title">Preset Start Period to</string>
+
+    <!-- Default value for the "Preset Start Period" Preference setting -->
+    <string name="pref_start_period_preset_default">Start of the Week</string>
+
+    <!-- Key used for the "Buffer to Start Period" Preference setting -->
+    <string name="pref_start_period_buffer_key" translatable="false">start-period-buffer</string>
+
+    <!-- Title shown for the "Buffer to Start Period" Preference setting -->
+    <string name="pref_start_period_buffer_title">Buffer to Start Period</string>
+
+    <!-- Dialog Title used for the "Buffer to Start Period" Preference setting -->
+    <string name="pref_start_period_buffer_dialog_title">Buffer days prior to start period</string>
+
+    <!-- Key used for the "Specify Start Period" Preference setting -->
+    <string name="pref_start_period_manual_key" translatable="false">from-date</string>
+
+    <!-- Title shown for the "Specify Start Period" Preference setting -->
+    <string name="pref_start_period_manual_title">Specify Start Period</string>
+
+    <!-- Dialog Title used for the "Specify Start Period" Preference setting -->
+    <string name="pref_start_period_manual_dialog_title">Manually pick the Start Period</string>
+
+    <!-- Predetermined Date Summary shown on the "Start Period Preset/Manual" Preference setting -->
+    <string name="predetermined_date_summary_text">
+        <!-- Output will be like 'Preset: January 01, 2017' -->
+        Preset: <xliff:g id="date_str">%1$s</xliff:g>
+    </string>
+
+    <!-- Manually set Date Summary shown on the "Start Period Preset/Manual" Preference setting -->
+    <string name="manual_date_summary_text">
+        <!-- Output will be like 'Manual: January 01, 2017' -->
+        Manual: <xliff:g example="January 01, 2017" id="date_str">%1$s</xliff:g>
+    </string>
+
+    <!-- Summary shown on the "Buffer to Start Period" Preference setting -->
+    <string name="buffer_days_summary_text">
+        <!-- Output will be like '7 days' -->
+        <xliff:g example="7" id="buffer_days">%1$d</xliff:g> days
+    </string>
+
+    <!-- Key used for the "Page to Display" Preference setting
+    which is not shown in the settings screen -->
+    <string name="pref_page_index_key" translatable="false">page</string>
+
+    <!-- Key used for the Maximum value of the "Page To Display" preference setting
+    which is not shown in the settings screen -->
+    <string name="pref_page_max_value_key" translatable="false">endIndex</string>
+
+    <!-- Key used for saving the current day's date which is not shown in the settings screen -->
+    <string name="pref_today_date_key" translatable="false">date-today</string>
+
+    <!-- =========================================== -->
+    <!-- STRINGS USED IN THE HIGHLIGHTS FRAGMENT TAB -->
+    <!-- =========================================== -->
+
+    <!-- Title used for Highlights Fragment Tab -->
+    <string name="highlights_title_str">Highlights</string>
+
+    <!-- Text shown above the RecyclerView of News Highlight items -->
+    <string name="news_headline_text">
+        <!-- Output will be like 'News since January 01, 2017' -->
+        News since <xliff:g example="January 01, 2017" id="date_str">%1$s</xliff:g>
+    </string>
+
+    <!-- ========================================= -->
+    <!-- STRINGS USED IN THE ARTICLES FRAGMENT TAB -->
+    <!-- ========================================= -->
+
+    <!-- Default message shown when no authors are found for the Article -->
+    <string name="no_authors_found_default_text">Anonymous</string>
+
+    <!-- Default message shown when the Published Date of the Article is not available -->
+    <string name="no_published_date_default_text">Unknown Date</string>
+
+    <!-- =========================================== -->
+    <!-- STRINGS USED IN THE HIGHLIGHTS FRAGMENT TAB -->
+    <!-- =========================================== -->
+    <string name="hl_new_stories_text_line">New Stories in</string>
+
+    <!-- =========================== -->
+    <!-- STRINGS USED FOR PAGINATION -->
+    <!-- =========================== -->
+
+    <!-- Text shown on the Pagination Number Picker Dialog's Negative Action Button [CHAR LIMIT=8]-->
+    <string name="page_number_picker_cancel_button_text">Cancel</string>
+
+    <!-- Text shown on the Pagination Number Picker Dialog's Positive Action Button [CHAR LIMIT=8]-->
+    <string name="page_number_picker_set_button_text">Set</string>
+
+    <!-- Title Text shown on the Pagination Number Picker Dialog [CHAR LIMIT=15]-->
+    <string name="page_number_picker_title_text">Jump to Page</string>
+
+    <!-- Message displayed when first page is being shown on click of button 'R.id.page_first_button_id' -->
+    <string name="navigate_page_first_msg">Loading the First page…</string>
+
+    <!-- Message displayed when last page is being shown on click of button 'R.id.page_last_button_id' -->
+    <string name="navigate_page_last_msg">Loading the Last page…</string>
+
+    <!-- Message displayed when a page is being shown on click of buttons 'R.id.page_previous_button_id' & 'R.id.page_next_button_id' -->
+    <string name="navigate_page_x_msg">Loading Page <xliff:g example="1" id="page_number">%1$d</xliff:g>…</string>
+
+    <!-- Message displayed when a particular selected page is being shown on click of button 'R.id.page_more_button_id' -->
+    <string name="navigate_page_sel_msg">Loading Selected Page <xliff:g example="1" id="page_number">%1$d</xliff:g>…</string>
+
+    <!-- ========================================== -->
+    <!-- STRINGS USED IN THE BOOKMARKED NEWS LAYOUT -->
+    <!-- ========================================== -->
+    <string name="bookmark_no_results_text">This page displays the News Articles bookmarked for reading later. To Bookmark an Article, click the &lt;b&gt;menu options icon&lt;/b&gt; [ic_news_item_popup_menu] on any News Article\'s Card and select &lt;b&gt;Read later&lt;/b&gt;.</string>
+
+    <!-- ========================================= -->
+    <!-- STRINGS USED IN THE FAVORITED NEWS LAYOUT -->
+    <!-- ========================================= -->
+    <string name="favorite_no_results_text">This page displays the News Articles you liked. To Favorite an Article, click the &lt;b&gt;menu options icon&lt;/b&gt; [ic_news_item_popup_menu] on any News Article\'s Card and select &lt;b&gt;Favorite this&lt;/b&gt;.</string>
+
+    <!-- ======================================== -->
+    <!-- STRINGS USED IN THE NETWORK ERROR LAYOUT -->
+    <!-- ======================================== -->
+    <string name="nw_error_title_text">Network Error</string>
+    <string name="nw_error_text_msg">Seems like there is an issue with the network connectivity.\n\nCheck whether the Airplane mode is Active, [ic_airplanemode_active] may be seen in the above status bar. Turn this OFF if it is seen.\n\nValidate the Network settings and visit us back once done.</string>
+    <string name="nw_error_settings_btn_text">Check Network</string>
+
+    <!-- ==================================== -->
+    <!-- STRINGS USED IN THE "NO FEED LAYOUT" -->
+    <!-- ==================================== -->
+    <string name="no_feed_reason_text">This can happen due to the following reasons -</string>
+
+
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/InfoCardStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/info_card_text_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/info_card_text_content_padding"
+        android:textColor="@color/defaultBackgroundColor"
+        android:textSize="@dimen/info_card_text_size"
+        android:textStyle="bold"
+        tools:drawableLeft="@drawable/ic_info_outline_orange"
+        tools:drawablePadding="@dimen/info_card_text_drawable_padding"
+        tools:drawableStart="@drawable/ic_info_outline_orange"
+        tools:text="@string/not_implemented_text_info" />
+
+</android.support.v7.widget.CardView>

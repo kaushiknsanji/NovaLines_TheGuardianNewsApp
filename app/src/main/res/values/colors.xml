@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ================ -->
+    <!-- APP THEME COLORS -->
+    <!-- ================ -->
+    <color name="colorPrimary">#0D7CAD</color>
+    <color name="colorPrimaryDark">#00507D</color>
+    <color name="colorAccent">#FF4081</color>
+    <!-- Default Background color used in the App -->
+    <color name="defaultBackgroundColor">#F2F2F2</color>
+
+    <!-- ==================== -->
+    <!-- VIEWPAGER TAB COLORS -->
+    <!-- ==================== -->
+    <color name="tabIndicatorColor">#DDFFFF</color>
+    <color name="tabTextColor">#AAD8F1</color>
+
+    <!-- ======================== -->
+    <!-- NAVIGATION DRAWER COLORS -->
+    <!-- ======================== -->
+    <!-- For the Navigation Header Text background -->
+    <color name="navHeaderTextBackgroundColor">#BF484F53</color>
+    <!-- For the Navigation Drawer background -->
+    <color name="navBackgroundColor">#484F53</color>
+    <!-- For the Navigation Item Divider -->
+    <color name="navDividerColor">#EAE8E3</color>
+    <!-- For the Navigation Icons when selected -->
+    <color name="bookmarksIconColorGreen700">#388e3c</color>
+    <color name="favoritesIconColorRed500">#f44336</color>
+    <color name="newspaperIconColorIndigo700">#303f9f</color>
+    <color name="settingsIconColorPurple700">#7b1fa2</color>
+    <color name="aboutIconColorPink700">#c2185b</color>
+
+    <!-- ============================== -->
+    <!-- NEWS HIGHLIGHTS CONTENT COLORS -->
+    <!-- ============================== -->
+    <color name="highlightsHeadlineTextColor">#484F53</color>
+
+    <!-- ============================ -->
+    <!-- NEWS ARTICLES CONTENT COLORS -->
+    <!-- ============================ -->
+    <color name="newsSectionTextColor">#B82266</color>
+    <color name="newsTrialTextColor">#0D7CAD</color>
+    <color name="newsTitleTextColor">#00507D</color>
+    <color name="newsPublisherTextColor">#333333</color>
+    <color name="newsDateTextColorTeal900">#004D40</color>
+
+    <!-- ========================= -->
+    <!-- PAGINATION BUTTONS COLORS -->
+    <!-- ========================= -->
+    <color name="paginationButtonColorYellow">#ffe500</color>
+    <color name="paginationButtonColorGrey900">#212121</color>
+    <color name="paginationNumberPickerColorYellow50">#fffde7</color>
+    <color name="paginationButtonIconDisabledColorGrey">#808080</color>
+    <color name="paginationButtonDisabledColorGrey400">#bdbdbd</color>
+
+    <!-- ================== -->
+    <!-- APP DIALOGS COLORS -->
+    <!-- ================== -->
+    <color name="dialogBackgroundGradEndColor">#1c92d2</color>
+    <color name="dialogBackgroundGradStartColor">#f2fcfe</color>
+    <color name="dialogBackgroundBorderColor">#1178b1</color>
+    <color name="dialogButtonTextColor">#00507D</color>
+
+    <!-- ==================== -->
+    <!-- SWIPE REFRESH COLORS -->
+    <!-- ==================== -->
+    <color name="colorGreen500">#4caf50</color>
+    <color name="colorIndigo500">#3f51b5</color>
+    <color name="colorPurple500">#9c27b0</color>
+    <color name="colorPink500">#e91e63</color>
+
+    <!-- Color used as a background for info card items -->
+    <color name="infoCardBackgroundColor">#484F53</color>
+    <!-- Color used for the Text shown in Bookmarked News Layout for No results condition -->
+    <color name="bookmarkMsgTextColor">#484F53</color>
+    <!-- Color used for the Text shown in Favorited News Layout for No results condition -->
+    <color name="favMsgTextColor">#484F53</color>
+
+
+</resources>

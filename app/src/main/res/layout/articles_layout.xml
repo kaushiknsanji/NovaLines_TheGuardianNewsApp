@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/articles_layout_content_padding">
+
+    <!-- Including the RecyclerView contained in a SwipeRefreshLayout -->
+    <include
+        android:id="@+id/swipe_container_id"
+        style="@style/ConstraintCenterInParentStyle"
+        layout="@layout/refreshable_recycler_layout"
+        android:layout_width="@dimen/match_constraint_0dp"
+        android:layout_height="@dimen/match_constraint_0dp" />
+
+</android.support.constraint.ConstraintLayout>

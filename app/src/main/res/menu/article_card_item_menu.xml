@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/read_later_action_id"
+        android:orderInCategory="1"
+        android:title="Read later" />
+
+    <item
+        android:id="@+id/mark_fav_action_id"
+        android:orderInCategory="2"
+        android:title="Favorite this" />
+
+    <item
+        android:id="@+id/jump_section_action_id"
+        android:orderInCategory="3"
+        android:title="Open News Section" />
+</menu>

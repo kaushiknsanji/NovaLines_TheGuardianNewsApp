@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pagination_panel_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageButton
+        android:id="@+id/page_first_button_id"
+        style="@style/PaginationButtonStyle"
+        android:src="@drawable/ic_page_first_button"
+        app:layout_constraintEnd_toStartOf="@+id/page_previous_button_id"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/page_previous_button_id"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/page_previous_button_id"
+        style="@style/PaginationButtonStyle"
+        android:src="@drawable/ic_page_previous_button"
+        app:layout_constraintEnd_toStartOf="@+id/page_more_button_id"
+        app:layout_constraintLeft_toRightOf="@id/page_first_button_id"
+        app:layout_constraintRight_toLeftOf="@+id/page_more_button_id"
+        app:layout_constraintStart_toEndOf="@id/page_first_button_id" />
+
+    <ImageButton
+        android:id="@+id/page_more_button_id"
+        style="@style/PaginationButtonStyle"
+        android:src="@drawable/ic_page_more_button"
+        app:layout_constraintEnd_toStartOf="@+id/page_next_button_id"
+        app:layout_constraintLeft_toRightOf="@id/page_previous_button_id"
+        app:layout_constraintRight_toLeftOf="@+id/page_next_button_id"
+        app:layout_constraintStart_toEndOf="@id/page_previous_button_id" />
+
+    <ImageButton
+        android:id="@+id/page_next_button_id"
+        style="@style/PaginationButtonStyle"
+        android:src="@drawable/ic_page_next_button"
+        app:layout_constraintEnd_toStartOf="@+id/page_last_button_id"
+        app:layout_constraintLeft_toRightOf="@id/page_more_button_id"
+        app:layout_constraintRight_toLeftOf="@+id/page_last_button_id"
+        app:layout_constraintStart_toEndOf="@id/page_more_button_id" />
+
+    <ImageButton
+        android:id="@+id/page_last_button_id"
+        style="@style/PaginationButtonStyle"
+        android:src="@drawable/ic_page_last_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/page_next_button_id"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@id/page_next_button_id" />
+
+</android.support.constraint.ConstraintLayout>

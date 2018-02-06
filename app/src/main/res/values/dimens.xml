@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- MATCH CONSTRAINT Dimension used for ConstraintLayouts -->
+    <dimen name="match_constraint_0dp">0dp</dimen>
+
+    <!-- Material Dimensions for Dialogs -->
+    <dimen name="material_dialog_padding">24dp</dimen>
+    <dimen name="material_dialog_title_body_padding">20dp</dimen>
+
+    <!-- For the icon buttons -->
+    <dimen name="std_btn_size_48dip">48dp</dimen>
+
+    <!-- For the caption images -->
+    <dimen name="caption_image_size">132dp</dimen>
+
+    <!-- For any 0dp margins mentioned as goneMargin -->
+    <dimen name="zero_gone_margin_size">0dp</dimen>
+
+    <!-- For the NumberPicker used in both Pagination & Settings -->
+    <dimen name="number_picker_min_width">68dp</dimen>
+
+    <!-- ======================================= -->
+    <!-- FOR THE NAVIGATION HEADER OF THE DRAWER -->
+    <!-- ======================================= -->
+    <!-- Navigation Header Image dimensions -->
+    <dimen name="nav_header_height">192dp</dimen>
+    <dimen name="nav_header_width">280dp</dimen>
+    <dimen name="nav_header_text_pad_left">16dp</dimen>
+    <dimen name="nav_header_text_pad_right">16dp</dimen>
+    <dimen name="nav_header_text_pad_top">4dp</dimen>
+    <dimen name="nav_header_text_pad_bottom">4dp</dimen>
+
+    <!-- ===================================== -->
+    <!-- FOR THE NAVIGATION ITEM OF THE DRAWER -->
+    <!-- ===================================== -->
+    <dimen name="nav_item_icon_square_size">24dp</dimen>
+    <dimen name="nav_item_content_padding">16dp</dimen>
+    <dimen name="nav_item_text_margin_left">16dp</dimen>
+    <dimen name="nav_item_text_size">16sp</dimen>
+
+    <!-- ============================================= -->
+    <!-- FOR THE NAVIGATION ITEM DIVIDER OF THE DRAWER -->
+    <!-- ============================================= -->
+    <dimen name="nav_item_div_pad_top">8dp</dimen>
+    <dimen name="nav_item_div_pad_bottom">8dp</dimen>
+    <dimen name="nav_item_div_pad_left">16dp</dimen>
+    <dimen name="nav_item_div_pad_right">16dp</dimen>
+    <dimen name="nav_item_div_height">2dp</dimen>
+
+    <!-- ====================================== -->
+    <!-- FOR THE NUMBER PICKER USED IN SETTINGS -->
+    <!-- ====================================== -->
+    <dimen name="pref_number_picker_margin_top">20dp</dimen>
+    <dimen name="pref_number_picker_margin_bottom">20dp</dimen>
+
+    <!-- ==================================== -->
+    <!-- FOR THE DATE PICKER USED IN SETTINGS -->
+    <!-- ==================================== -->
+    <dimen name="pref_date_picker_margin_top">20dp</dimen>
+    <dimen name="pref_date_picker_margin_bottom">20dp</dimen>
+
+    <!-- ====================== -->
+    <!-- FOR THE CUSTOM TOOLBAR -->
+    <!-- ====================== -->
+    <dimen name="toolbar_title_text_size">21sp</dimen>
+    <dimen name="app_bar_elevation">4dp</dimen>
+
+    <!-- ======================== -->
+    <!-- FOR THE CARDS IN THE APP -->
+    <!-- ======================== -->
+    <dimen name="card_item_spacing">6dp</dimen>
+
+    <!-- ========================== -->
+    <!-- FOR THE NEWS ARTICLE ITEMS -->
+    <!-- ========================== -->
+    <dimen name="articles_layout_content_padding">8dp</dimen>
+    <dimen name="news_item_8dip_margin">8dp</dimen>
+    <dimen name="news_section_text_size">12sp</dimen>
+    <dimen name="news_title_text_size">16sp</dimen>
+    <dimen name="news_trail_text_size">14sp</dimen>
+    <dimen name="news_publisher_text_size">14sp</dimen>
+    <dimen name="news_published_date_text_size">12sp</dimen>
+    <dimen name="news_item_4dip_margin">4dp</dimen>
+    <dimen name="article_section_text_margin_left">12dp</dimen>
+    <dimen name="article_section_text_gone_margin_left">8dp</dimen>
+
+    <!-- ============================ -->
+    <!-- FOR THE NEWS HIGHLIGHT ITEMS -->
+    <!-- ============================ -->
+    <dimen name="highlights_layout_content_padding">8dp</dimen>
+    <dimen name="headline_text_size">16sp</dimen>
+    <dimen name="headline_content_div_height">2dp</dimen>
+    <dimen name="headline_item_8dip_margin">8dp</dimen>
+    <dimen name="hl_article_count_text_size">36sp</dimen>
+    <dimen name="hl_news_count_text_content_padding">8dp</dimen>
+    <dimen name="hl_news_text_line_margin_top">4dp</dimen>
+    <dimen name="hl_news_text_line_margin_left">8dp</dimen>
+    <dimen name="hl_new_stories_line_text_size">16sp</dimen>
+    <dimen name="hl_article_section_text_size">28sp</dimen>
+    <dimen name="hl_article_section_text_margin_top">2dp</dimen>
+    <dimen name="hl_article_section_text_margin_left">8dp</dimen>
+    <dimen name="hl_article_section_text_margin_bottom">4dp</dimen>
+    <dimen name="hl_news_item_enter_image_margin_right">4dp</dimen>
+
+    <!-- ========================== -->
+    <!-- FOR THE PAGINATION BUTTONS -->
+    <!-- ========================== -->
+    <dimen name="pagination_button_size">48dp</dimen>
+    <dimen name="pagination_button_margin_left">6dp</dimen>
+    <dimen name="pagination_button_margin_right">6dp</dimen>
+    <dimen name="pagination_button_margin_bottom">6dp</dimen>
+    <dimen name="pagination_button_elevation">2dp</dimen>
+
+    <!-- =============================================== -->
+    <!-- FOR THE NUMBER PICKER USED IN PAGINATION DIALOG -->
+    <!-- =============================================== -->
+    <dimen name="page_number_picker_margin_top">17dp</dimen>
+    <dimen name="page_number_picker_title_text_padding_bottom">12dp</dimen>
+    <dimen name="page_number_picker_button_text_size">15sp</dimen>
+    <dimen name="page_number_picker_buttons_margin_top">32dp</dimen>
+    <dimen name="page_number_picker_cancel_btn_margin_right">4dp</dimen>
+    <dimen name="page_number_picker_buttons_margin_bottom">8dp</dimen>
+    <dimen name="page_number_picker_buttons_content_padding">8dp</dimen>
+    <dimen name="page_number_picker_buttons_min_width">64dp</dimen>
+    <dimen name="page_number_picker_buttons_height">36dp</dimen>
+    <dimen name="page_number_picker_set_btn_margin_left">4dp</dimen>
+    <dimen name="page_number_picker_set_btn_margin_right">8dp</dimen>
+
+    <!-- ================= -->
+    <!-- FOR THE INFO CARD -->
+    <!-- ================= -->
+    <dimen name="info_card_margin_top">16dp</dimen>
+    <dimen name="info_card_margin_left">24dp</dimen>
+    <dimen name="info_card_margin_right">24dp</dimen>
+    <dimen name="info_card_corner_radius">4dp</dimen>
+    <dimen name="info_card_text_size">18sp</dimen>
+    <dimen name="info_card_text_content_padding">4dp</dimen>
+    <dimen name="info_card_text_drawable_padding">4dp</dimen>
+
+    <!-- ============================== -->
+    <!-- FOR THE BOOKMARKED NEWS LAYOUT -->
+    <!-- ============================== -->
+    <dimen name="bookmark_scrollview_margin_top">8dp</dimen>
+    <dimen name="bookmark_scrollview_margin_left">16dp</dimen>
+    <dimen name="bookmark_scrollview_margin_right">16dp</dimen>
+    <dimen name="bookmark_msg_text_margin_bottom">8dp</dimen>
+    <dimen name="bookmark_msg_text_margin_top">16dp</dimen>
+    <dimen name="bookmark_msg_text_size">21sp</dimen>
+
+    <!-- ============================= -->
+    <!-- FOR THE FAVORITED NEWS LAYOUT -->
+    <!-- ============================= -->
+    <dimen name="fav_scrollview_margin_top">8dp</dimen>
+    <dimen name="fav_scrollview_margin_left">16dp</dimen>
+    <dimen name="fav_scrollview_margin_right">16dp</dimen>
+    <dimen name="fav_msg_text_margin_bottom">8dp</dimen>
+    <dimen name="fav_msg_text_margin_top">16dp</dimen>
+    <dimen name="fav_msg_text_size">21sp</dimen>
+
+    <!-- ============================ -->
+    <!-- FOR THE NETWORK ERROR LAYOUT -->
+    <!-- ============================ -->
+    <dimen name="nw_error_scrollview_margin_left">16dp</dimen>
+    <dimen name="nw_error_scrollview_margin_top">8dp</dimen>
+    <dimen name="nw_error_scrollview_margin_right">16dp</dimen>
+    <dimen name="nw_error_text_margin_top">8dp</dimen>
+    <dimen name="nw_error_settings_btn_margin_top">8dp</dimen>
+    <dimen name="nw_error_settings_btn_margin_bottom">16dp</dimen>
+    <dimen name="nw_error_text_size">21sp</dimen>
+    <dimen name="nw_error_settings_btn_text_size">18sp</dimen>
+    <dimen name="nw_error_settings_btn_drawable_padding">4dp</dimen>
+
+    <!-- ========================== -->
+    <!-- FOR THE "MORE NEWS LAYOUT" -->
+    <!-- ========================== -->
+    <dimen name="add_news_scrollview_margin_top">8dp</dimen>
+    <dimen name="add_more_news_text_size">21sp</dimen>
+    <dimen name="add_more_news_text_margin_top">8dp</dimen>
+    <dimen name="add_more_news_btn_text_size">18sp</dimen>
+    <dimen name="add_more_news_btn_margin_top">8dp</dimen>
+    <dimen name="add_more_news_btn_margin_bottom">8dp</dimen>
+    <dimen name="add_more_news_btn_drawable_padding">4dp</dimen>
+    <dimen name="add_news_scrollview_margin_left">16dp</dimen>
+    <dimen name="add_news_scrollview_margin_right">16dp</dimen>
+
+    <!-- ======================== -->
+    <!-- FOR THE "NO FEED LAYOUT" -->
+    <!-- ======================== -->
+    <dimen name="no_feed_scrollview_margin_top">16dp</dimen>
+    <dimen name="no_feed_scrollview_margin_left">16dp</dimen>
+    <dimen name="no_feed_scrollview_margin_right">16dp</dimen>
+    <dimen name="no_feed_reason_text_size">16sp</dimen>
+    <dimen name="no_feed_reason_text_margin_top">8dp</dimen>
+    <dimen name="no_feed_recycler_view_margin_top">8dp</dimen>
+    <dimen name="no_feed_recycler_view_margin_bottom">16dp</dimen>
+    <dimen name="nfhi_item_number_text_size">36sp</dimen>
+    <dimen name="nfhi_item_internal_margin">8dp</dimen>
+    <dimen name="nfhi_vertical_line_width">2dp</dimen>
+    <dimen name="nfhi_item_text_size">16sp</dimen>
+    <dimen name="nfhi_item_btn_text_size">18sp</dimen>
+    <dimen name="nfhi_item_btn_drawable_padding">4dp</dimen>
+
+</resources>

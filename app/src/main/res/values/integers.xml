@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Minimum value of the NumberPicker used for the "News items per page" Preference setting -->
+    <integer name="pref_items_per_page_min_value">1</integer>
+    <!-- Maximum value of the NumberPicker used for the "News items per page" Preference setting -->
+    <integer name="pref_items_per_page_max_value">50</integer>
+    <!-- Default value of the NumberPicker used for the "News items per page" Preference setting -->
+    <integer name="pref_items_per_page_default_value">20</integer>
+
+    <!-- Minimum value of the NumberPicker used for the "Buffer to Start Period" Preference setting -->
+    <integer name="pref_start_period_buffer_min_value">0</integer>
+    <!-- Maximum value of the NumberPicker used for the "Buffer to Start Period" Preference setting -->
+    <integer name="pref_start_period_buffer_max_value">7</integer>
+    <!-- Default value of the NumberPicker used for the "Buffer to Start Period" Preference setting -->
+    <integer name="pref_start_period_buffer_default_value">
+        @integer/pref_start_period_buffer_min_value
+    </integer>
+
+    <!-- Default value of the "Page to Display" Preference setting -->
+    <integer name="pref_page_index_default_value">1</integer>
+
+    <!-- Maximum number of lines for the Title's Trailing Text under expanded view -->
+    <integer name="article_trail_text_max_lines_expanded">6</integer>
+    <!-- Maximum number of lines for the Article's Publisher Text under collapsed view -->
+    <integer name="article_publisher_text_max_lines_collapsed">1</integer>
+    <!-- Maximum number of lines for the Article's Publisher Text under expanded view -->
+    <integer name="article_publisher_text_max_lines_expanded">2</integer>
+
+</resources>

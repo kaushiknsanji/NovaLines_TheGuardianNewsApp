@@ -1,0 +1,170 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme, with no ActionBar for Custom Toolbar -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <!-- ================================== -->
+    <!-- STYLES USED FOR CONSTRAINT LAYOUTS -->
+    <!-- ================================== -->
+
+    <!-- Style to align the View component under ConstraintLayout in center_horizontal format -->
+    <style name="ConstraintCenterHorizontalStyle">
+        <item name="layout_constraintLeft_toLeftOf">parent</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="layout_constraintRight_toRightOf">parent</item>
+    </style>
+
+    <!-- Style to align the View component under ConstraintLayout to the Top in center_horizontal format -->
+    <style name="ConstraintTopCenterHorizontalStyle" parent="ConstraintCenterHorizontalStyle">
+        <item name="layout_constraintTop_toTopOf">parent</item>
+    </style>
+
+    <!-- Style to align the View component under ConstraintLayout to the Bottom in center_horizontal format -->
+    <style name="ConstraintBottomCenterHorizontalStyle" parent="ConstraintCenterHorizontalStyle">
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+    </style>
+
+    <!-- Style to align the View component under ConstraintLayout to the complete Center of its Parent -->
+    <style name="ConstraintCenterInParentStyle" parent="ConstraintCenterHorizontalStyle">
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+    </style>
+
+    <!-- Style to align the View component under ConstraintLayout in center_vertical format -->
+    <style name="ConstraintCenterVerticalStyle">
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+    </style>
+
+    <!-- Style to align the View component under ConstraintLayout to the Left in center_vertical format -->
+    <style name="ConstraintLeftCenterVerticalStyle" parent="ConstraintCenterVerticalStyle">
+        <item name="layout_constraintLeft_toLeftOf">parent</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
+
+    <!-- Style to align the View component under ConstraintLayout to the Right in center_vertical format -->
+    <style name="ConstraintRightCenterVerticalStyle" parent="ConstraintCenterVerticalStyle">
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="layout_constraintRight_toRightOf">parent</item>
+    </style>
+
+    <!-- ======================= -->
+    <!-- STYLES USED FOR TOOLBAR -->
+    <!-- ======================= -->
+
+    <!-- Style used for the Toolbar Title -->
+    <style name="ToolbarTheme.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/toolbar_title_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <!-- ==================== -->
+    <!-- STYLES USED FOR TABS -->
+    <!-- ==================== -->
+
+    <!-- Style for the Tabs -->
+    <style name="TabStyle" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/tabIndicatorColor</item>
+        <item name="tabSelectedTextColor">@color/tabIndicatorColor</item>
+        <item name="tabBackground">@color/colorPrimary</item>
+        <!-- Spread the tabs to fill the entire screen width : START -->
+        <item name="tabMaxWidth">0dp</item>
+        <item name="tabGravity">fill</item>
+        <item name="tabMode">scrollable</item>
+        <!-- Spread the tabs to fill the entire screen width : END -->
+        <item name="tabTextAppearance">@style/TabTextAppearance</item>
+    </style>
+
+    <!-- Text appearance style for the tab -->
+    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">@color/tabTextColor</item>
+    </style>
+
+    <!-- ==================================== -->
+    <!-- STYLES USED FOR THE CARDS IN THE APP -->
+    <!-- ==================================== -->
+
+    <!-- Parent Style of the Cards used in this app -->
+    <style name="BaseCardViewStyle" parent="CardView">
+        <item name="cardPreventCornerOverlap">true</item>
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <!-- Child Style for the Info Cards used in the app -->
+    <style name="InfoCardStyle" parent="BaseCardViewStyle">
+        <item name="cardBackgroundColor">@color/infoCardBackgroundColor</item>
+        <item name="cardCornerRadius">@dimen/info_card_corner_radius</item>
+        <item name="android:layout_marginTop">@dimen/info_card_margin_top</item>
+        <item name="android:layout_marginStart" tools:targetApi="jelly_bean_mr1">
+            @dimen/info_card_margin_left
+        </item>
+        <item name="android:layout_marginLeft">@dimen/info_card_margin_left</item>
+        <item name="android:layout_marginEnd" tools:targetApi="jelly_bean_mr1">
+            @dimen/info_card_margin_right
+        </item>
+        <item name="android:layout_marginRight">@dimen/info_card_margin_right</item>
+    </style>
+
+    <!-- ============================== -->
+    <!-- STYLES USED FOR THE PAGINATION -->
+    <!-- ============================== -->
+    <!-- Style for the Pagination Buttons -->
+    <style name="PaginationButtonStyle">
+        <item name="android:layout_width">@dimen/pagination_button_size</item>
+        <item name="android:layout_height">@dimen/pagination_button_size</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:elevation" tools:targetApi="lollipop">
+            @dimen/pagination_button_elevation
+        </item>
+        <item name="android:layout_marginLeft">@dimen/pagination_button_margin_left</item>
+        <item name="android:layout_marginStart" tools:targetApi="jelly_bean_mr1">
+            @dimen/pagination_button_margin_left
+        </item>
+        <item name="android:layout_marginRight">@dimen/pagination_button_margin_right</item>
+        <item name="android:layout_marginEnd" tools:targetApi="jelly_bean_mr1">
+            @dimen/pagination_button_margin_right
+        </item>
+        <item name="android:layout_marginBottom">@dimen/pagination_button_margin_bottom</item>
+    </style>
+
+    <!-- Style for the Buttons in the Pagination Number Picker Dialog 'R.layout.page_number_picker_dialog' -->
+    <style name="PaginationNumberPickerButtonsStyle">
+        <item name="android:textColor">@color/dialogButtonTextColor</item>
+        <item name="android:textSize">@dimen/page_number_picker_button_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/page_number_picker_buttons_height</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_marginTop">@dimen/page_number_picker_buttons_margin_top</item>
+        <item name="android:layout_marginBottom">@dimen/page_number_picker_buttons_margin_bottom
+        </item>
+        <item name="android:paddingLeft">@dimen/page_number_picker_buttons_content_padding</item>
+        <item name="android:paddingStart" tools:targetApi="jelly_bean_mr1">
+            @dimen/page_number_picker_buttons_content_padding
+        </item>
+        <item name="android:paddingRight">@dimen/page_number_picker_buttons_content_padding</item>
+        <item name="android:paddingEnd" tools:targetApi="jelly_bean_mr1">
+            @dimen/page_number_picker_buttons_content_padding
+        </item>
+        <item name="android:minWidth">@dimen/page_number_picker_buttons_min_width</item>
+    </style>
+
+    <!-- ========================================== -->
+    <!-- STYLES USED FOR THE NEWS CONTENT CARD TILE -->
+    <!-- ========================================== -->
+    <!-- For the Image Buttons in the News Card Tile -->
+    <style name="NewsCardImageButtonsStyle">
+        <item name="android:layout_width">@dimen/std_btn_size_48dip</item>
+        <item name="android:layout_height">@dimen/std_btn_size_48dip</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+</resources>

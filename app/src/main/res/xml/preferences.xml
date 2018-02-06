@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v7.preference.PreferenceCategory android:title="@string/pref_sort_results_category_title">
+
+        <android.support.v7.preference.ListPreference
+            android:defaultValue="@string/pref_sort_by_default"
+            android:dialogTitle="@string/pref_sort_by_dialog_title"
+            android:entries="@array/pref_sort_by_entries"
+            android:entryValues="@array/pref_sort_by_values"
+            android:key="@string/pref_sort_by_key"
+            android:title="@string/pref_sort_by_title" />
+
+        <android.support.v7.preference.ListPreference
+            android:defaultValue="@string/pref_sort_on_default"
+            android:dialogTitle="@string/pref_sort_on_dialog_title"
+            android:entries="@array/pref_sort_on_entries"
+            android:entryValues="@array/pref_sort_on_values"
+            android:key="@string/pref_sort_on_key"
+            android:title="@string/pref_sort_on_title" />
+
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory android:title="@string/pref_pagination_category_title">
+
+        <com.example.kaushiknsanji.novalines.settings.NumberPickerPreference
+            android:defaultValue="@integer/pref_items_per_page_default_value"
+            android:dialogTitle="@string/pref_items_per_page_dialog_title"
+            android:key="@string/pref_items_per_page_key"
+            android:title="@string/pref_items_per_page_title" />
+
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory android:title="@string/pref_start_period_category_title">
+
+        <android.support.v7.preference.CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/pref_start_period_manual_override_key"
+            android:title="@string/pref_start_period_manual_override_title" />
+
+        <android.support.v7.preference.ListPreference
+            android:defaultValue="@string/pref_start_period_preset_default"
+            android:dialogTitle="@string/pref_start_period_preset_dialog_title"
+            android:entries="@array/pref_start_period_preset_entries"
+            android:entryValues="@array/pref_start_period_preset_entries"
+            android:key="@string/pref_start_period_preset_key"
+            android:title="@string/pref_start_period_preset_title" />
+
+        <com.example.kaushiknsanji.novalines.settings.NumberPickerPreference
+            android:defaultValue="@integer/pref_start_period_buffer_default_value"
+            android:dialogTitle="@string/pref_start_period_buffer_dialog_title"
+            android:key="@string/pref_start_period_buffer_key"
+            android:title="@string/pref_start_period_buffer_title" />
+
+        <com.example.kaushiknsanji.novalines.settings.DatePickerPreference
+            android:dialogTitle="@string/pref_start_period_manual_dialog_title"
+            android:key="@string/pref_start_period_manual_key"
+            android:title="@string/pref_start_period_manual_title" />
+
+    </android.support.v7.preference.PreferenceCategory>
+
+</android.support.v7.preference.PreferenceScreen>

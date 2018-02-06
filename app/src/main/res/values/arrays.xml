@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Data used for the "Sort by" preference setting -->
+    <string-array name="pref_sort_by_entries">
+        <item>Most relevant/recent to least relevant/recent</item>
+        <item>Least recent to most recent</item>
+    </string-array>
+    <string-array name="pref_sort_by_values">
+        <item>newest</item>
+        <item>oldest</item>
+    </string-array>
+
+    <!-- Data used for the "Sort based on" preference setting -->
+    <string-array name="pref_sort_on_entries">
+        <item>The date, the content appeared on the web</item>
+        <item>The date, the content appeared in print/newspaper</item>
+        <item>The date, the content was last updated</item>
+    </string-array>
+    <string-array name="pref_sort_on_values">
+        <item>published</item>
+        <item>newspaper-edition</item>
+        <item>last-modified</item>
+    </string-array>
+
+    <!-- Data used for the "Preset Start Period" preference setting -->
+    <string-array name="pref_start_period_preset_entries">
+        <item>Start of the Week</item>
+        <item>Start of the Month</item>
+    </string-array>
+
+    <string-array name="news_fixed_section_ids">
+        <item>@string/top_stories_section_id</item>
+        <item>@string/most_visited_section_id</item>
+        <item>@string/world_news_section_id</item>
+    </string-array>
+
+    <string-array name="news_fixed_section_names">
+        <item>@string/top_stories_section_name</item>
+        <item>@string/most_visited_section_name</item>
+        <item>@string/world_news_section_name</item>
+    </string-array>
+
+    <!-- List of show-fields query parameter values used for
+    filtering required content from the result -->
+    <string-array name="show_fields_filter">
+        <item>trailText</item>
+        <item>byline</item>
+        <item>thumbnail</item>
+    </string-array>
+
+</resources>

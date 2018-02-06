@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nav_item_div_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/navBackgroundColor"
+    android:paddingBottom="@dimen/nav_item_div_pad_bottom"
+    android:paddingEnd="@dimen/nav_item_div_pad_right"
+    android:paddingLeft="@dimen/nav_item_div_pad_left"
+    android:paddingRight="@dimen/nav_item_div_pad_right"
+    android:paddingStart="@dimen/nav_item_div_pad_left"
+    android:paddingTop="@dimen/nav_item_div_pad_top">
+
+    <View
+        android:id="@+id/nav_item_div_view_id"
+        style="@style/ConstraintCenterInParentStyle"
+        android:layout_width="@dimen/match_constraint_0dp"
+        android:layout_height="@dimen/nav_item_div_height"
+        android:background="@color/navDividerColor" />
+
+</android.support.constraint.ConstraintLayout>

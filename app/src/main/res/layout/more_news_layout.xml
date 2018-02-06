@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- To show "Subscribe to More feeds" in the info card -->
+    <include
+        android:id="@+id/info_card_view_id"
+        style="@style/InfoCardStyle"
+        layout="@layout/info_card_layout"
+        android:layout_width="@dimen/match_constraint_0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/add_news_scrollview_id"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Scrollable content that shows the caption image, text and a button to subscribe additional feeds -->
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/add_news_scrollview_id"
+        style="@style/ConstraintBottomCenterHorizontalStyle"
+        android:layout_width="@dimen/match_constraint_0dp"
+        android:layout_height="@dimen/match_constraint_0dp"
+        android:layout_marginEnd="@dimen/add_news_scrollview_margin_right"
+        android:layout_marginLeft="@dimen/add_news_scrollview_margin_left"
+        android:layout_marginRight="@dimen/add_news_scrollview_margin_right"
+        android:layout_marginStart="@dimen/add_news_scrollview_margin_left"
+        android:layout_marginTop="@dimen/add_news_scrollview_margin_top"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@+id/info_card_view_id">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/add_news_image_id"
+                style="@style/ConstraintTopCenterHorizontalStyle"
+                android:layout_width="@dimen/caption_image_size"
+                android:layout_height="@dimen/caption_image_size"
+                app:layout_constraintBottom_toTopOf="@+id/add_more_news_text_id"
+                app:srcCompat="@drawable/ic_newspaper_add_color" />
+
+            <TextView
+                android:id="@+id/add_more_news_text_id"
+                style="@style/ConstraintCenterHorizontalStyle"
+                android:layout_width="@dimen/match_constraint_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/add_more_news_text_margin_top"
+                android:textSize="@dimen/add_more_news_text_size"
+                app:layout_constraintBottom_toTopOf="@+id/add_more_news_btn_id"
+                app:layout_constraintTop_toBottomOf="@+id/add_news_image_id"
+                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi in arcu placerat, auctor est ut, dictum metus. Fusce magna nisi, ultricies eu sem ac, vulputate sagittis arcu. Sed pretium purus a condimentum interdum. " />
+
+            <Button
+                android:id="@+id/add_more_news_btn_id"
+                style="@style/ConstraintBottomCenterHorizontalStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/add_more_news_btn_margin_bottom"
+                android:layout_marginTop="@dimen/add_more_news_btn_margin_top"
+                android:background="@drawable/add_more_btn_bg_selector"
+                android:drawableLeft="@drawable/ic_add_circle_white"
+                android:drawableStart="@drawable/ic_add_circle_white"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/add_more_news_btn_text_size"
+                app:layout_constraintTop_toBottomOf="@+id/add_more_news_text_id"
+                tools:drawablePadding="@dimen/add_more_news_btn_drawable_padding"
+                tools:text="Lorem Ipsum" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.constraint.ConstraintLayout>
