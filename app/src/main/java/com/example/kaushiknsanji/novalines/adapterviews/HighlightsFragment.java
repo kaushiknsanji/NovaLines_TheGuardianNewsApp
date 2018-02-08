@@ -20,6 +20,7 @@ import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.adapters.HighlightsAdapter;
 import com.example.kaushiknsanji.novalines.drawerviews.HeadlinesFragment;
 import com.example.kaushiknsanji.novalines.models.NewsSectionInfo;
+import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsHighlightsLoader;
 
 import java.text.DateFormat;
@@ -41,6 +42,9 @@ public class HighlightsFragment extends Fragment
     //Constant used for logs
     private static final String LOG_TAG = HighlightsFragment.class.getSimpleName();
 
+    //Bundle Key Constant to save/restore the value of the top visible Adapter Item position
+    private static final String VISIBLE_ITEM_VIEW_POSITION_INT_KEY = "RecyclerView.TopItemPosition";
+
     //For the SwipeRefreshLayout
     private SwipeRefreshLayout mSwipeContainer;
 
@@ -59,6 +63,9 @@ public class HighlightsFragment extends Fragment
 
     //For the Settings SharedPreferences
     private SharedPreferences mPreferences;
+
+    //Saves the top visible Adapter Item position
+    private int mVisibleItemViewPosition;
 
     /**
      * Static constructor of the Fragment {@link HighlightsFragment}
@@ -110,8 +117,20 @@ public class HighlightsFragment extends Fragment
         //Triggering the Data load
         triggerLoad(false);
 
-        //Setting the launch flag based on whether there is saved state or not
-        mInitialLaunch = (savedInstanceState == null);
+        if (savedInstanceState == null) {
+            //On initial launch of this Fragment
+
+            //Setting the launch flag to True as this is the initial launch
+            mInitialLaunch = true;
+        } else {
+            //On subsequent launch of this Fragment
+
+            //Setting the launch flag to False
+            mInitialLaunch = false;
+
+            //Restoring the value of the position of the top Adapter item position previously visible
+            mVisibleItemViewPosition = savedInstanceState.getInt(VISIBLE_ITEM_VIEW_POSITION_INT_KEY);
+        }
 
         //Returning the prepared layout
         return rootView;
@@ -158,6 +177,20 @@ public class HighlightsFragment extends Fragment
         //Resetting the launch flag to false
         //as it will be a subsequent launch when the Fragment is resumed
         mInitialLaunch = false;
+    }
+
+    /**
+     * Called to ask the fragment to save its current dynamic state, so it
+     * can later be reconstructed in a new instance of its process if
+     * restarted.
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //Saving the current position of the top Adapter item partially/completely visible
+        outState.putInt(VISIBLE_ITEM_VIEW_POSITION_INT_KEY, RecyclerViewUtility.getFirstVisibleItemPosition(mRecyclerView));
+        super.onSaveInstanceState(outState);
     }
 
     /**
@@ -348,16 +381,25 @@ public class HighlightsFragment extends Fragment
      *                        with the default animation
      */
     public void scrollToItemPosition(int position, boolean scrollImmediate) {
-        RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
+        //Retrieving the layout manager of RecyclerView
+        LinearLayoutManager layoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
         if (position > RecyclerView.NO_POSITION) {
             //Scrolling to the item position passed when valid
-            if (scrollImmediate) {
-                //Scrolling to the item position immediately
-                layoutManager.scrollToPosition(position);
-            } else {
-                //Scrolling to the item position naturally with default animation
-                layoutManager.smoothScrollToPosition(mRecyclerView, null, position);
+
+            //Validating the position passed is different from the top one to update if required
+            if (RecyclerViewUtility.getFirstVisibleItemPosition(mRecyclerView) != position) {
+                //Updating the item position reference
+                mVisibleItemViewPosition = position;
+
+                if (scrollImmediate) {
+                    //Scrolling to the item position immediately
+                    layoutManager.scrollToPositionWithOffset(mVisibleItemViewPosition, 0);
+                } else {
+                    //Scrolling to the item position naturally with smooth scroll
+                    RecyclerViewUtility.smoothVScrollToPositionWithViewTop(mRecyclerView, mVisibleItemViewPosition);
+                }
             }
+
         }
     }
 
@@ -445,6 +487,9 @@ public class HighlightsFragment extends Fragment
         Log.d(LOG_TAG, "onItemDataSwapped: News Highlights data loaded successfully");
         //Hiding the Progress Indicator after the data load completion
         mSwipeContainer.setRefreshing(false);
+
+        //Scrolling over to first item after data load
+        scrollToItemPosition(mVisibleItemViewPosition, false);
     }
 
     /**

@@ -425,7 +425,13 @@ public class HeadlinesFragment extends Fragment
         Fragment fragment = mViewPagerAdapter.getRegisteredFragment(oldPosition);
         if (fragment != null) {
             //When child fragment is attached
-            if (fragment instanceof ArticlesFragment) {
+
+            if (fragment instanceof HighlightsFragment) {
+                //For HighlightsFragment instances
+                HighlightsFragment highlightsFragment = (HighlightsFragment) fragment;
+                //Resetting to first item
+                highlightsFragment.scrollToItemPosition(0, true);
+            } else if (fragment instanceof ArticlesFragment) {
                 //For ArticlesFragment instances
                 ArticlesFragment articlesFragment = (ArticlesFragment) fragment;
                 //Resetting to first item
@@ -447,10 +453,12 @@ public class HeadlinesFragment extends Fragment
         //Retrieving the Current Fragment from ViewPager
         Fragment fragment = mViewPagerAdapter.getRegisteredFragment(mViewPager.getCurrentItem());
         if (fragment instanceof HighlightsFragment) {
+            //For HighlightsFragment instances
             HighlightsFragment highlightsFragment = (HighlightsFragment) fragment;
             //Scrolling to first item
             highlightsFragment.scrollToItemPosition(0, false);
         } else if (fragment instanceof ArticlesFragment) {
+            //For ArticlesFragment instances
             ArticlesFragment articlesFragment = (ArticlesFragment) fragment;
             //Scrolling to first item
             articlesFragment.scrollToItemPosition(0, false);
