@@ -28,12 +28,14 @@
         <item>Start of the Month</item>
     </string-array>
 
+    <!-- IDs of the fixed News Topics shown in the Headlines -->
     <string-array name="news_fixed_section_ids">
         <item>@string/top_stories_section_id</item>
         <item>@string/most_visited_section_id</item>
         <item>@string/world_news_section_id</item>
     </string-array>
 
+    <!-- Names of the fixed News Topics shown in the Headlines -->
     <string-array name="news_fixed_section_names">
         <item>@string/top_stories_section_name</item>
         <item>@string/most_visited_section_name</item>
@@ -41,11 +43,12 @@
     </string-array>
 
     <!-- List of show-fields query parameter values used for
-    filtering required content from the result -->
+    filtering required content from the News Feed response -->
     <string-array name="show_fields_filter">
         <item>trailText</item>
         <item>byline</item>
         <item>thumbnail</item>
     </string-array>
+
 
 </resources>
