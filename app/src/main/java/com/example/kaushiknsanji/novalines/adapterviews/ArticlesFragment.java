@@ -12,7 +12,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +25,7 @@ import com.example.kaushiknsanji.novalines.models.NewsArticleInfo;
 import com.example.kaushiknsanji.novalines.observers.BaseRecyclerViewScrollListener;
 import com.example.kaushiknsanji.novalines.utils.NewsURLGenerator;
 import com.example.kaushiknsanji.novalines.utils.PreferencesObserverUtility;
+import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsArticlesLoader;
 
 import java.net.URL;
@@ -236,7 +236,7 @@ public class ArticlesFragment extends Fragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         //Saving the current position of the top Adapter item partially/completely visible
-        outState.putInt(VISIBLE_ITEM_VIEW_POSITION_INT_KEY, getFirstVisibleItemPosition());
+        outState.putInt(VISIBLE_ITEM_VIEW_POSITION_INT_KEY, RecyclerViewUtility.getFirstVisibleItemPosition(mRecyclerView));
         super.onSaveInstanceState(outState);
     }
 
@@ -392,7 +392,7 @@ public class ArticlesFragment extends Fragment
             //Scrolling to the item position passed when valid
 
             //Validating the position passed is different from the top one to update if required
-            if (getFirstVisibleItemPosition() != position) {
+            if (RecyclerViewUtility.getFirstVisibleItemPosition(mRecyclerView) != position) {
                 //Updating the item position reference
                 mVisibleItemViewPosition = position;
 
@@ -403,24 +403,7 @@ public class ArticlesFragment extends Fragment
                     layoutManager.scrollToPositionWithOffset(mVisibleItemViewPosition, 0);
                 } else {
                     //Scrolling to the item position naturally with smooth scroll
-
-                    //Configuring the Linear scroll
-                    RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(getContext()) {
-                        /**
-                         * When scrolling towards a child view, this method defines whether we should align the top
-                         * or the bottom edge of the child with the parent RecyclerView.
-                         *
-                         * @return SNAP_TO_START to align the top of the child with the parent RecyclerView.
-                         */
-                        @Override
-                        protected int getVerticalSnapPreference() {
-                            return LinearSmoothScroller.SNAP_TO_START;
-                        }
-                    };
-                    //Setting the item position to scroll to
-                    smoothScroller.setTargetPosition(mVisibleItemViewPosition);
-                    //Initiating the smooth scroll
-                    layoutManager.startSmoothScroll(smoothScroller);
+                    RecyclerViewUtility.smoothVScrollToPositionWithViewTop(mRecyclerView, mVisibleItemViewPosition);
                 }
             }
 
@@ -446,26 +429,6 @@ public class ArticlesFragment extends Fragment
         } else {
             //Hiding the Pagination panel by default for Single Page Results
             ((HeadlinesFragment) getParentFragment()).showPaginationPanel(false);
-        }
-    }
-
-    /**
-     * Method that retrieves the item position of the first completely visible
-     * or the partially visible item in the screen.
-     *
-     * @return is the Integer value of the first item position that is currently visible in the screen
-     */
-    private int getFirstVisibleItemPosition() {
-        //Retrieving the Linear Layout Manager of the RecyclerView
-        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-        //First, retrieving the top completely visible item position
-        int position = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-        //Checking the validity of the above position
-        if (position > RecyclerView.NO_POSITION) {
-            return position; //Returning the same if valid
-        } else {
-            //Else, returning the top partially visible item position
-            return linearLayoutManager.findFirstVisibleItemPosition();
         }
     }
 
