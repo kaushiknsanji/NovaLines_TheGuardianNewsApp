@@ -1,7 +1,8 @@
 package com.example.kaushiknsanji.novalines.observers;
 
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
 
 /**
  * Abstract Class that extends the RecyclerView.OnScrollListener to inform
@@ -62,7 +63,7 @@ public abstract class BaseRecyclerViewScrollListener extends RecyclerView.OnScro
             //Retrieving the current total items in the RecyclerView
             int totalItems = recyclerView.getAdapter().getItemCount();
             //Retrieving the current last seen item position
-            int lastItemPosition = getLastVisibleItemPosition(recyclerView.getLayoutManager());
+            int lastItemPosition = RecyclerViewUtility.getLastVisibleItemPosition(recyclerView);
 
             if (dy > 0) {
                 //Scanning when scrolling to the bottom
@@ -107,34 +108,5 @@ public abstract class BaseRecyclerViewScrollListener extends RecyclerView.OnScro
      *                             <br/>If <0 then scroll is moving towards the top
      */
     public abstract void onBottomReached(int verticalScrollAmount);
-
-    /**
-     * Method that retrieves the item position of the last completely visible
-     * or the partially visible item in the screen
-     *
-     * @return is the Integer value of the last item position that is currently visible in the screen
-     */
-    private int getLastVisibleItemPosition(RecyclerView.LayoutManager layoutManager) {
-        if (layoutManager instanceof LinearLayoutManager) {
-            //When the Layout Manager is an instance of LinearLayoutManager
-
-            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
-            //First, retrieving the last completely visible item position
-            int position = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-            //Checking the validity of the above position
-            if (position > RecyclerView.NO_POSITION) {
-                return position; //Returning the same if valid
-            } else {
-                //Else, returning the last partially visible item position
-                return linearLayoutManager.findLastVisibleItemPosition();
-            }
-        }
-
-        //(Not including the condition for Grids as we are not going to use any Grids for displaying
-        // News Items)
-
-        //On all else, returning -1 (RecyclerView.NO_POSITION)
-        return RecyclerView.NO_POSITION;
-    }
 
 }
