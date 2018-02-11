@@ -226,13 +226,19 @@
     <!-- STRINGS USED IN THE NETWORK ERROR LAYOUT -->
     <!-- ======================================== -->
     <string name="nw_error_title_text">Network Error</string>
-    <string name="nw_error_text_msg">Seems like there is an issue with the network connectivity.\n\nCheck whether the Airplane mode is Active, [ic_airplanemode_active] may be seen in the above status bar. Turn this OFF if it is seen.\n\nValidate the Network settings and visit us back once done.</string>
+    <string name="nw_error_text_msg">Seems like there is an issue with the network connectivity.\n\nCheck whether the Airplane mode is Active, [ic_airplanemode_black] may be seen in the above status bar. Turn this OFF if it is seen.\n\nValidate the Network settings and visit us back once done.</string>
     <string name="nw_error_settings_btn_text">Check Network</string>
 
     <!-- ==================================== -->
     <!-- STRINGS USED IN THE "NO FEED LAYOUT" -->
     <!-- ==================================== -->
     <string name="no_feed_reason_text">This can happen due to the following reasons -</string>
-
+    <string name="no_feed_title_text">No Feed Available</string>
+    <string name="nf_app_settings_resolution_text">The Start date of the News might be incorrectly set. Open the app settings [ic_settings_black] and reset all to defaults.</string>
+    <string name="nf_network_settings_resolution_text">Network Connectivity might be stale. Enable and disable the Airplane mode [ic_airplanemode_black] to see if it resolves.</string>
+    <string name="nf_refresh_resolution_text">No News feed available from Guardian News Server. Try refreshing [ic_refresh_black] or visit us back after sometime.</string>
+    <string name="nf_app_settings_btn_text">Check App Settings</string>
+    <string name="nf_nw_settings_btn_text">Check Network</string>
+    <string name="nf_refresh_btn_text">Refresh</string>
 
 </resources>
