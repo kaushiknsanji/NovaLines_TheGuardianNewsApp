@@ -164,7 +164,7 @@
     <dimen name="nw_error_scrollview_margin_top">8dp</dimen>
     <dimen name="nw_error_scrollview_margin_right">16dp</dimen>
     <dimen name="nw_error_text_margin_top">8dp</dimen>
-    <dimen name="nw_error_settings_btn_margin_top">8dp</dimen>
+    <dimen name="nw_error_settings_btn_margin_top">16dp</dimen>
     <dimen name="nw_error_settings_btn_margin_bottom">16dp</dimen>
     <dimen name="nw_error_text_size">21sp</dimen>
     <dimen name="nw_error_settings_btn_text_size">18sp</dimen>
@@ -193,11 +193,11 @@
     <dimen name="no_feed_reason_text_margin_top">8dp</dimen>
     <dimen name="no_feed_recycler_view_margin_top">8dp</dimen>
     <dimen name="no_feed_recycler_view_margin_bottom">16dp</dimen>
-    <dimen name="nfhi_item_number_text_size">36sp</dimen>
-    <dimen name="nfhi_item_internal_margin">8dp</dimen>
+    <dimen name="nfhi_resolution_number_text_size">36sp</dimen>
+    <dimen name="nfhi_internal_margin">8dp</dimen>
     <dimen name="nfhi_vertical_line_width">2dp</dimen>
-    <dimen name="nfhi_item_text_size">16sp</dimen>
-    <dimen name="nfhi_item_btn_text_size">18sp</dimen>
-    <dimen name="nfhi_item_btn_drawable_padding">4dp</dimen>
+    <dimen name="nfhi_resolution_text_size">21sp</dimen>
+    <dimen name="nfhi_resolution_btn_text_size">18sp</dimen>
+    <dimen name="nfhi_resolution_btn_drawable_padding">4dp</dimen>
 
 </resources>
