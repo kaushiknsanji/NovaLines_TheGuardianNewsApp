@@ -104,7 +104,7 @@ public class BookmarksFragment extends Fragment {
         //Setting the Html Text to be displayed for No Results
         TextAppearanceUtility.setHtmlText(mNoResultsTextView, getString(R.string.bookmark_no_results_text));
         //Setting the Font for the Text
-        mNoResultsTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.elsie));
+        mNoResultsTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.gabriela));
         //Replacing the placeholder for drawables in Text with their corresponding image
         TextAppearanceUtility.replaceTextWithImage(getContext(), mNoResultsTextView);
     }
