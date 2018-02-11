@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.adapters.HighlightsAdapter;
 import com.example.kaushiknsanji.novalines.drawerviews.HeadlinesFragment;
+import com.example.kaushiknsanji.novalines.errorviews.NetworkErrorFragment;
 import com.example.kaushiknsanji.novalines.models.NewsSectionInfo;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsHighlightsLoader;
@@ -44,12 +47,17 @@ public class HighlightsFragment extends Fragment
 
     //Bundle Key Constant to save/restore the value of the top visible Adapter Item position
     private static final String VISIBLE_ITEM_VIEW_POSITION_INT_KEY = "RecyclerView.TopItemPosition";
+    //Bundle Key Constant to save/restore the value of the visibility of "Network Error Layout"
+    private static final String NW_ERROR_VIEW_VISIBILITY_BOOL_KEY = "Visibility.NetworkErrorView";
 
     //For the SwipeRefreshLayout
     private SwipeRefreshLayout mSwipeContainer;
 
     //For the Headline TextView
     private TextView mHeadlineTextView;
+
+    //For the content divider
+    private View mHeadlineContentDivider;
 
     //For the RecyclerView
     private RecyclerView mRecyclerView;
@@ -60,6 +68,12 @@ public class HighlightsFragment extends Fragment
     //Boolean that stores whether the Fragment was launched for the first time
     //Defaulted to False (meaning, Not Initial)
     private boolean mInitialLaunch = false;
+
+    //Saves whether the "Network Error Layout" should be visible/hidden
+    private boolean mNetworkErrorViewVisible;
+
+    //For the "Error Layout"
+    private View mErrorView;
 
     //For the Settings SharedPreferences
     private SharedPreferences mPreferences;
@@ -104,6 +118,9 @@ public class HighlightsFragment extends Fragment
         //Setup the text on TextView
         setupHeadlineText();
 
+        //Finding the content divider
+        mHeadlineContentDivider = rootView.findViewById(R.id.content_div_id);
+
         //Finding the SwipeRefreshLayout
         mSwipeContainer = rootView.findViewById(R.id.swipe_container_id);
         //Initializing the SwipeRefreshLayout
@@ -114,14 +131,18 @@ public class HighlightsFragment extends Fragment
         //Initializing the RecyclerView
         setupRecyclerView();
 
-        //Triggering the Data load
-        triggerLoad(false);
+        //Finding the "Error View"
+        mErrorView = rootView.findViewById(R.id.error_frame_id);
 
         if (savedInstanceState == null) {
             //On initial launch of this Fragment
 
             //Setting the launch flag to True as this is the initial launch
             mInitialLaunch = true;
+
+            //Ensuring the "Error View" is hidden
+            hideErrorView();
+
         } else {
             //On subsequent launch of this Fragment
 
@@ -130,7 +151,16 @@ public class HighlightsFragment extends Fragment
 
             //Restoring the value of the position of the top Adapter item position previously visible
             mVisibleItemViewPosition = savedInstanceState.getInt(VISIBLE_ITEM_VIEW_POSITION_INT_KEY);
+
+            //Restoring the visibility of "Network Error Layout"
+            if (savedInstanceState.getBoolean(NW_ERROR_VIEW_VISIBILITY_BOOL_KEY)) {
+                showNetworkErrorLayout();
+            }
+
         }
+
+        //Triggering the Data load
+        triggerLoad(false);
 
         //Returning the prepared layout
         return rootView;
@@ -190,6 +220,9 @@ public class HighlightsFragment extends Fragment
     public void onSaveInstanceState(Bundle outState) {
         //Saving the current position of the top Adapter item partially/completely visible
         outState.putInt(VISIBLE_ITEM_VIEW_POSITION_INT_KEY, RecyclerViewUtility.getFirstVisibleItemPosition(mRecyclerView));
+        //Saving the visibility state of the "Network Error Layout"
+        outState.putBoolean(NW_ERROR_VIEW_VISIBILITY_BOOL_KEY, mNetworkErrorViewVisible);
+
         super.onSaveInstanceState(outState);
     }
 
@@ -431,25 +464,32 @@ public class HighlightsFragment extends Fragment
     public void onLoadFinished(Loader<List<NewsSectionInfo>> loader, List<NewsSectionInfo> newsSectionInfos) {
         switch (loader.getId()) {
             case NewsHighlightsLoader.HIGHLIGHTS_LOADER:
-                if (newsSectionInfos != null && newsSectionInfos.size() > 0) {
-                    //Loading the data to the adapter when present
-                    mRecyclerAdapter.swapItemData(newsSectionInfos);
-                    //Updating the date on the Headline TextView
-                    setupHeadlineText();
-                } else {
-                    //When the data returned is Empty or NULL
-                    NewsHighlightsLoader highlightsLoader = (NewsHighlightsLoader) loader;
-
-                    if (!highlightsLoader.getNetworkConnectivityStatus()) {
-                        //Reporting Network Failure when False
-                        Log.d(LOG_TAG, "onLoadFinished: Network Failure");
+                if (getActivity() != null) {
+                    //When attached to the Activity
+                    if (newsSectionInfos != null && newsSectionInfos.size() > 0) {
+                        //Loading the data to the adapter when present
+                        mRecyclerAdapter.swapItemData(newsSectionInfos);
+                        //Updating the date on the Headline TextView
+                        setupHeadlineText();
                     } else {
-                        //When there is NO network issue and the current page has no data to be shown
-                        Log.d(LOG_TAG, "onLoadFinished: NO DATA RETURNED");
-                    }
+                        //When the data returned is Empty or NULL
 
-                    //Hiding the Progress Indicator on failure
-                    mSwipeContainer.setRefreshing(false);
+                        //Hiding the Progress Indicator on failure
+                        mSwipeContainer.setRefreshing(false);
+
+                        NewsHighlightsLoader highlightsLoader = (NewsHighlightsLoader) loader;
+
+                        if (!highlightsLoader.getNetworkConnectivityStatus()) {
+                            //Reporting Network Failure when False
+                            Log.d(LOG_TAG, "onLoadFinished: Network Failure");
+                            //Displaying the "Network Error Layout"
+                            showNetworkErrorLayout();
+                        } else {
+                            //When there is NO network issue and the current page has no data to be shown
+                            Log.d(LOG_TAG, "onLoadFinished: NO DATA RETURNED");
+                        }
+
+                    }
                 }
                 break;
         }
@@ -471,6 +511,75 @@ public class HighlightsFragment extends Fragment
     }
 
     /**
+     * Method that displays the "Network Error Layout".
+     */
+    private void showNetworkErrorLayout() {
+        //Updating the visibility flag
+        mNetworkErrorViewVisible = true;
+        //When the layout needs to be shown
+        mErrorView.setVisibility(View.VISIBLE);
+        //Displaying the "Network Error Layout"
+        replaceFragment(NetworkErrorFragment.newInstance(), NetworkErrorFragment.FRAGMENT_TAG);
+        //Ensuring the Progress is always not shown in this case
+        mSwipeContainer.setRefreshing(false);
+        //Hiding other components
+        enableDefaultComponents(false);
+    }
+
+    /**
+     * Method that controls the visibility of the default view components in the layout.
+     *
+     * @param visibility <b>TRUE</b> to display the view components; <b>FALSE</b> to hide them.
+     */
+    private void enableDefaultComponents(boolean visibility) {
+        if (visibility) {
+            //Displaying the View components
+            mHeadlineTextView.setVisibility(View.VISIBLE);
+            mHeadlineContentDivider.setVisibility(View.VISIBLE);
+            mSwipeContainer.setVisibility(View.VISIBLE);
+        } else {
+            //Hiding the View components
+            mHeadlineTextView.setVisibility(View.GONE);
+            mHeadlineContentDivider.setVisibility(View.GONE);
+            mSwipeContainer.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Method that hides the "Error View"
+     * and takes care of setting the dependent view visibility flags to false
+     */
+    private void hideErrorView() {
+        Log.d(LOG_TAG, "hideErrorView: Started");
+        //Hiding the "Error View"
+        mErrorView.setVisibility(View.GONE);
+        //Setting the "Network Error Layout" visibility flag to false
+        mNetworkErrorViewVisible = false;
+        //Displaying other components
+        enableDefaultComponents(true);
+    }
+
+    /**
+     * Method that replaces the Fragment at 'R.id.error_frame_id' with the Fragment and its Tag passed.
+     * Prior to replacing, it checks whether the given Fragment is already present at 'R.id.error_frame_id'
+     * or not.
+     *
+     * @param fragment is the instance of the Fragment that needs to be displayed at 'R.id.error_frame_id'
+     * @param tag      is the String identifier used by the FragmentManager for checking the presence of the Fragment
+     *                 prior to replacing the content with the Fragment
+     */
+    private void replaceFragment(Fragment fragment, String tag) {
+        //Getting the Instance of the FragmentManager
+        FragmentManager childFragmentManager = getChildFragmentManager();
+        if (childFragmentManager.findFragmentByTag(tag) == null) {
+            //Getting the FragmentTransaction
+            FragmentTransaction fragmentTransaction = childFragmentManager.beginTransaction();
+            //Replacing the Fragment at 'R.id.error_frame_id' with the given Fragment and its Tag
+            fragmentTransaction.replace(R.id.error_frame_id, fragment, tag).commit();
+        }
+    }
+
+    /**
      * Called when a swipe gesture triggers a refresh.
      */
     @Override
@@ -485,6 +594,9 @@ public class HighlightsFragment extends Fragment
     @Override
     public void onItemDataSwapped() {
         Log.d(LOG_TAG, "onItemDataSwapped: News Highlights data loaded successfully");
+        //Ensuring the "Error View" is hidden
+        hideErrorView();
+
         //Hiding the Progress Indicator after the data load completion
         mSwipeContainer.setRefreshing(false);
 

@@ -12,4 +12,13 @@
         android:layout_width="@dimen/match_constraint_0dp"
         android:layout_height="@dimen/match_constraint_0dp" />
 
+    <!-- For displaying the "No Feed layout" when there is no feed available
+    or the "Network Error layout" when there is a Network failure -->
+    <FrameLayout
+        android:id="@+id/error_frame_id"
+        style="@style/ConstraintCenterInParentStyle"
+        android:layout_width="@dimen/match_constraint_0dp"
+        android:layout_height="@dimen/match_constraint_0dp"
+        android:visibility="gone" />
+
 </android.support.constraint.ConstraintLayout>

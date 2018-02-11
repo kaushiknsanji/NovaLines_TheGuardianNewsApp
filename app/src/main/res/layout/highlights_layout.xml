@@ -36,4 +36,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/content_div_id" />
 
+    <!-- For displaying the "Network Error layout" when there is a Network failure -->
+    <FrameLayout
+        android:id="@+id/error_frame_id"
+        style="@style/ConstraintCenterInParentStyle"
+        android:layout_width="@dimen/match_constraint_0dp"
+        android:layout_height="@dimen/match_constraint_0dp"
+        android:visibility="gone" />
+
 </android.support.constraint.ConstraintLayout>

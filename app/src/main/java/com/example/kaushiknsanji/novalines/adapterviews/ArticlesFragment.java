@@ -2,11 +2,12 @@ package com.example.kaushiknsanji.novalines.adapterviews;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,10 +22,14 @@ import android.view.ViewGroup;
 import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.adapters.ArticlesAdapter;
 import com.example.kaushiknsanji.novalines.drawerviews.HeadlinesFragment;
+import com.example.kaushiknsanji.novalines.errorviews.NetworkErrorFragment;
+import com.example.kaushiknsanji.novalines.errorviews.NoFeedResolutionFragment;
 import com.example.kaushiknsanji.novalines.models.NewsArticleInfo;
 import com.example.kaushiknsanji.novalines.observers.BaseRecyclerViewScrollListener;
+import com.example.kaushiknsanji.novalines.settings.SettingsActivity;
 import com.example.kaushiknsanji.novalines.utils.NewsURLGenerator;
 import com.example.kaushiknsanji.novalines.utils.PreferencesObserverUtility;
+import com.example.kaushiknsanji.novalines.utils.RecyclerViewItemDecorUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsArticlesLoader;
 
@@ -55,6 +60,10 @@ public class ArticlesFragment extends Fragment
 
     //Bundle Key Constant to save/restore the value of the top visible Adapter Item position
     private static final String VISIBLE_ITEM_VIEW_POSITION_INT_KEY = "RecyclerView.TopItemPosition";
+    //Bundle Key Constant to save/restore the value of the visibility of "No Feed Layout"
+    private static final String NO_FEED_VIEW_VISIBILITY_BOOL_KEY = "Visibility.NoFeedView";
+    //Bundle Key Constant to save/restore the value of the visibility of "Network Error Layout"
+    private static final String NW_ERROR_VIEW_VISIBILITY_BOOL_KEY = "Visibility.NetworkErrorView";
     //Constant used as a Bundle Key for the News Topic ID parameter
     private static final String NEWS_TOPIC_ID_STRING_KEY = "NewsTopicID";
     //Constant used as a Bundle Key to ID the Position of the Fragment in the ViewPager
@@ -83,6 +92,15 @@ public class ArticlesFragment extends Fragment
 
     //Saves whether this Fragment is showing a view with Paginated results or not
     private boolean mIsPaginatedView;
+
+    //Saves whether the "No Feed Layout" should be visible/hidden
+    private boolean mNoFeedViewVisible;
+
+    //Saves whether the "Network Error Layout" should be visible/hidden
+    private boolean mNetworkErrorViewVisible;
+
+    //For the "Error Layout"
+    private View mErrorView;
 
     //Saves the last page index of the News Query result
     private int mLastPageIndex = 1; //Defaulted to 1
@@ -177,10 +195,16 @@ public class ArticlesFragment extends Fragment
         //Initializing the URL Generator for use with the NewsArticlesLoader
         mUrlGenerator = new NewsURLGenerator(getContext());
 
-        //Triggering the Data load
-        triggerLoad(false);
+        //Finding the "Error View"
+        mErrorView = rootView.findViewById(R.id.error_frame_id);
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState == null) {
+            //On initial launch of this Fragment
+
+            //Ensuring the "Error View" is hidden
+            hideErrorView();
+
+        } else {
             //On subsequent launch of this Fragment
 
             if (mIsPaginatedView) {
@@ -192,7 +216,21 @@ public class ArticlesFragment extends Fragment
 
             //Restoring the value of the position of the top Adapter item position previously visible
             mVisibleItemViewPosition = savedInstanceState.getInt(VISIBLE_ITEM_VIEW_POSITION_INT_KEY);
+
+            //Restoring the visibility of "No Feed Layout"
+            if (savedInstanceState.getBoolean(NO_FEED_VIEW_VISIBILITY_BOOL_KEY)) {
+                showNoFeedLayout();
+            }
+
+            //Restoring the visibility of "Network Error Layout"
+            if (savedInstanceState.getBoolean(NW_ERROR_VIEW_VISIBILITY_BOOL_KEY)) {
+                showNetworkErrorLayout();
+            }
+
         }
+
+        //Triggering the Data load
+        triggerLoad(false);
 
         //Returning the prepared layout
         return rootView;
@@ -237,6 +275,11 @@ public class ArticlesFragment extends Fragment
     public void onSaveInstanceState(Bundle outState) {
         //Saving the current position of the top Adapter item partially/completely visible
         outState.putInt(VISIBLE_ITEM_VIEW_POSITION_INT_KEY, RecyclerViewUtility.getFirstVisibleItemPosition(mRecyclerView));
+        //Saving the visibility state of the "No Feed Layout"
+        outState.putBoolean(NO_FEED_VIEW_VISIBILITY_BOOL_KEY, mNoFeedViewVisible);
+        //Saving the visibility state of the "Network Error Layout"
+        outState.putBoolean(NW_ERROR_VIEW_VISIBILITY_BOOL_KEY, mNetworkErrorViewVisible);
+
         super.onSaveInstanceState(outState);
     }
 
@@ -298,7 +341,7 @@ public class ArticlesFragment extends Fragment
             //Registering the pagination scroll listener on RecyclerView for paginated views
             mRecyclerView.addOnScrollListener(new RecyclerViewScrollListener(VSCROLL_PAGINATION_TRIGGER_POS));
             //Setting the Item Decor on RecyclerView for proper Card Item and Paginated Buttons spacing
-            mRecyclerView.addItemDecoration(new CardItemDecoration(
+            mRecyclerView.addItemDecoration(new RecyclerViewItemDecorUtility(
                     getResources().getDimensionPixelOffset(R.dimen.card_item_spacing),
                     getResources().getDimensionPixelSize(R.dimen.pagination_button_size)
             ));
@@ -306,7 +349,7 @@ public class ArticlesFragment extends Fragment
             //For Single Page Results
 
             //Setting the Item Decor on RecyclerView for proper Card Item spacing
-            mRecyclerView.addItemDecoration(new CardItemDecoration(
+            mRecyclerView.addItemDecoration(new RecyclerViewItemDecorUtility(
                     getResources().getDimensionPixelOffset(R.dimen.card_item_spacing)
             ));
         }
@@ -343,7 +386,7 @@ public class ArticlesFragment extends Fragment
      * Method that triggers a content refresh
      * based on whether the content is Paginated or Single Page
      */
-    private void triggerRefresh() {
+    public void triggerRefresh() {
         //Resetting the top visible item position to 0, prior to refresh
         mVisibleItemViewPosition = 0;
 
@@ -466,6 +509,7 @@ public class ArticlesFragment extends Fragment
                 mRecyclerAdapter.swapItemData(newsArticleInfos);
                 //Updating the last page index value to the Fragment member
                 mLastPageIndex = ((NewsArticlesLoader) loader).getLastPageIndex();
+
             } else {
                 //When the data returned is Empty or NULL
 
@@ -477,15 +521,21 @@ public class ArticlesFragment extends Fragment
                 if (!newsArticlesLoader.getNetworkConnectivityStatus()) {
                     //Reporting Network Failure when False
                     Log.d(LOG_TAG + "_" + mNewsTopicId, "onLoadFinished: Network Failure");
+                    //Displaying the "Network Error Layout"
+                    showNetworkErrorLayout();
                 } else {
                     //When there is NO network issue and the current page has no data to be shown
                     Log.d(LOG_TAG + "_" + mNewsTopicId, "onLoadFinished: NO DATA RETURNED");
 
+                    //Retrying for Paginated Results if the current page is not the first page
                     if (mIsPaginatedView && getStartPageIndex() > 1) {
                         //When not on first page, reset the 'page' setting value to 1,
                         //to refresh the content and show the first page if possible
                         ((HeadlinesFragment) getParentFragment()).resetStartPageIndex();
                     }
+
+                    //Displaying the "No Feed Layout"  when there is no data
+                    showNoFeedLayout();
                 }
 
             }
@@ -505,6 +555,89 @@ public class ArticlesFragment extends Fragment
         ArrayList<NewsArticleInfo> newsArticleInfoList = new ArrayList<>();
         //Calling the Adapter's swap method to clear the data
         mRecyclerAdapter.swapItemData(newsArticleInfoList);
+    }
+
+    /**
+     * Method that displays the "No Feed Layout".
+     */
+    private void showNoFeedLayout() {
+        //Updating the visibility flag
+        mNoFeedViewVisible = true;
+        //When the layout needs to be shown
+        mErrorView.setVisibility(View.VISIBLE);
+        //Displaying the "No Feed Layout"
+        replaceFragment(NoFeedResolutionFragment.newInstance(), NoFeedResolutionFragment.FRAGMENT_TAG);
+        //Ensuring the Progress is always not shown in this case
+        mSwipeContainer.setRefreshing(false);
+        //Hiding other components
+        enableDefaultComponents(false);
+    }
+
+    /**
+     * Method that displays the "Network Error Layout".
+     */
+    private void showNetworkErrorLayout() {
+        //Updating the visibility flag
+        mNetworkErrorViewVisible = true;
+        //When the layout needs to be shown
+        mErrorView.setVisibility(View.VISIBLE);
+        //Displaying the "Network Error Layout"
+        replaceFragment(NetworkErrorFragment.newInstance(), NetworkErrorFragment.FRAGMENT_TAG);
+        //Ensuring the Progress is always not shown in this case
+        mSwipeContainer.setRefreshing(false);
+        //Hiding other components
+        enableDefaultComponents(false);
+    }
+
+    /**
+     * Method that controls the visibility of the default view components in the layout.
+     *
+     * @param visibility <b>TRUE</b> to display the view components; <b>FALSE</b> to hide them.
+     */
+    private void enableDefaultComponents(boolean visibility) {
+        if (visibility) {
+            //Displaying the View components
+            mSwipeContainer.setVisibility(View.VISIBLE);
+        } else {
+            //Hiding the View components
+            mSwipeContainer.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Method that hides the "Error View"
+     * and takes care of setting the dependent view visibility flags to false
+     */
+    private void hideErrorView() {
+        Log.d(LOG_TAG + "_" + mNewsTopicId, "hideErrorView: Started");
+        //Hiding the "Error View"
+        mErrorView.setVisibility(View.GONE);
+        //Setting the "No Feed Layout" visibility flag to false
+        mNoFeedViewVisible = false;
+        //Setting the "Network Error Layout" visibility flag to false
+        mNetworkErrorViewVisible = false;
+        //Displaying other components
+        enableDefaultComponents(true);
+    }
+
+    /**
+     * Method that replaces the Fragment at 'R.id.error_frame_id' with the Fragment and its Tag passed.
+     * Prior to replacing, it checks whether the given Fragment is already present at 'R.id.error_frame_id'
+     * or not.
+     *
+     * @param fragment is the instance of the Fragment that needs to be displayed at 'R.id.error_frame_id'
+     * @param tag      is the String identifier used by the FragmentManager for checking the presence of the Fragment
+     *                 prior to replacing the content with the Fragment
+     */
+    private void replaceFragment(Fragment fragment, String tag) {
+        //Getting the Instance of the FragmentManager
+        FragmentManager childFragmentManager = getChildFragmentManager();
+        if (childFragmentManager.findFragmentByTag(tag) == null) {
+            //Getting the FragmentTransaction
+            FragmentTransaction fragmentTransaction = childFragmentManager.beginTransaction();
+            //Replacing the Fragment at 'R.id.error_frame_id' with the given Fragment and its Tag
+            fragmentTransaction.replace(R.id.error_frame_id, fragment, tag).commit();
+        }
     }
 
     /**
@@ -545,6 +678,9 @@ public class ArticlesFragment extends Fragment
     @Override
     public void onItemDataSwapped() {
         Log.d(LOG_TAG + "_" + mNewsTopicId, "onItemDataSwapped: News Articles data loaded successfully for " + mNewsTopicId);
+        //Ensuring the "Error View" is hidden
+        hideErrorView();
+
         //Hiding the Progress Indicator after the data load completion
         mSwipeContainer.setRefreshing(false);
 
@@ -664,6 +800,19 @@ public class ArticlesFragment extends Fragment
     }
 
     /**
+     * Method that loads the {@link SettingsActivity} when the "Check App Settings"
+     * button is clicked in the Resolution items of the "No Feed Layout".
+     * <p>
+     * This is also called by the Settings Menu Option.
+     */
+    private void openAppSettings() {
+        //Creating an explicit intent to SettingsActivity
+        Intent settingsIntent = new Intent(getContext(), SettingsActivity.class);
+        //Launching the Activity
+        startActivity(settingsIntent);
+    }
+
+    /**
      * Subclass of {@link BaseRecyclerViewScrollListener} that listens to the scroll event
      * received when the scroll reaches/leaves the last y items in the {@link RecyclerView}
      */
@@ -695,69 +844,5 @@ public class ArticlesFragment extends Fragment
         }
 
     }
-
-    /**
-     * Custom {@link android.support.v7.widget.RecyclerView.ItemDecoration} class
-     * for proper Card Item spacing and spacing with the Paginated Buttons if any
-     */
-    private class CardItemDecoration extends RecyclerView.ItemDecoration {
-        //Stores the Dimension size for the Card Item spacing
-        private int mCardSpacing;
-        //Stores the Dimension size of the Paginated Buttons
-        private int mPaginationButtonSize;
-
-        /**
-         * Constructor of {@link CardItemDecoration}
-         * (Used for Paginated Results)
-         *
-         * @param cardSpacing          is the Integer value of the Dimension size for Card Item spacing
-         * @param paginationButtonSize is the Integer value of the Dimension size of Paginated Buttons
-         */
-        public CardItemDecoration(int cardSpacing, int paginationButtonSize) {
-            mCardSpacing = cardSpacing;
-            mPaginationButtonSize = paginationButtonSize;
-        }
-
-        /**
-         * Constructor of {@link CardItemDecoration}
-         * (Used for Single Page Results)
-         *
-         * @param cardSpacing is the Integer value of the Dimension size for Card Item spacing
-         */
-        public CardItemDecoration(int cardSpacing) {
-            //Propagating the call to main constructor with the Pagination Button size as 0
-            this(cardSpacing, 0);
-        }
-
-        /**
-         * Retrieve any offsets for the given item. Each field of <code>outRect</code> specifies
-         * the number of pixels that the item view should be inset by, similar to padding or margin.
-         * The default implementation sets the bounds of outRect to 0 and returns.
-         *
-         * @param outRect Rect to receive the output.
-         * @param view    The child view to decorate
-         * @param parent  RecyclerView this ItemDecoration is decorating
-         * @param state   The current state of RecyclerView.
-         */
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
-
-            //Retrieving the total item count
-            int totalItems = parent.getAdapter().getItemCount();
-            if (parent.getChildAdapterPosition(view) == totalItems - 1
-                    && mPaginationButtonSize > 0) {
-                //Setting the Bottom offset height of the last Child view for Paginated Results
-                //(This correction is for the Pagination Buttons shown at the Bottom)
-                outRect.bottom = mCardSpacing + mPaginationButtonSize;
-            } else {
-                //Setting the Bottom offset height of the Child views (including the last one for
-                //Single Page Results)
-                outRect.bottom = mCardSpacing;
-            }
-        }
-
-    }
-
 
 }
