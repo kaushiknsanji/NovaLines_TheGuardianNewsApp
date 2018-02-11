@@ -8,6 +8,8 @@
     <color name="colorAccent">#FF4081</color>
     <!-- Default Background color used in the App -->
     <color name="defaultBackgroundColor">#F2F2F2</color>
+    <!-- Common Black/Dark Grey color used in the App -->
+    <color name="nearBlackColor">#484F53</color>
 
     <!-- ==================== -->
     <!-- VIEWPAGER TAB COLORS -->
@@ -21,7 +23,7 @@
     <!-- For the Navigation Header Text background -->
     <color name="navHeaderTextBackgroundColor">#BF484F53</color>
     <!-- For the Navigation Drawer background -->
-    <color name="navBackgroundColor">#484F53</color>
+    <color name="navBackgroundColor">@color/nearBlackColor</color>
     <!-- For the Navigation Item Divider -->
     <color name="navDividerColor">#EAE8E3</color>
     <!-- For the Navigation Icons when selected -->
@@ -34,7 +36,7 @@
     <!-- ============================== -->
     <!-- NEWS HIGHLIGHTS CONTENT COLORS -->
     <!-- ============================== -->
-    <color name="highlightsHeadlineTextColor">#484F53</color>
+    <color name="highlightsHeadlineTextColor">@color/nearBlackColor</color>
 
     <!-- ============================ -->
     <!-- NEWS ARTICLES CONTENT COLORS -->
@@ -71,11 +73,15 @@
     <color name="colorPink500">#e91e63</color>
 
     <!-- Color used as a background for info card items -->
-    <color name="infoCardBackgroundColor">#484F53</color>
+    <color name="infoCardBackgroundColor">@color/nearBlackColor</color>
     <!-- Color used for the Text shown in Bookmarked News Layout for No results condition -->
-    <color name="bookmarkMsgTextColor">#484F53</color>
+    <color name="bookmarkMsgTextColor">@color/nearBlackColor</color>
     <!-- Color used for the Text shown in Favorited News Layout for No results condition -->
-    <color name="favMsgTextColor">#484F53</color>
+    <color name="favMsgTextColor">@color/nearBlackColor</color>
+    <!-- Color used for the Text shown in Network Error Layout -->
+    <color name="networkErrorMsgTextColor">@color/nearBlackColor</color>
+    <!-- Color used for the Text shown in "No Feed Help item" -->
+    <color name="nfhiResolutionTextColor">@color/nearBlackColor</color>
 
 
 </resources>
