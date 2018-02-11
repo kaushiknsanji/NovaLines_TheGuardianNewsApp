@@ -9,15 +9,16 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/nfhi_item_internal_margin">
+        android:layout_margin="@dimen/nfhi_internal_margin">
 
         <TextView
-            android:id="@+id/nfhi_item_number_text_id"
+            android:id="@+id/nfhi_resolution_number_text_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/nfhi_item_number_text_size"
-            android:textStyle="bold"
+            android:textSize="@dimen/nfhi_resolution_number_text_size"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,22 +28,23 @@
             android:id="@+id/nfhi_vertical_line_id"
             android:layout_width="@dimen/nfhi_vertical_line_width"
             android:layout_height="@dimen/match_constraint_0dp"
-            android:layout_marginLeft="@dimen/nfhi_item_internal_margin"
-            android:layout_marginStart="@dimen/nfhi_item_internal_margin"
+            android:layout_marginLeft="@dimen/nfhi_internal_margin"
+            android:layout_marginStart="@dimen/nfhi_internal_margin"
             android:background="@android:color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/nfhi_item_textline_id"
-            app:layout_constraintLeft_toRightOf="@+id/nfhi_item_number_text_id"
-            app:layout_constraintStart_toEndOf="@+id/nfhi_item_number_text_id"
-            app:layout_constraintTop_toTopOf="@+id/nfhi_item_textline_id" />
+            app:layout_constraintBottom_toBottomOf="@+id/nfhi_resolution_text_id"
+            app:layout_constraintLeft_toRightOf="@+id/nfhi_resolution_number_text_id"
+            app:layout_constraintStart_toEndOf="@+id/nfhi_resolution_number_text_id"
+            app:layout_constraintTop_toTopOf="@+id/nfhi_resolution_text_id" />
 
         <TextView
-            android:id="@+id/nfhi_item_textline_id"
+            android:id="@+id/nfhi_resolution_text_id"
             android:layout_width="@dimen/match_constraint_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/nfhi_item_internal_margin"
-            android:layout_marginStart="@dimen/nfhi_item_internal_margin"
-            android:textColor="@color/highlightsHeadlineTextColor"
-            android:textSize="@dimen/nfhi_item_text_size"
+            android:layout_marginLeft="@dimen/nfhi_internal_margin"
+            android:layout_marginStart="@dimen/nfhi_internal_margin"
+            android:bufferType="spannable"
+            android:textColor="@color/nfhiResolutionTextColor"
+            android:textSize="@dimen/nfhi_resolution_text_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nfhi_vertical_line_id"
             app:layout_constraintRight_toRightOf="parent"
@@ -51,17 +53,17 @@
             tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi in arcu placerat, auctor est ut, dictum metus. Fusce magna nisi, ultricies eu sem ac, vulputate sagittis arcu. Sed pretium purus a condimentum interdum. " />
 
         <Button
-            android:id="@+id/nfhi_item_btn_id"
+            android:id="@+id/nfhi_resolution_btn_id"
             style="@style/ConstraintCenterHorizontalStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/nfhi_item_internal_margin"
+            android:layout_marginTop="@dimen/nfhi_internal_margin"
             android:background="@drawable/nfhi_btn_bg_selector"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/nfhi_item_btn_text_size"
-            app:layout_constraintTop_toBottomOf="@+id/nfhi_item_textline_id"
-            tools:drawableLeft="@drawable/ic_settings_unselected"
-            tools:drawablePadding="@dimen/nfhi_item_btn_drawable_padding"
+            android:textSize="@dimen/nfhi_resolution_btn_text_size"
+            app:layout_constraintTop_toBottomOf="@+id/nfhi_resolution_text_id"
+            tools:drawableLeft="@drawable/ic_settings_white"
+            tools:drawablePadding="@dimen/nfhi_resolution_btn_drawable_padding"
             tools:text="Lorem Ipsum" />
 
     </android.support.constraint.ConstraintLayout>

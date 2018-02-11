@@ -50,5 +50,22 @@
         <item>thumbnail</item>
     </string-array>
 
+    <!-- List of resolution texts and button texts for
+    resolving the "No Feed available" scenario -->
+    <string-array name="nf_resolution_texts">
+        <item>@string/nf_app_settings_resolution_text</item>
+        <item>@string/nf_network_settings_resolution_text</item>
+        <item>@string/nf_refresh_resolution_text</item>
+    </string-array>
+    <string-array name="nf_resolution_btn_texts">
+        <item>@string/nf_app_settings_btn_text</item>
+        <item>@string/nf_nw_settings_btn_text</item>
+        <item>@string/nf_refresh_btn_text</item>
+    </string-array>
+    <string-array name="nf_resolution_btn_drawables">
+        <item>@drawable/ic_settings_white</item>
+        <item>@drawable/ic_network_setting</item>
+        <item>@drawable/ic_refresh_white</item>
+    </string-array>
 
 </resources>

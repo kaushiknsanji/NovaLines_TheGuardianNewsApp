@@ -12,7 +12,6 @@
         layout="@layout/info_card_layout"
         android:layout_width="@dimen/match_constraint_0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/no_feed_help_info_scrollview_id"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -43,6 +42,7 @@
                 style="@style/ConstraintTopCenterHorizontalStyle"
                 android:layout_width="@dimen/caption_image_size"
                 android:layout_height="@dimen/caption_image_size"
+                android:focusableInTouchMode="true"
                 app:srcCompat="@drawable/ic_newspaper_no_feed" />
 
             <TextView
@@ -54,8 +54,8 @@
                 android:gravity="center"
                 android:text="@string/no_feed_reason_text"
                 android:textSize="@dimen/no_feed_reason_text_size"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/no_feed_image_id" />
+                app:layout_constraintTop_toBottomOf="@+id/no_feed_image_id"
+                tools:textStyle="bold" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/no_feed_recycler_view_id"
