@@ -14,8 +14,8 @@
         android:gravity="center"
         android:textColor="@color/highlightsHeadlineTextColor"
         android:textSize="@dimen/headline_text_size"
-        android:textStyle="bold"
-        tools:text="News since Yesterday" />
+        tools:text="News since Yesterday"
+        tools:textStyle="bold" />
 
     <View
         android:id="@+id/content_div_id"

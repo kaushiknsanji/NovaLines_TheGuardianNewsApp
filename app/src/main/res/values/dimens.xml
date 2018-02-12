@@ -88,7 +88,7 @@
     <!-- FOR THE NEWS HIGHLIGHT ITEMS -->
     <!-- ============================ -->
     <dimen name="highlights_layout_content_padding">8dp</dimen>
-    <dimen name="headline_text_size">16sp</dimen>
+    <dimen name="headline_text_size">17sp</dimen>
     <dimen name="headline_content_div_height">2dp</dimen>
     <dimen name="headline_item_8dip_margin">8dp</dimen>
     <dimen name="hl_article_count_text_size">36sp</dimen>

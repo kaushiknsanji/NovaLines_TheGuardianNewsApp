@@ -1,6 +1,7 @@
 package com.example.kaushiknsanji.novalines.adapterviews;
 
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -364,6 +366,9 @@ public class HighlightsFragment extends Fragment
             mHeadlineTextView.setText(getString(R.string.news_headline_text,
                     DateFormat.getDateInstance(DateFormat.LONG).format(fromDateCalendar.getTime())));
         }
+
+        //Setting the Font
+        mHeadlineTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.gabriela), Typeface.BOLD);
     }
 
     /**
