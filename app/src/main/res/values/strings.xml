@@ -172,6 +172,8 @@
         News since <xliff:g example="January 01, 2017" id="date_str">%1$s</xliff:g>
     </string>
 
+    <string name="hl_new_stories_text_line">New Stories in</string>
+
     <!-- ========================================= -->
     <!-- STRINGS USED IN THE ARTICLES FRAGMENT TAB -->
     <!-- ========================================= -->
@@ -182,10 +184,18 @@
     <!-- Default message shown when the Published Date of the Article is not available -->
     <string name="no_published_date_default_text">Unknown Date</string>
 
-    <!-- =========================================== -->
-    <!-- STRINGS USED IN THE HIGHLIGHTS FRAGMENT TAB -->
-    <!-- =========================================== -->
-    <string name="hl_new_stories_text_line">New Stories in</string>
+    <!-- Menu action strings for the News article items -->
+    <string name="article_action_read_later">Read later</string>
+    <string name="article_action_favorite">Favorite this</string>
+    <string name="article_action_open_section">Open News Section</string>
+
+    <!-- ====================================== -->
+    <!-- STRINGS USED IN THE HEADLINES FRAGMENT -->
+    <!-- ====================================== -->
+
+    <!-- Menu action strings for the child fragments of the Headlines -->
+    <string name="headline_action_refresh">Refresh</string>
+    <string name="headline_action_subscribe">Add News Feed</string>
 
     <!-- =========================== -->
     <!-- STRINGS USED FOR PAGINATION -->

@@ -1,5 +1,6 @@
 package com.example.kaushiknsanji.novalines.adapterviews;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -16,6 +17,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -25,6 +29,7 @@ import com.example.kaushiknsanji.novalines.adapters.HighlightsAdapter;
 import com.example.kaushiknsanji.novalines.drawerviews.HeadlinesFragment;
 import com.example.kaushiknsanji.novalines.errorviews.NetworkErrorFragment;
 import com.example.kaushiknsanji.novalines.models.NewsSectionInfo;
+import com.example.kaushiknsanji.novalines.settings.SettingsActivity;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsHighlightsLoader;
 
@@ -91,6 +96,19 @@ public class HighlightsFragment extends Fragment
     public static HighlightsFragment newInstance() {
         //Returning the instance of the Fragment
         return new HighlightsFragment();
+    }
+
+    /**
+     * Called to do initial creation of a fragment.
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     *                           a previous saved state, this is the state.
+     */
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //Indicating that this fragment has menu options to show
+        setHasOptionsMenu(true);
     }
 
     /**
@@ -226,6 +244,47 @@ public class HighlightsFragment extends Fragment
         outState.putBoolean(NW_ERROR_VIEW_VISIBILITY_BOOL_KEY, mNetworkErrorViewVisible);
 
         super.onSaveInstanceState(outState);
+    }
+
+    /**
+     * Initialize the contents of the Fragment host's standard options menu.  You
+     * should place your menu items in to <var>menu</var>.
+     *
+     * @param menu     The options menu in which you place your items.
+     * @param inflater The LayoutInflater object that can be used to inflate the Menu options
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //Inflating the Menu options from headlines_main_menu.xml
+        inflater.inflate(R.menu.headlines_main_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     * The default implementation simply returns false to have the normal
+     * processing happen.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     * @see #onCreateOptionsMenu
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //Handling based on the Menu item selected
+        switch (item.getItemId()) {
+            case R.id.refresh_action_id:
+                //For the refresh menu option
+                triggerLoad(true);
+                return true;
+            case R.id.settings_action_id:
+                //For the settings menu option
+                openAppSettings();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
@@ -678,6 +737,16 @@ public class HighlightsFragment extends Fragment
                 }
             }
         }
+    }
+
+    /**
+     * Method that loads the {@link SettingsActivity} when the Settings Menu option is clicked
+     */
+    private void openAppSettings() {
+        //Creating an explicit intent to SettingsActivity
+        Intent settingsIntent = new Intent(getContext(), SettingsActivity.class);
+        //Launching the Activity
+        startActivity(settingsIntent);
     }
 
 }
