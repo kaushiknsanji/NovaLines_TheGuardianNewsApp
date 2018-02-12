@@ -3,15 +3,13 @@
     <item
         android:id="@+id/read_later_action_id"
         android:orderInCategory="1"
-        android:title="Read later" />
-
+        android:title="@string/article_action_read_later" />
     <item
         android:id="@+id/mark_fav_action_id"
         android:orderInCategory="2"
-        android:title="Favorite this" />
-
+        android:title="@string/article_action_favorite" />
     <item
         android:id="@+id/jump_section_action_id"
         android:orderInCategory="3"
-        android:title="Open News Section" />
+        android:title="@string/article_action_open_section" />
 </menu>
