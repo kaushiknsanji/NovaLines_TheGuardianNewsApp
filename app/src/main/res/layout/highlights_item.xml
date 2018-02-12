@@ -38,11 +38,9 @@
 
         <TextView
             android:id="@+id/hl_article_section_text_id"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/match_constraint_0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/hl_article_section_text_margin_bottom"
-            android:layout_marginLeft="@dimen/hl_article_section_text_margin_left"
-            android:layout_marginStart="@dimen/hl_article_section_text_margin_left"
             android:layout_marginTop="@dimen/hl_article_section_text_margin_top"
             android:ellipsize="end"
             android:maxLines="1"
@@ -50,10 +48,10 @@
             android:textSize="@dimen/hl_article_section_text_size"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintLeft_toRightOf="@+id/news_count_text_id"
+            app:layout_constraintEnd_toStartOf="@+id/news_item_enter_image_id"
+            app:layout_constraintLeft_toLeftOf="@+id/news_text_line_id"
             app:layout_constraintRight_toLeftOf="@+id/news_item_enter_image_id"
-            app:layout_constraintStart_toEndOf="@+id/news_count_text_id"
+            app:layout_constraintStart_toStartOf="@+id/news_text_line_id"
             app:layout_constraintTop_toBottomOf="@+id/news_text_line_id"
             tools:text="International" />
 
