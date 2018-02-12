@@ -144,7 +144,7 @@
     <dimen name="bookmark_scrollview_margin_right">16dp</dimen>
     <dimen name="bookmark_msg_text_margin_bottom">8dp</dimen>
     <dimen name="bookmark_msg_text_margin_top">16dp</dimen>
-    <dimen name="bookmark_msg_text_size">21sp</dimen>
+    <dimen name="bookmark_msg_text_size">18sp</dimen>
 
     <!-- ============================= -->
     <!-- FOR THE FAVORITED NEWS LAYOUT -->
@@ -154,7 +154,7 @@
     <dimen name="fav_scrollview_margin_right">16dp</dimen>
     <dimen name="fav_msg_text_margin_bottom">8dp</dimen>
     <dimen name="fav_msg_text_margin_top">16dp</dimen>
-    <dimen name="fav_msg_text_size">21sp</dimen>
+    <dimen name="fav_msg_text_size">18sp</dimen>
 
     <!-- ============================ -->
     <!-- FOR THE NETWORK ERROR LAYOUT -->
