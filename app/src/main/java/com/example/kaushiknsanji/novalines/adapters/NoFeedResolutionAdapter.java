@@ -20,7 +20,12 @@ import com.example.kaushiknsanji.novalines.utils.TextAppearanceUtility;
 import java.util.List;
 
 /**
- * Created by Kaushik N Sanji on 08-Feb-18.
+ * Adapter class of the RecyclerView present in the layout 'R.layout.no_feed_layout',
+ * inflated by {@link com.example.kaushiknsanji.novalines.errorviews.NoFeedResolutionFragment}
+ * that is used along with the {@link android.support.v7.widget.LinearLayoutManager}
+ * to bind and display a list of {@link NoFeedInfo} objects.
+ *
+ * @author Kaushik N Sanji
  */
 public class NoFeedResolutionAdapter extends RecyclerView.Adapter<NoFeedResolutionAdapter.ViewHolder> {
 
