@@ -12,7 +12,6 @@ import com.example.kaushiknsanji.novalines.utils.NewsSectionInfoParserUtility;
 import com.example.kaushiknsanji.novalines.utils.NewsURLGenerator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -33,6 +32,9 @@ public class NewsHighlightsLoader extends AsyncTaskLoader<List<NewsSectionInfo>>
     //Saves the query result which is a List of NewsSectionInfo objects
     private List<NewsSectionInfo> mNewsSectionInfoList;
 
+    //Saves the list of Ids of the Subscribed News Categories
+    private List<String> mSubscribedNewsSectionIdsList;
+
     //Boolean that stores the Network Connectivity state
     private boolean mIsNetworkConnected = false;
 
@@ -43,9 +45,11 @@ public class NewsHighlightsLoader extends AsyncTaskLoader<List<NewsSectionInfo>>
      * Constructor of the Loader {@link NewsHighlightsLoader}
      *
      * @param context is the reference to Activity Context
+     * @param subscribedNewsSectionIdsList is a List of Ids of the Subscribed News Categories
      */
-    public NewsHighlightsLoader(Context context) {
+    public NewsHighlightsLoader(Context context, ArrayList<String> subscribedNewsSectionIdsList) {
         super(context);
+        mSubscribedNewsSectionIdsList = subscribedNewsSectionIdsList;
     }
 
     /**
@@ -66,17 +70,14 @@ public class NewsHighlightsLoader extends AsyncTaskLoader<List<NewsSectionInfo>>
             //Updating the Connectivity status to True
             mIsNetworkConnected = true;
 
-            //Getting the List of Subscribed News Sections
-            List<String> subscribedNewsSectionIds = getSubscribedNewsSections();
-
             //Initializing the List of NewsSectionInfo objects
             ArrayList<NewsSectionInfo> newsSectionInfoList = new ArrayList<>();
 
             //Initializing the NewsURLGenerator
-            NewsURLGenerator urlGenerator = new NewsURLGenerator(context);
+            NewsURLGenerator urlGenerator = new NewsURLGenerator(context, true);
 
             //Iterating over the Subscribed News Sections to retrieve their data: START
-            for (String sectionIdStr : subscribedNewsSectionIds) {
+            for (String sectionIdStr : mSubscribedNewsSectionIdsList) {
                 //Firing the request and extracting the News Section Info
                 NewsSectionInfo newsSectionInfo = NewsSectionInfoParserUtility
                         .getNewsSectionInfo(
@@ -105,20 +106,6 @@ public class NewsHighlightsLoader extends AsyncTaskLoader<List<NewsSectionInfo>>
 
         //For all else, returning null
         return null;
-    }
-
-    /**
-     * Method that retrieves and returns a List of Subscribed News Sections
-     *
-     * @return List of Strings containing the Subscribed News Section IDs
-     */
-    private List<String> getSubscribedNewsSections() {
-        //Retrieving the reference to Context
-        Context context = getContext();
-        //Retrieving the fixed set of Subscribed News Section IDs
-        String[] subscribedSectionIdArray = context.getResources().getStringArray(R.array.news_fixed_section_ids);
-        //Returning the Subscribed News Section IDs as a List
-        return Arrays.asList(subscribedSectionIdArray);
     }
 
     /**
@@ -242,4 +229,5 @@ public class NewsHighlightsLoader extends AsyncTaskLoader<List<NewsSectionInfo>>
     public long getFromDateInMillis() {
         return mFromDateInMillis;
     }
+
 }

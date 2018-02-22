@@ -40,15 +40,35 @@ public class NewsURLGenerator {
     private Context mAppContext;
     //Stores reference to the Preferences used by the App
     private SharedPreferences mSharedPreferences;
+    //Stores whether the URL Generation is required for only Article Count purposes
+    private boolean mCountMode;
 
     /**
      * Constructor that gives the instance of {@link NewsURLGenerator}
+     * (This constructor is not meant for Article Count purpose)
      *
      * @param context is the Context of the Activity/Fragment or App
      */
     public NewsURLGenerator(Context context) {
         mAppContext = context.getApplicationContext();
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mAppContext);
+        mCountMode = false;
+    }
+
+    /**
+     * Constructor that gives the instance of {@link NewsURLGenerator}
+     * (This constructor is meant for Article Count purpose, but can be used for the
+     * Generic purpose by passing False for #countMode)
+     *
+     * @param context   is the Context of the Activity/Fragment or App
+     * @param countMode Signifies whether the URL Generator will be used for Article Count Purpose
+     *                  or the Generic Purpose
+     *                  <br/><b>TRUE</b> for Count Purpose; <b>FALSE</b> for Generic Purpose
+     */
+    public NewsURLGenerator(Context context, boolean countMode) {
+        mAppContext = context.getApplicationContext();
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mAppContext);
+        mCountMode = countMode;
     }
 
     /**
@@ -210,13 +230,22 @@ public class NewsURLGenerator {
 
         //Appending the 'page' preference setting: START
         String pageIndexKeyStr = mAppContext.getString(R.string.pref_page_index_key);
-        uriBuilder.appendQueryParameter(
-                pageIndexKeyStr,
-                String.valueOf(
-                        mSharedPreferences.getInt(pageIndexKeyStr,
-                                mAppContext.getResources().getInteger(R.integer.pref_page_index_default_value))
-                )
-        );
+        if (mCountMode) {
+            //Defaulting the 'page' setting value to 1, for Count purpose
+            uriBuilder.appendQueryParameter(
+                    pageIndexKeyStr,
+                    String.valueOf(mAppContext.getResources().getInteger(R.integer.pref_page_index_default_value))
+            );
+        } else {
+            //Using the current 'page' setting value for Generic purpose
+            uriBuilder.appendQueryParameter(
+                    pageIndexKeyStr,
+                    String.valueOf(
+                            mSharedPreferences.getInt(pageIndexKeyStr,
+                                    mAppContext.getResources().getInteger(R.integer.pref_page_index_default_value))
+                    )
+            );
+        }
         //Appending the 'page' preference setting: END
     }
 }
