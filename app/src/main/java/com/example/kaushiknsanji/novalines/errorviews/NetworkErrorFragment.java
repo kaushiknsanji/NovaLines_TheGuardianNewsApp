@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.kaushiknsanji.novalines.R;
-import com.example.kaushiknsanji.novalines.utils.NetworkUtility;
+import com.example.kaushiknsanji.novalines.utils.IntentUtility;
 import com.example.kaushiknsanji.novalines.utils.TextAppearanceUtility;
 
 /**
@@ -104,7 +104,7 @@ public class NetworkErrorFragment extends Fragment
         switch (view.getId()) {
             case R.id.network_settings_btn_id:
                 //Launching Network Settings on click of this button
-                NetworkUtility.openNetworkSettings(getContext());
+                IntentUtility.openNetworkSettings(getContext());
                 break;
         }
     }
