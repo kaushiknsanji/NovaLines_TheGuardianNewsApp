@@ -173,7 +173,7 @@
     <!-- FOR THE "MORE NEWS LAYOUT" -->
     <!-- ========================== -->
     <dimen name="add_news_scrollview_margin_top">8dp</dimen>
-    <dimen name="add_more_news_text_size">21sp</dimen>
+    <dimen name="add_more_news_text_size">18sp</dimen>
     <dimen name="add_more_news_text_margin_top">8dp</dimen>
     <dimen name="add_more_news_btn_text_size">18sp</dimen>
     <dimen name="add_more_news_btn_margin_top">8dp</dimen>

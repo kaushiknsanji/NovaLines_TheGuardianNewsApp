@@ -80,6 +80,8 @@
     <color name="favMsgTextColor">@color/nearBlackColor</color>
     <!-- Color used for the Text shown in Network Error Layout -->
     <color name="networkErrorMsgTextColor">@color/nearBlackColor</color>
+    <!-- Color used for the Text shown in More News Layout -->
+    <color name="subscribeNewsMsgTextColor">@color/nearBlackColor</color>
     <!-- Color used for the Text shown in "No Feed Help item" -->
     <color name="nfhiResolutionTextColor">@color/nearBlackColor</color>
 

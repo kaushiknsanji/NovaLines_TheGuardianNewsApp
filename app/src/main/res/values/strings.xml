@@ -189,13 +189,46 @@
     <string name="article_action_favorite">Favorite this</string>
     <string name="article_action_open_section">Open News Section</string>
 
+    <!-- ========================================== -->
+    <!-- STRINGS USED IN THE MORE NEWS FRAGMENT TAB -->
+    <!-- ========================================== -->
+
+    <!-- The Tab Title of MoreNewsFragment -->
+    <string name="more_news_tab_title_text" translatable="false"> + </string>
+
+    <!-- Short Info Text displayed when a particular News Section/Category is not subscribed -->
+    <string name="news_not_subscribed_title_text">
+        <xliff:g example="Sport" id="news_category">\'%1$s\'</xliff:g> Not subscribed
+    </string>
+
+    <!-- Message displayed when a particular News Section/Category is not subscribed -->
+    <string name="news_not_subscribed_msg">
+        You are currently not subscribed to &lt;b&gt;<xliff:g example="Sport" id="news_category">\'%1$s\'</xliff:g>&lt;/b&gt; News Feed. Please use the button below to subscribe the &lt;b&gt;<xliff:g example="Sport" id="news_category">\'%1$s\'</xliff:g>&lt;/b&gt; News Feed.
+    </string>
+
+    <!-- Button Text used when a particular News Section/Category is not subscribed -->
+    <string name="news_not_subscribed_btn_text">
+        <xliff:g example="Sport" id="news_category">%1$s</xliff:g>
+    </string>
+
+    <!-- Default Short Info Text displayed when the Fragment is launched for subscribing to More News Feeds -->
+    <string name="more_news_subscribe_title_text">Subscribe to More Feeds</string>
+
+    <!-- Default Message displayed when the Fragment is launched for subscribing to More News Feeds -->
+    <string name="more_news_subscribe_msg">For more News Feeds from different categories, click the menu icon [ic_newspaper_add_black] to subscribe the feeds of your choice.</string>
+
+    <!-- Button Text used when the Fragment is launched for subscribing to More News Feeds -->
+    <string name="more_news_subscribe_btn_text">Subscribe More</string>
+
+    <!-- Title of the action menu item for Subscribing to More News Feeds -->
+    <string name="more_news_action_subscribe">Subscribe</string>
+
     <!-- ====================================== -->
     <!-- STRINGS USED IN THE HEADLINES FRAGMENT -->
     <!-- ====================================== -->
 
-    <!-- Menu action strings for the child fragments of the Headlines -->
+    <!-- Title of the action menu item for refreshing the content -->
     <string name="headline_action_refresh">Refresh</string>
-    <string name="headline_action_subscribe">Add News Feed</string>
 
     <!-- =========================== -->
     <!-- STRINGS USED FOR PAGINATION -->
