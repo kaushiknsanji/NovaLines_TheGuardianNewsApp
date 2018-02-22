@@ -12,7 +12,6 @@
         layout="@layout/info_card_layout"
         android:layout_width="@dimen/match_constraint_0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/add_news_scrollview_id"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -51,6 +50,8 @@
                 android:layout_width="@dimen/match_constraint_0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/add_more_news_text_margin_top"
+                android:gravity="center"
+                android:textColor="@color/subscribeNewsMsgTextColor"
                 android:textSize="@dimen/add_more_news_text_size"
                 app:layout_constraintBottom_toTopOf="@+id/add_more_news_btn_id"
                 app:layout_constraintTop_toBottomOf="@+id/add_news_image_id"
@@ -65,11 +66,11 @@
                 android:layout_marginTop="@dimen/add_more_news_btn_margin_top"
                 android:background="@drawable/add_more_btn_bg_selector"
                 android:drawableLeft="@drawable/ic_add_circle_white"
+                android:drawablePadding="@dimen/add_more_news_btn_drawable_padding"
                 android:drawableStart="@drawable/ic_add_circle_white"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/add_more_news_btn_text_size"
                 app:layout_constraintTop_toBottomOf="@+id/add_more_news_text_id"
-                tools:drawablePadding="@dimen/add_more_news_btn_drawable_padding"
                 tools:text="Lorem Ipsum" />
 
         </android.support.constraint.ConstraintLayout>
