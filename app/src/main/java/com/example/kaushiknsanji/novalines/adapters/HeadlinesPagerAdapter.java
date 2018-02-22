@@ -13,22 +13,32 @@ import java.util.ArrayList;
 import java.util.Set;
 
 /**
- * Created by Kaushik N Sanji on 10-Jan-18.
+ * Custom {@link FragmentStatePagerAdapter} that provides the appropriate Fragment
+ * for the ViewPager in {@link com.example.kaushiknsanji.novalines.drawerviews.HeadlinesFragment}
+ *
+ * @author Kaushik N Sanji
  */
-
 public class HeadlinesPagerAdapter extends FragmentStatePagerAdapter {
+
+    //Constant used for logs
+    private static final String LOG_TAG = HeadlinesPagerAdapter.class.getSimpleName();
 
     //Sparse Array to keep track of the registered fragments in memory
     private SparseArray<Fragment> mRegisteredFragments = new SparseArray<>();
 
-    //Sparse Array to save the list of ViewPager Fragments supplied
+    //List to store the ViewPager Fragments supplied
     private ArrayList<Fragment> mFragmentList = new ArrayList<>();
 
-    //Sparse Array to save the title of the Fragments supplied
+    //List to save the title of the Fragments supplied
     private ArrayList<String> mFragmentTitleList = new ArrayList<>();
 
     //Stores a reference to the FragmentManager used
     private FragmentManager mFragmentManager;
+
+    //Stores the Fragment currently set as Primary item to be shown
+    private Fragment mPrimaryFragment;
+    //Stores the position of the Fragment currently set as Primary item
+    private int mPrimaryFragmentPos;
 
     /**
      * Constructor of the FragmentStatePagerAdapter {@link HeadlinesPagerAdapter}
@@ -72,6 +82,58 @@ public class HeadlinesPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         //Returning the Fragment at the position
         return mFragmentList.get(position);
+    }
+
+    /**
+     * Called when the host view is attempting to determine if an item's position
+     * has changed. Returns {@link #POSITION_UNCHANGED} if the position of the given
+     * item has not changed or {@link #POSITION_NONE} if the item is no longer present
+     * in the adapter.
+     *
+     * @param object Object representing an item, previously returned by a call to
+     *               {@link #instantiateItem(ViewGroup, int)}.
+     * @return object's new position index from [0, {@link #getCount()}),
+     * {@link #POSITION_UNCHANGED} if the object's position has not changed,
+     * or {@link #POSITION_NONE} if the item is no longer present.
+     */
+    @Override
+    public int getItemPosition(Object object) {
+        //Casting to a Fragment (assuming that it is always a Fragment)
+        Fragment fragment = (Fragment) object;
+
+        if (fragment.equals(mPrimaryFragment)) {
+            //When the Primary Item Fragment is same as the Fragment being checked for position change
+            if (mPrimaryFragmentPos == mFragmentList.indexOf(fragment)) {
+                //Returning POSITION_UNCHANGED when the positions are same
+                return POSITION_UNCHANGED;
+            } else {
+                //Returning POSITION_NONE to reload the Fragment when the positions are different
+                return POSITION_NONE;
+            }
+        } else if (mRegisteredFragments.indexOfValue(fragment) > -1) {
+            //Returning POSITION_UNCHANGED when not a Fragment of Primary Item
+            //and is present in the saved fragments list
+            return POSITION_UNCHANGED;
+        }
+        //On all else, Returning POSITION_NONE to reload the Fragment
+        return POSITION_NONE;
+    }
+
+    /**
+     * Called to inform the adapter of which item is currently considered to
+     * be the "primary", that is the one to show the user as the current page.
+     *
+     * @param container The containing View from which the page will be removed.
+     * @param position  The page position that is now the primary.
+     * @param object    The same object that was returned by {@link #instantiateItem(ViewGroup, int)}.
+     */
+    @Override
+    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        super.setPrimaryItem(container, position, object);
+        //Saving the Primary Item Fragment shown
+        mPrimaryFragment = (Fragment) object;
+        //Saving the position of Primary Item Fragment
+        mPrimaryFragmentPos = position;
     }
 
     /**
