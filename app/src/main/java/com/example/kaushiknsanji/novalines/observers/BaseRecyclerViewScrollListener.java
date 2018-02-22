@@ -44,6 +44,22 @@ public abstract class BaseRecyclerViewScrollListener extends RecyclerView.OnScro
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         super.onScrollStateChanged(recyclerView, newState);
+
+        if (mIsScrolledToBottomEnd && newState == RecyclerView.SCROLL_STATE_IDLE) {
+            //When the scroll to bottom state is true and the RecyclerView scroll is idle
+
+            //Retrieving the current number of items in the RecyclerView
+            int totalItems = recyclerView.getAdapter().getItemCount();
+
+            if ((totalItems - mBottomYEndItemPosForTrigger) <= mBottomYEndItemPosForTrigger) {
+                //When there is less number of items for scroll
+
+                //Updating the scrolled to bottom state as False
+                mIsScrolledToBottomEnd = false;
+                //Fake Signalling that the last item view has been reached
+                onBottomReached(1);
+            }
+        }
     }
 
     /**
@@ -60,12 +76,20 @@ public abstract class BaseRecyclerViewScrollListener extends RecyclerView.OnScro
         if (dy != 0) {
             //Scanning for vertical scrolls only
 
-            //Retrieving the current total items in the RecyclerView
+            //Retrieving the current number of items in the RecyclerView
             int totalItems = recyclerView.getAdapter().getItemCount();
             //Retrieving the current last seen item position
             int lastItemPosition = RecyclerViewUtility.getLastVisibleItemPosition(recyclerView);
 
-            if (dy > 0) {
+            if ((totalItems - mBottomYEndItemPosForTrigger) <= mBottomYEndItemPosForTrigger) {
+                //When there is less number of items for scroll
+
+                //Updating the scrolled to bottom state as False
+                mIsScrolledToBottomEnd = false;
+                //Fake Signalling that the last item view has been reached
+                onBottomReached(1);
+
+            } else if (dy > 0) {
                 //Scanning when scrolling to the bottom
 
                 //Checking if the last seen item was one of the last y items
@@ -96,6 +120,7 @@ public abstract class BaseRecyclerViewScrollListener extends RecyclerView.OnScro
                     onBottomReached(dy);
                 }
             }
+
         }
     }
 
