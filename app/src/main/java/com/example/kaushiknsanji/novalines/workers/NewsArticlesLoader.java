@@ -1,12 +1,8 @@
 package com.example.kaushiknsanji.novalines.workers;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v4.content.AsyncTaskLoader;
-import android.support.v7.preference.PreferenceManager;
-import android.util.Log;
 
-import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.models.NewsArticleInfo;
 import com.example.kaushiknsanji.novalines.utils.NetworkUtility;
 import com.example.kaushiknsanji.novalines.utils.NewsArticleInfoParserUtility;
@@ -73,27 +69,7 @@ public class NewsArticlesLoader extends AsyncTaskLoader<List<NewsArticleInfo>> {
 
             if (newsArticleInfoList != null && newsArticleInfoList.size() > 0) {
                 //Retrieving the Number of Pages of available data when there is News feed
-                int lastPageIndex = articleInfoParserUtility.getPagesCount();
-
-                if (lastPageIndex > 0) {
-                    //Updating the value to 'endIndex' preference when greater than 0
-                    //(This excludes the "Top Stories" and "Most Visited" News topics
-                    // which are one page views)
-
-                    //Retrieving the Preferences to get the current setting values
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-                    //Opening the Editor to update the value of the last page index found
-                    SharedPreferences.Editor prefEditor = preferences.edit();
-                    prefEditor.putInt(context.getString(R.string.pref_page_max_value_key),
-                            lastPageIndex); //updating the 'endIndex'
-                    prefEditor.apply(); //Applying the changes
-
-                    //Updating the member value
-                    mLastPageIndex = lastPageIndex;
-
-                    Log.d(LOG_TAG, "loadInBackground: lastPageIndex updated to " + lastPageIndex);
-                }
+                mLastPageIndex = articleInfoParserUtility.getPagesCount();
             }
 
             //Returning the extracted list of NewsArticleInfo Objects

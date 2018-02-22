@@ -1,8 +1,6 @@
 package com.example.kaushiknsanji.novalines.adapterviews;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,7 +27,7 @@ import com.example.kaushiknsanji.novalines.errorviews.NetworkErrorFragment;
 import com.example.kaushiknsanji.novalines.errorviews.NoFeedResolutionFragment;
 import com.example.kaushiknsanji.novalines.models.NewsArticleInfo;
 import com.example.kaushiknsanji.novalines.observers.BaseRecyclerViewScrollListener;
-import com.example.kaushiknsanji.novalines.settings.SettingsActivity;
+import com.example.kaushiknsanji.novalines.utils.IntentUtility;
 import com.example.kaushiknsanji.novalines.utils.NewsURLGenerator;
 import com.example.kaushiknsanji.novalines.utils.PreferencesObserverUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewItemDecorUtility;
@@ -41,7 +39,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Kaushik N Sanji on 08-Jan-18.
+ * Fragment that inflates the layout 'R.layout.articles_layout'
+ * containing the {@link RecyclerView} used in the {@link com.example.kaushiknsanji.novalines.adapters.HeadlinesPagerAdapter}
+ * for the ViewPager shown in {@link HeadlinesFragment}.
+ *
+ * Responsible for displaying the News Feeds from various News Categories/Sections
+ * subscribed by the user.
+ *
+ * @author Kaushik N Sanji
  */
 public class ArticlesFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<List<NewsArticleInfo>>,
@@ -67,6 +72,9 @@ public class ArticlesFragment extends Fragment
     private static final String NO_FEED_VIEW_VISIBILITY_BOOL_KEY = "Visibility.NoFeedView";
     //Bundle Key Constant to save/restore the value of the visibility of "Network Error Layout"
     private static final String NW_ERROR_VIEW_VISIBILITY_BOOL_KEY = "Visibility.NetworkErrorView";
+    //Bundle Key Constant to save/restore the index of the last page viewed by the user
+    private static final String LAST_VIEWED_PAGE_INT_KEY = "PaginatedView.LastViewedIndex";
+
     //Constant used as a Bundle Key for the News Topic ID parameter
     private static final String NEWS_TOPIC_ID_STRING_KEY = "NewsTopicID";
     //Constant used as a Bundle Key to ID the Position of the Fragment in the ViewPager
@@ -107,6 +115,9 @@ public class ArticlesFragment extends Fragment
 
     //Saves the last page index of the News Query result
     private int mLastPageIndex = 1; //Defaulted to 1
+
+    //Saves the last viewed page index of the News Query result
+    private int mLastViewedPageIndex = 1; //Defaulted to 1
 
     //Saves the top visible Adapter Item position
     private int mVisibleItemViewPosition;
@@ -223,8 +234,12 @@ public class ArticlesFragment extends Fragment
         } else {
             //On subsequent launch of this Fragment
 
-            if (mIsPaginatedView) {
+            if (mIsPaginatedView && getUserVisibleHint()) {
                 //For Paginated Results
+                //(when this fragment is the one currently being viewed by the user)
+
+                //Restoring the index of the last page viewed by the user
+                mLastViewedPageIndex = savedInstanceState.getInt(LAST_VIEWED_PAGE_INT_KEY);
 
                 //Updating the state of Pagination Buttons on load
                 ((HeadlinesFragment) getParentFragment()).updatePaginationButtonsState();
@@ -295,6 +310,8 @@ public class ArticlesFragment extends Fragment
         outState.putBoolean(NO_FEED_VIEW_VISIBILITY_BOOL_KEY, mNoFeedViewVisible);
         //Saving the visibility state of the "Network Error Layout"
         outState.putBoolean(NW_ERROR_VIEW_VISIBILITY_BOOL_KEY, mNetworkErrorViewVisible);
+        //Saving the index of the last page viewed
+        outState.putInt(LAST_VIEWED_PAGE_INT_KEY, mLastViewedPageIndex);
 
         super.onSaveInstanceState(outState);
     }
@@ -333,7 +350,9 @@ public class ArticlesFragment extends Fragment
                 return true;
             case R.id.settings_action_id:
                 //For the settings menu option
-                openAppSettings();
+
+                //Loading App's Settings
+                IntentUtility.openAppSettings(getContext());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -381,7 +400,7 @@ public class ArticlesFragment extends Fragment
         ArrayList<NewsArticleInfo> newsArticleInfoList = new ArrayList<>();
 
         //Initializing the Adapter for the List view
-        mRecyclerAdapter = new ArticlesAdapter(getContext(), R.layout.news_article_item, newsArticleInfoList, mLoaderIds);
+        mRecyclerAdapter = new ArticlesAdapter(getContext(), R.layout.news_article_item, newsArticleInfoList, mLoaderIds, mNewsTopicId);
 
         //Registering the OnAdapterItemDataSwapListener
         mRecyclerAdapter.setOnAdapterItemDataSwapListener(this);
@@ -396,7 +415,7 @@ public class ArticlesFragment extends Fragment
             //For Paginated Results
 
             //Registering the pagination scroll listener on RecyclerView for paginated views
-            mRecyclerView.addOnScrollListener(new RecyclerViewScrollListener(VSCROLL_PAGINATION_TRIGGER_POS));
+            mRecyclerView.addOnScrollListener(new RecyclerViewScrollListener(this, VSCROLL_PAGINATION_TRIGGER_POS));
             //Setting the Item Decor on RecyclerView for proper Card Item and Paginated Buttons spacing
             mRecyclerView.addItemDecoration(new RecyclerViewItemDecorUtility(
                     getResources().getDimensionPixelOffset(R.dimen.card_item_spacing),
@@ -516,19 +535,34 @@ public class ArticlesFragment extends Fragment
      * Method that shows/hides the pagination panel for Paginated results
      * based on the position of the currently visible item at the top
      */
-    private void checkAndEnablePaginationPanel() {
+    public void checkAndEnablePaginationPanel() {
         if (mIsPaginatedView) {
             //For Paginated Results
-            if (mVisibleItemViewPosition >= mRecyclerAdapter.getItemCount() - VSCROLL_PAGINATION_TRIGGER_POS) {
-                //Displaying the Pagination panel when the Bottom Y items are reached
-                ((HeadlinesFragment) getParentFragment()).showPaginationPanel(true);
+
+            //Retrieving the current number of items in the RecyclerView
+            int totalItems = mRecyclerAdapter.getItemCount();
+
+            if (totalItems == 0) {
+                //Hiding the Pagination panel for no items
+                ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
+            } else if ((totalItems - VSCROLL_PAGINATION_TRIGGER_POS) <= 0) {
+                //Displaying the Pagination panel by default when the number of items are less
+                ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, true);
             } else {
-                //Hiding the Pagination panel when away from the Bottom Y items
-                ((HeadlinesFragment) getParentFragment()).showPaginationPanel(false);
+                //When there are considerable number of items
+                if (mVisibleItemViewPosition >= totalItems - VSCROLL_PAGINATION_TRIGGER_POS) {
+                    //Displaying the Pagination panel when the Bottom Y items are reached
+                    ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, true);
+                } else {
+                    //Hiding the Pagination panel when away from the Bottom Y items
+                    ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
+                }
+
             }
+
         } else {
             //Hiding the Pagination panel by default for Single Page Results
-            ((HeadlinesFragment) getParentFragment()).showPaginationPanel(false);
+            ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
         }
     }
 
@@ -566,6 +600,13 @@ public class ArticlesFragment extends Fragment
                 mRecyclerAdapter.swapItemData(newsArticleInfos);
                 //Updating the last page index value to the Fragment member
                 mLastPageIndex = ((NewsArticlesLoader) loader).getLastPageIndex();
+                if (mLastPageIndex > 0 && getUserVisibleHint()) {
+                    //When the last page index is calculated
+                    //and the current fragment is the one being viewed by the user
+
+                    //Resetting the 'endIndex' preference setting value to the last page index determined
+                    ((HeadlinesFragment) getParentFragment()).resetEndPageIndex(mLastPageIndex);
+                }
 
             } else {
                 //When the data returned is Empty or NULL
@@ -707,6 +748,15 @@ public class ArticlesFragment extends Fragment
     }
 
     /**
+     * Method that returns the index of the last page viewed by the user
+     *
+     * @return Integer value of the last page viewed by the user
+     */
+    public int getLastViewedPageIndex() {
+        return mLastViewedPageIndex;
+    }
+
+    /**
      * Method that returns the current 'page' (Page to Display) setting value
      * from the SharedPreferences
      *
@@ -754,24 +804,7 @@ public class ArticlesFragment extends Fragment
     @Override
     public void onItemClick(NewsArticleInfo newsArticleInfo) {
         //Launching the News Article in a Web Browser
-        openLink(newsArticleInfo.getWebUrl());
-    }
-
-    /**
-     * Method that opens a webpage for the URL passed
-     *
-     * @param webUrl is the String containing the URL of the News Article to be launched
-     */
-    private void openLink(String webUrl) {
-        //Parsing the URL
-        Uri webPageUri = Uri.parse(webUrl);
-        //Creating an ACTION_VIEW Intent with the URI
-        Intent webIntent = new Intent(Intent.ACTION_VIEW, webPageUri);
-        //Checking if there is an Activity that accepts the Intent
-        if (webIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            //Launching the corresponding Activity and passing it the Intent
-            startActivity(webIntent);
-        }
+        IntentUtility.openLink(getContext(), newsArticleInfo.getWebUrl());
     }
 
     /**
@@ -804,7 +837,8 @@ public class ArticlesFragment extends Fragment
      */
     @Override
     public void onOpenNewsSectionRequest(NewsArticleInfo newsArticleInfo) {
-
+        //Opening the News Category Tab for the News Section requested
+        ((HeadlinesFragment) getParentFragment()).openNewsCategoryTabByTitle(newsArticleInfo.getSectionName(), newsArticleInfo.getSectionId());
     }
 
     /**
@@ -821,6 +855,16 @@ public class ArticlesFragment extends Fragment
             Log.d(LOG_TAG + "_" + mNewsTopicId, "onSharedPreferenceChanged: key " + key);
             mVisibleItemViewPosition = 0;
 
+            if (getUserVisibleHint()) {
+                //When the current fragment is the one viewed by the user
+                if (key.equals(getString(R.string.pref_page_index_key))) {
+                    //On the change in 'page' setting value
+
+                    //Saving the 'page' setting value as the index of the last page viewed
+                    mLastViewedPageIndex = getStartPageIndex();
+                }
+            }
+
             //Triggering a new data load only if any parameters have changed
             //(This also prevents duplicate triggers)
             checkAndReloadData();
@@ -832,8 +876,8 @@ public class ArticlesFragment extends Fragment
      * with the URL generated using the current parameters to trigger a new data load only if necessary
      */
     private void checkAndReloadData() {
-        if (getActivity() != null) {
-            //When attached to an Activity
+        if (getActivity() != null && getUserVisibleHint()) {
+            //When attached to an Activity and the current fragment is the one viewed by the user
             Log.d(LOG_TAG + "_" + mNewsTopicId, "checkAndReloadData: Started");
             //Retrieving the current loader of the Fragment
             LoaderManager loaderManager = getActivity().getSupportLoaderManager();
@@ -857,30 +901,25 @@ public class ArticlesFragment extends Fragment
     }
 
     /**
-     * Method that loads the {@link SettingsActivity} when the Settings Menu option is clicked
-     */
-    private void openAppSettings() {
-        //Creating an explicit intent to SettingsActivity
-        Intent settingsIntent = new Intent(getContext(), SettingsActivity.class);
-        //Launching the Activity
-        startActivity(settingsIntent);
-    }
-
-    /**
      * Subclass of {@link BaseRecyclerViewScrollListener} that listens to the scroll event
      * received when the scroll reaches/leaves the last y items in the {@link RecyclerView}
      */
     private class RecyclerViewScrollListener extends BaseRecyclerViewScrollListener {
 
+        //Stores the fragment that is registered to this ScrollListener
+        private Fragment fragment;
+
         /**
          * Constructor of {@link BaseRecyclerViewScrollListener}
          *
+         * @param fragment The fragment that is registering this ScrollListener
          * @param bottomYEndItemPosForTrigger is the Integer value of the trigger point
          *                                    for when the vertical scroll reaches/leaves
          *                                    the last y items in RecyclerView
          */
-        public RecyclerViewScrollListener(int bottomYEndItemPosForTrigger) {
+        public RecyclerViewScrollListener(Fragment fragment, int bottomYEndItemPosForTrigger) {
             super(bottomYEndItemPosForTrigger);
+            this.fragment = fragment;
         }
 
         /**
@@ -894,7 +933,7 @@ public class ArticlesFragment extends Fragment
         @Override
         public void onBottomReached(int verticalScrollAmount) {
             //Propagating the call to the Parent Fragment - HeadlinesFragment
-            ((HeadlinesFragment) getParentFragment()).showPaginationPanel(verticalScrollAmount > 0);
+            ((HeadlinesFragment) getParentFragment()).showPaginationPanel(fragment, verticalScrollAmount > 0);
         }
 
     }
