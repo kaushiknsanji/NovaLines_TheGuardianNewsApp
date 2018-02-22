@@ -17,6 +17,9 @@ import android.widget.Toast;
 import com.example.kaushiknsanji.novalines.R;
 
 /**
+ * {@link DialogFragment} class that inflates the layout 'R.layout.page_number_picker_dialog'
+ * to display the Number Picker for the user to select and jump to the page selected
+ *
  * @author Kaushik N Sanji
  */
 public class PaginationNumberPickerDialogFragment extends DialogFragment

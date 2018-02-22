@@ -30,6 +30,13 @@ import com.example.kaushiknsanji.novalines.settings.SettingsActivity;
 import java.util.ArrayList;
 
 /**
+ * The Main Activity of the App that inflates the layout 'R.layout.activity_news'
+ * containing a DrawerLayout that displays a Navigation Drawer with the Main content.
+ * <p>
+ * Responsible for initializing the custom Navigation Drawer implemented using
+ * a RecyclerView, and handling the click actions on the Drawer items.
+ * </p>
+ *
  * @author Kaushik N Sanji
  */
 public class NewsActivity extends AppCompatActivity
@@ -63,7 +70,7 @@ public class NewsActivity extends AppCompatActivity
          * fragment instance, though the fragment may be attached and detached multiple times.
          *
          * @param fm                 Host FragmentManager
-         * @param fragment                  Fragment changing state
+         * @param fragment           Fragment changing state
          * @param savedInstanceState Saved instance bundle from a previous instance
          */
         @Override

@@ -42,9 +42,10 @@ import java.util.List;
  * Fragment that inflates the layout 'R.layout.articles_layout'
  * containing the {@link RecyclerView} used in the {@link com.example.kaushiknsanji.novalines.adapters.HeadlinesPagerAdapter}
  * for the ViewPager shown in {@link HeadlinesFragment}.
- *
+ * <p>
  * Responsible for displaying the News Feeds from various News Categories/Sections
  * subscribed by the user.
+ * </p>
  *
  * @author Kaushik N Sanji
  */

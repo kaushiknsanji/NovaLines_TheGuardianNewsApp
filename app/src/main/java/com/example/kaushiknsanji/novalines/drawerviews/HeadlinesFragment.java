@@ -33,9 +33,10 @@ import java.util.Arrays;
  * Drawer Fragment that inflates the Coordinator layout 'R.layout.headlines_layout'
  * containing a ViewPager of Fragments loaded by the adapter {@link HeadlinesPagerAdapter}
  * and managed through the ChildFragmentManager.
- *
+ * <p>
  * Responsible for displaying the Fragments for the subscribed News Categories/Sections
  * and additionally subscribed News Feeds.
+ * </p>
  *
  * @author Kaushik N Sanji
  */

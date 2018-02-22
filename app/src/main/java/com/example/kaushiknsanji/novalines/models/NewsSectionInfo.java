@@ -104,7 +104,7 @@ public class NewsSectionInfo implements Parcelable {
     /**
      * Setter Method for the 'Section ID' of the News section
      *
-     * @param sectionId
+     * @param sectionId is a String containing the 'Section ID' of the News Section
      */
     public void setSectionId(String sectionId) {
         this.mSectionId = sectionId;
@@ -122,7 +122,7 @@ public class NewsSectionInfo implements Parcelable {
     /**
      * Setter Method for the Section Name of the News section
      *
-     * @param sectionNameStr
+     * @param sectionNameStr is a String containing the Section Name of the News section
      */
     public void setSectionName(String sectionNameStr) {
         this.mSectionName = sectionNameStr;
@@ -140,7 +140,7 @@ public class NewsSectionInfo implements Parcelable {
     /**
      * Setter Method for the Article count under the News section
      *
-     * @param newsArticleCount
+     * @param newsArticleCount is an Integer for the total article count under the News section
      */
     public void setNewsArticleCount(int newsArticleCount) {
         this.mNewsArticleCount = newsArticleCount;

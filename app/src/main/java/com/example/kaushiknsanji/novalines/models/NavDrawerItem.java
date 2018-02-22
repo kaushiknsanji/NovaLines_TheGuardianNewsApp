@@ -4,7 +4,11 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 
 /**
- * Created by Kaushik N Sanji on 16-Dec-17.
+ * Model class for storing the Navigation Drawer Item details
+ * used by {@link com.example.kaushiknsanji.novalines.NewsActivity}
+ * to setup the Navigation Drawer content.
+ *
+ * @author Kaushik N Sanji
  */
 public class NavDrawerItem {
 
@@ -43,7 +47,8 @@ public class NavDrawerItem {
      * Setter Method for the Drawable resource of the icon to be used
      * for the Drawer Item
      *
-     * @param drawerIcon
+     * @param drawerIcon is an integer reference to the Drawable resource
+     *                   to be used for the Drawer Item's icon
      */
     public void setDrawerIcon(@DrawableRes int drawerIcon) {
         mDrawerIcon = drawerIcon;
@@ -61,7 +66,7 @@ public class NavDrawerItem {
     /**
      * Setter Method for the Title to be used for the Drawer item
      *
-     * @param itemTitle
+     * @param itemTitle is a String containing the title to be used for the Drawer Item
      */
     public void setItemTitle(String itemTitle) {
         mItemTitle = itemTitle;
@@ -79,7 +84,8 @@ public class NavDrawerItem {
     /**
      * Setter Method for the Layout resource of the Drawer item to be used
      *
-     * @param drawerLayout
+     * @param drawerLayout is an integer reference to the Layout resource
+     *                     to be used for the Drawer Item
      */
     public void setDrawerLayout(@LayoutRes int drawerLayout) {
         mDrawerLayout = drawerLayout;

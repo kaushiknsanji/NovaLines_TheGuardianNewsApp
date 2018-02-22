@@ -42,9 +42,10 @@ import java.util.concurrent.TimeUnit;
  * Fragment that inflates the layout 'R.layout.highlights_layout'
  * containing the {@link RecyclerView} used in the {@link com.example.kaushiknsanji.novalines.adapters.HeadlinesPagerAdapter}
  * for the ViewPager shown in {@link HeadlinesFragment}.
- *
+ * <p>
  * Responsible for displaying the count of Articles for the News Feeds from the
  * subscribed News Categories/Sections.
+ * </p>
  *
  * @author Kaushik N Sanji
  */

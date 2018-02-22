@@ -143,7 +143,7 @@ public class NewsArticleInfo implements Parcelable {
     /**
      * Setter Method for the 'Section ID' of the News article
      *
-     * @param sectionId
+     * @param sectionId is a String containing the 'Section ID' of the News article
      */
     public void setSectionId(String sectionId) {
         this.mSectionId = sectionId;
@@ -161,7 +161,7 @@ public class NewsArticleInfo implements Parcelable {
     /**
      * Setter Method for the Section Name of the News article
      *
-     * @param sectionName
+     * @param sectionName is a String containing the Section Name of the News article
      */
     public void setSectionName(String sectionName) {
         this.mSectionName = sectionName;
@@ -179,7 +179,7 @@ public class NewsArticleInfo implements Parcelable {
     /**
      * Setter Method for the Article count found for the News query
      *
-     * @param newsArticleCount
+     * @param newsArticleCount is an Integer for the total article count, found for the News query
      */
     public void setNewsArticleCount(int newsArticleCount) {
         this.mNewsArticleCount = newsArticleCount;
@@ -235,7 +235,7 @@ public class NewsArticleInfo implements Parcelable {
     /**
      * Setter Method for the Published Date of the News article
      *
-     * @param publishedDate
+     * @param publishedDate a String containing the Published Date of the News article
      */
     public void setPublishedDate(String publishedDate) {
         this.mPublishedDate = publishedDate;
@@ -253,7 +253,7 @@ public class NewsArticleInfo implements Parcelable {
     /**
      * Setter Method for the Title of the News article
      *
-     * @param newsTitle
+     * @param newsTitle a String containing the Title of the News article
      */
     public void setNewsTitle(String newsTitle) {
         this.mNewsTitle = newsTitle;
@@ -271,7 +271,7 @@ public class NewsArticleInfo implements Parcelable {
     /**
      * Setter Method for the link to the html content of the News article
      *
-     * @param webUrl
+     * @param webUrl a String containing the link to the html content of the News article
      */
     public void setWebUrl(String webUrl) {
         this.mWebUrl = webUrl;
@@ -289,7 +289,7 @@ public class NewsArticleInfo implements Parcelable {
     /**
      * Setter Method for the link to the raw content of the News article
      *
-     * @param apiUrl
+     * @param apiUrl a String containing the link to the raw content of the News article
      */
     public void setApiUrl(String apiUrl) {
         this.mApiUrl = apiUrl;
@@ -307,7 +307,7 @@ public class NewsArticleInfo implements Parcelable {
     /**
      * Setter Method for the Trailing Text of the Headline of the News article
      *
-     * @param trailText
+     * @param trailText a String containing the Trailing Text of the Headline of the News article
      */
     public void setTrailText(String trailText) {
         this.mTrailText = trailText;
@@ -326,7 +326,7 @@ public class NewsArticleInfo implements Parcelable {
     /**
      * Setter Method for the Author of the News article
      *
-     * @param author
+     * @param author a String containing the Author of the News article
      */
     public void setAuthor(String author) {
         this.mAuthor = author;
@@ -344,7 +344,7 @@ public class NewsArticleInfo implements Parcelable {
     /**
      * Setter Method for the link to the Thumbnail Image of the News article
      *
-     * @param thumbImageUrl
+     * @param thumbImageUrl a String containing the link to the Thumbnail Image of the News article
      */
     public void setThumbImageUrl(String thumbImageUrl) {
         this.mThumbImageUrl = thumbImageUrl;
