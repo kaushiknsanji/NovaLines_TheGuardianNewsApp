@@ -1,6 +1,5 @@
 package com.example.kaushiknsanji.novalines.errorviews;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,8 +17,7 @@ import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.adapters.NoFeedResolutionAdapter;
 import com.example.kaushiknsanji.novalines.adapterviews.ArticlesFragment;
 import com.example.kaushiknsanji.novalines.models.NoFeedInfo;
-import com.example.kaushiknsanji.novalines.settings.SettingsActivity;
-import com.example.kaushiknsanji.novalines.utils.NetworkUtility;
+import com.example.kaushiknsanji.novalines.utils.IntentUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewItemDecorUtility;
 
 import java.util.ArrayList;
@@ -182,10 +180,10 @@ public class NoFeedResolutionFragment extends Fragment
         //Executing action based on the Resolution Button text
         if (resolutionButtonText.equals(getString(R.string.nf_app_settings_btn_text))) {
             //Launching App Settings
-            openAppSettings();
+            IntentUtility.openAppSettings(getContext());
         } else if (resolutionButtonText.equals(getString(R.string.nf_nw_settings_btn_text))) {
             //Launching Network Settings
-            NetworkUtility.openNetworkSettings(getContext());
+            IntentUtility.openNetworkSettings(getContext());
         } else if (resolutionButtonText.equals(getString(R.string.nf_refresh_btn_text))) {
             //Triggering a refresh based on the Parent Fragment
             Fragment parentFragment = getParentFragment();
@@ -195,17 +193,6 @@ public class NoFeedResolutionFragment extends Fragment
                 articlesFragment.triggerRefresh();
             }
         }
-    }
-
-    /**
-     * Method that loads the {@link SettingsActivity} when the "Check App Settings"
-     * button is clicked in the Resolution items of the "No Feed Layout".
-     */
-    private void openAppSettings() {
-        //Creating an explicit intent to SettingsActivity
-        Intent settingsIntent = new Intent(getContext(), SettingsActivity.class);
-        //Launching the Activity
-        startActivity(settingsIntent);
     }
 
 }
