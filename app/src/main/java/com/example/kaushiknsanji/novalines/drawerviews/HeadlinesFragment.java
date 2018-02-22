@@ -23,10 +23,21 @@ import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.adapters.HeadlinesPagerAdapter;
 import com.example.kaushiknsanji.novalines.adapterviews.ArticlesFragment;
 import com.example.kaushiknsanji.novalines.adapterviews.HighlightsFragment;
+import com.example.kaushiknsanji.novalines.adapterviews.MoreNewsFragment;
 import com.example.kaushiknsanji.novalines.dialogs.PaginationNumberPickerDialogFragment;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
- * Created by Kaushik N Sanji on 09-Jan-18.
+ * Drawer Fragment that inflates the Coordinator layout 'R.layout.headlines_layout'
+ * containing a ViewPager of Fragments loaded by the adapter {@link HeadlinesPagerAdapter}
+ * and managed through the ChildFragmentManager.
+ *
+ * Responsible for displaying the Fragments for the subscribed News Categories/Sections
+ * and additionally subscribed News Feeds.
+ *
+ * @author Kaushik N Sanji
  */
 public class HeadlinesFragment extends Fragment
         implements TabLayout.OnTabSelectedListener,
@@ -39,6 +50,10 @@ public class HeadlinesFragment extends Fragment
     public static final String NAV_FRAGMENT_TAG = LOG_TAG;
     //Bundle Key constants used for saving/restoring the state
     private static final String ACTIVE_TAB_POSITION_INT_KEY = "TabLayout.ActiveTabIndex";
+    //Bundle key constant to save/restore the list of Subscribed News Category Names
+    private static final String NEWS_SECTION_NAMES_LIST_KEY = "SubscribedNewsSectionNames";
+    //Bundle key constant to save/restore the list of Subscribed News Category Ids
+    private static final String NEWS_SECTION_IDS_LIST_KEY = "SubscribedNewsSectionIds";
     //For the custom Toolbar used as ActionBar
     private Toolbar mToolbar;
     //For the ViewPager
@@ -57,6 +72,9 @@ public class HeadlinesFragment extends Fragment
     private ImageButton mPageNextButton;
     private ImageButton mPagePreviousButton;
     private ImageButton mPageMoreButton;
+    //For managing the subscribed list of News categories
+    private ArrayList<String> mSubscribedNewsSectionNamesList;
+    private ArrayList<String> mSubscribedNewsSectionIdsList;
 
     /**
      * Constructor of {@link HeadlinesFragment}
@@ -99,6 +117,9 @@ public class HeadlinesFragment extends Fragment
         //Adapter for ViewPager to display the correct fragment at the active position
         mViewPagerAdapter = new HeadlinesPagerAdapter(getChildFragmentManager());
 
+        //Loading the list of Subscribed News Categories
+        loadSubscribedNewsSections(savedInstanceState);
+
         //Loading the ViewPager's Adapter with the Fragments
         loadViewPagerFragments();
 
@@ -132,7 +153,6 @@ public class HeadlinesFragment extends Fragment
             //On initial launch of this Fragment
 
             //Making the first tab as selected
-            //onTabSelected(mTabLayout.getTabAt(0));
             mViewPager.setCurrentItem(0);
 
             //Resetting the 'page' (Page to Display) setting to 1 on initial launch
@@ -142,7 +162,6 @@ public class HeadlinesFragment extends Fragment
             //On subsequent launch of this Fragment
 
             //Restoring the active fragment tab
-            //onTabSelected(mTabLayout.getTabAt(savedInstanceState.getInt(ACTIVE_TAB_POSITION_INT_KEY)));
             mViewPager.setCurrentItem(savedInstanceState.getInt(ACTIVE_TAB_POSITION_INT_KEY));
         }
 
@@ -161,6 +180,9 @@ public class HeadlinesFragment extends Fragment
     public void onSaveInstanceState(Bundle outState) {
         //Saving the current tab position
         outState.putInt(ACTIVE_TAB_POSITION_INT_KEY, mViewPager.getCurrentItem());
+        //Saving the subscribed list of News Categories
+        outState.putStringArrayList(NEWS_SECTION_NAMES_LIST_KEY, mSubscribedNewsSectionNamesList);
+        outState.putStringArrayList(NEWS_SECTION_IDS_LIST_KEY, mSubscribedNewsSectionIdsList);
 
         super.onSaveInstanceState(outState);
     }
@@ -220,16 +242,55 @@ public class HeadlinesFragment extends Fragment
     }
 
     /**
+     * Method that resets the 'page' (Page to Display) setting of a particular fragment to 1, when not 1
+     *
+     * @param lastViewedPageIndex is the index of the last page viewed by the user
+     *                            which is specific to the fragment and not stored as a SharedPreference
+     */
+    public void resetLastViewedPageIndex(int lastViewedPageIndex) {
+        //Retrieving the preference key string of 'page'
+        String startIndexPrefKeyStr = getString(R.string.pref_page_index_key);
+        //Retrieving the default value of 'page' setting
+        int startIndexPrefKeyDefaultValue = getResources().getInteger(R.integer.pref_page_index_default_value);
+        //Retrieving the current value of 'page' setting
+        int startIndex = mPreferences.getInt(startIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
+
+        if (lastViewedPageIndex > 1) {
+            //When the index of the last page viewed is greater than 1
+
+            //Opening the Editor to update the value
+            SharedPreferences.Editor prefEditor = mPreferences.edit();
+            //Setting the 'page' setting value to lastViewedPageIndex
+            prefEditor.putInt(startIndexPrefKeyStr, lastViewedPageIndex);
+            prefEditor.apply(); //applying the changes
+            //Setting the 'page' setting value to its default value, which is 1
+            //(This resets the start page to the first page for the current fragment)
+            prefEditor.putInt(startIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
+            prefEditor.apply(); //applying the changes
+
+        } else if (startIndex > 1) {
+            //When the 'page' (Page to Display) setting is greater than 1 but not the last page viewed
+
+            //Resetting the 'page' (Page to Display) setting value to 1
+            resetStartPageIndex();
+        }
+    }
+
+    /**
      * Method that resets/reapplies the value for the 'endIndex' preference setting
      *
-     * @param endIndexValue Integer value of the last page index to be applied to the 'endIndex' preference setting.
-     *                      When the value is <=0, the default value of 'page' preference setting will be applied to 'endIndex' preference setting
+     * @param endIndexValue Integer value of the last page index (specific to the fragment)
+     *                      to be applied to the 'endIndex' preference setting.
+     *                      When the value is <=0, the default value of 'page' preference setting
+     *                      will be applied to 'endIndex' preference setting
      */
-    private void resetEndPageIndex(int endIndexValue) {
+    public void resetEndPageIndex(int endIndexValue) {
         //Retrieving the preference key string of 'endIndex'
         String endIndexPrefKeyStr = getString(R.string.pref_page_max_value_key);
         //Retrieving the default value of 'page' setting
         int startIndexPrefKeyDefaultValue = getResources().getInteger(R.integer.pref_page_index_default_value);
+        //Flag to check whether the state of Pagination Buttons needs an update
+        boolean updateButtonsStateReqd = false;
 
         //Opening the Editor to update the value
         SharedPreferences.Editor prefEditor = mPreferences.edit();
@@ -238,11 +299,27 @@ public class HeadlinesFragment extends Fragment
             //the value passed is 0 (or less)
             prefEditor.putInt(endIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
         } else {
+            //When the endIndex value specific to the fragment is more than 0
+
+            //Retrieving the current value of endIndex from the preference
+            int endIndexPrefValue = mPreferences.getInt(endIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
+
+            if (endIndexPrefValue == endIndexValue) {
+                //When the endIndex values are same, there will be no change in Preference value
+                //Hence manual update of Pagination Buttons state is required
+                updateButtonsStateReqd = true;
+            }
+
             //honouring the value passed when greater than 0
             prefEditor.putInt(endIndexPrefKeyStr, endIndexValue);
         }
 
         prefEditor.apply(); //applying the changes
+
+        if (updateButtonsStateReqd) {
+            //When set to true, updating the state of Pagination Buttons
+            updatePaginationButtonsState();
+        }
     }
 
     /**
@@ -318,6 +395,56 @@ public class HeadlinesFragment extends Fragment
     }
 
     /**
+     * Method that loads the list of Subscribed News Categories.
+     *
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state which will contain
+     *                           the last Subscribed News Categories.
+     */
+    private void loadSubscribedNewsSections(Bundle savedInstanceState) {
+
+        if (savedInstanceState == null) {
+            //On initial launch of this Fragment
+
+            //Initializing the lists to store the Subscribed News Categories
+            mSubscribedNewsSectionIdsList = new ArrayList<>();
+            mSubscribedNewsSectionNamesList = new ArrayList<>();
+
+            //Retrieving the initial list of Subscribed News Categories
+            mSubscribedNewsSectionIdsList.addAll(Arrays.asList(getResources().getStringArray(R.array.news_fixed_section_ids)));
+            mSubscribedNewsSectionNamesList.addAll(Arrays.asList(getResources().getStringArray(R.array.news_fixed_section_names)));
+
+        } else {
+            //On subsequent launch of this Fragment
+
+            //Retrieving the last saved list of Subscribed News Categories
+            mSubscribedNewsSectionIdsList = savedInstanceState.getStringArrayList(NEWS_SECTION_IDS_LIST_KEY);
+            mSubscribedNewsSectionNamesList = savedInstanceState.getStringArrayList(NEWS_SECTION_NAMES_LIST_KEY);
+        }
+    }
+
+    /**
+     * Method that returns the list of Subscribed News Category Ids
+     *
+     * @return Arraylist of Strings containing the IDs of the Subscribed News Categories
+     */
+    public ArrayList<String> getSubscribedNewsSectionIdsList() {
+        return mSubscribedNewsSectionIdsList;
+    }
+
+    /**
+     * Method that adds the Subscribed News Category details to the list maintained by the Fragment
+     *
+     * @param newsCategoryTitleStr The Title of the News Category that has been subscribed
+     * @param newsCategoryIdStr    The ID of the News Category Tab that has been subscribed
+     */
+    private void addNewsSectionSubscribed(String newsCategoryTitleStr, String newsCategoryIdStr) {
+        //Adding the Subscribed News Category details to the lists
+        mSubscribedNewsSectionIdsList.add(newsCategoryIdStr);
+        mSubscribedNewsSectionNamesList.add(newsCategoryTitleStr);
+    }
+
+    /**
      * Method that initializes the ViewPager's Adapter with the Fragments to be displayed
      */
     private void loadViewPagerFragments() {
@@ -326,21 +453,31 @@ public class HeadlinesFragment extends Fragment
                 HighlightsFragment.newInstance(),
                 getString(R.string.highlights_title_str), 0);
 
+        //Retrieving the count of Subscribed News Categories
+        int noOfNewsTopics = mSubscribedNewsSectionIdsList.size();
 
-        //Retrieving the details of the Fragments for the News Topics to be loaded
-        String[] newsTopicIdArray = getResources().getStringArray(R.array.news_fixed_section_ids);
-        String[] newsTopicNameArray = getResources().getStringArray(R.array.news_fixed_section_names);
-        int noOfNewsTopics = newsTopicIdArray.length;
-
-        //Iterating and loading the list of Fragments for the News Topics
+        //Iterating and loading the list of Fragments for the News Categories Subscribed
         for (int index = 0; index < noOfNewsTopics; index++) {
             mViewPagerAdapter.addFragment(
-                    ArticlesFragment.newInstance(newsTopicIdArray[index], index + 1),
-                    newsTopicNameArray[index],
+                    ArticlesFragment.newInstance(mSubscribedNewsSectionIdsList.get(index), index + 1),
+                    mSubscribedNewsSectionNamesList.get(index),
                     index + 1
             );
         }
 
+        //Loading the "More News" Fragment as the last tab content
+        appendMoreNewsFragment();
+    }
+
+    /**
+     * Method that appends the instance of {@link MoreNewsFragment}
+     * at the end of the list maintained by the {@link HeadlinesPagerAdapter}
+     */
+    private void appendMoreNewsFragment() {
+        mViewPagerAdapter.addFragment(
+                MoreNewsFragment.newInstance(),
+                getString(R.string.more_news_tab_title_text),
+                mViewPagerAdapter.getCount());
     }
 
     /**
@@ -386,27 +523,41 @@ public class HeadlinesFragment extends Fragment
 
         //Retrieving the Current Fragment from ViewPager
         Fragment fragment = mViewPagerAdapter.getRegisteredFragment(newPosition);
+        Log.d(LOG_TAG, "onTabSelected: Current Fragment is " + fragment);
         if (fragment != null) {
             //When child fragment is attached
+
+            //Marking the current fragment as visible to the user
+            fragment.setUserVisibleHint(true);
+
             if (fragment instanceof ArticlesFragment) {
                 //For ArticlesFragment instances
                 ArticlesFragment articlesFragment = (ArticlesFragment) fragment;
+                Log.d(LOG_TAG, "onTabSelected: Current ArticlesFragment is for " + articlesFragment.getNewsTopicId());
                 if (articlesFragment.isPaginatedView()) {
                     //Resetting the 'page' setting and 'endIndex' setting when the fragment is
-                    //for News Topics with Paginated view
-                    resetStartPageIndex();
+                    //for News Topics with Paginated results
+                    resetLastViewedPageIndex(articlesFragment.getLastViewedPageIndex());
                     resetEndPageIndex(articlesFragment.getLastPageIndex());
-                    //Updating the state of Pagination Buttons
-                    updatePaginationButtonsState();
+                    //Show/Hide Pagination panel based on the position of the currently visible item at the top
+                    articlesFragment.checkAndEnablePaginationPanel();
                 } else {
                     //Hiding the Pagination Panel for a fragment without Paginated view
-                    showPaginationPanel(false);
+                    showPaginationPanel(fragment, false);
                 }
             } else {
                 //For other Fragment instances
 
                 //Hiding the Pagination Panel
-                showPaginationPanel(false);
+                showPaginationPanel(fragment, false);
+
+                if (fragment instanceof MoreNewsFragment) {
+                    //For MoreNewsFragment instance
+
+                    //Initializing the content of MoreNewsFragment
+                    MoreNewsFragment moreNewsFragment = (MoreNewsFragment) fragment;
+                    moreNewsFragment.showDefaultInfo();
+                }
             }
         }
     }
@@ -425,6 +576,9 @@ public class HeadlinesFragment extends Fragment
         Fragment fragment = mViewPagerAdapter.getRegisteredFragment(oldPosition);
         if (fragment != null) {
             //When child fragment is attached
+
+            //Marking the previous fragment as NOT visible to the user
+            fragment.setUserVisibleHint(false);
 
             if (fragment instanceof HighlightsFragment) {
                 //For HighlightsFragment instances
@@ -566,8 +720,23 @@ public class HeadlinesFragment extends Fragment
         if (key.equals(getString(R.string.pref_page_index_key)) || key.equals(getString(R.string.pref_page_max_value_key))) {
             //When the 'page' (Page to Display) setting  or the 'endIndex' setting value is changed
             Log.d(LOG_TAG, "onSharedPreferenceChanged: Updating " + key);
-            //Updating the state of Pagination Buttons
-            updatePaginationButtonsState();
+
+            //Retrieving the current Tab's Fragment
+            Fragment fragment = mViewPagerAdapter.getRegisteredFragment(mViewPager.getCurrentItem());
+            if (fragment instanceof ArticlesFragment) {
+                //Casting to ArticlesFragment
+                ArticlesFragment articlesFragment = (ArticlesFragment) fragment;
+                Log.d(LOG_TAG, "onSharedPreferenceChanged: Updating for " + articlesFragment.getNewsTopicId());
+                Log.d(LOG_TAG, "onSharedPreferenceChanged: isVisible " + articlesFragment.getUserVisibleHint());
+                if (articlesFragment.isPaginatedView() && articlesFragment.getUserVisibleHint()) {
+                    //When the fragment is having paginated results
+                    //and is the one currently being viewed by the user
+
+                    //Updating the state of Pagination Buttons
+                    updatePaginationButtonsState();
+                }
+            }
+
         }
     }
 
@@ -576,16 +745,21 @@ public class HeadlinesFragment extends Fragment
      * based on the value of visibility passed.
      * This method is also invoked by {@link ArticlesFragment}.
      *
+     * @param fragment The fragment that is requesting to hide/show the Pagination Panel
      * @param visibility <b>TRUE</b> to display the Pagination Panel; <b>FALSE</b> otherwise
      */
-    public void showPaginationPanel(boolean visibility) {
-        if (visibility) {
-            //Displaying the Pagination Panel when True
-            mPaginationPanel.setVisibility(View.VISIBLE);
-        } else {
-            //Hiding the Pagination Panel when False
-            mPaginationPanel.setVisibility(View.GONE);
+    public void showPaginationPanel(Fragment fragment, boolean visibility) {
+
+        if (fragment.getUserVisibleHint()) {
+            if (visibility) {
+                //Displaying the Pagination Panel when True
+                mPaginationPanel.setVisibility(View.VISIBLE);
+            } else {
+                //Hiding the Pagination Panel when False
+                mPaginationPanel.setVisibility(View.GONE);
+            }
         }
+
     }
 
     /**
@@ -595,16 +769,68 @@ public class HeadlinesFragment extends Fragment
      * or the News Section Item clicked on the {@link HighlightsFragment}
      *
      * @param newsCategoryTitleStr The Title of the News Category Tab that is requested to be opened
+     * @param newsCategoryIdStr The ID of the News Category Tab that is requested to be opened
      */
-    public void openNewsCategoryTabByTitle(String newsCategoryTitleStr) {
+    public void openNewsCategoryTabByTitle(String newsCategoryTitleStr, String newsCategoryIdStr) {
         //Retrieving the position of the News Category Fragment in the ViewPager
         int fragmentPosition = mViewPagerAdapter.getItemPositionByTitle(newsCategoryTitleStr);
         if (fragmentPosition > 0) {
             //Setting the ViewPager to load the requested Fragment when present
             mViewPager.setCurrentItem(fragmentPosition, true);
         } else {
-            //TODO: When the requested Fragment is not present
+            //When the requested Fragment is not present
+
+            //Loading the "More News" Fragment asking the user to subscribe the News Category requested
+            //Finding the MoreNewsFragment Position
+            int moreNewsFragmentPosition = mViewPagerAdapter.getItemPositionByTitle(getString(R.string.more_news_tab_title_text));
+            //Getting the Fragment at the Position
+            Fragment fragment = mViewPagerAdapter.getItem(moreNewsFragmentPosition);
+            if (fragment instanceof MoreNewsFragment) {
+                //Casting to MoreNewsFragment
+                MoreNewsFragment moreNewsFragment = (MoreNewsFragment) fragment;
+                //Scrolling over to the Fragment Tab
+                mViewPager.setCurrentItem(moreNewsFragmentPosition, true);
+                //Loading the Fragment with the info specific to the News Category requested
+                moreNewsFragment.showSpecificInfo(newsCategoryTitleStr, newsCategoryIdStr);
+            }
         }
+    }
+
+    /**
+     * Method invoked by the Child ViewPager Fragment {@link MoreNewsFragment} of this Parent Fragment
+     * when a specific News Category Feed is is requested to be subscribed and launched.
+     *
+     * @param newsCategoryTitleStr The Title of the News Category that is requested to be subscribed and launched
+     * @param newsCategoryIdStr    The ID of the News Category Tab that is requested to be subscribed and launched
+     */
+    public void subscribeAndLaunchNewsCategory(String newsCategoryTitleStr, String newsCategoryIdStr) {
+        Log.d(LOG_TAG, "subscribeAndLaunchNewsCategory: Started");
+        //Retrieving the current tab position of MoreNewsFragment
+        int currentMoreFragmentPosition = mViewPagerAdapter.getItemPositionByTitle(getString(R.string.more_news_tab_title_text));
+        //Creating the instance of the News Fragment for the News Category subscribed
+        ArticlesFragment subscribedFragment = ArticlesFragment.newInstance(newsCategoryIdStr, currentMoreFragmentPosition);
+        //Adding to the list maintained by the HeadlinesPagerAdapter
+        mViewPagerAdapter.addFragment(
+                subscribedFragment,
+                newsCategoryTitleStr,
+                currentMoreFragmentPosition //inserting at the same position of the MoreNewsFragment
+        );
+        //Resetting 'page' setting value to 1
+        resetStartPageIndex();
+        //Triggering the adapter to reload the stuff which invokes the adapter's getItemPosition method
+        mViewPagerAdapter.notifyDataSetChanged();
+        //Launching the News Category Tab added
+        mViewPager.setCurrentItem(currentMoreFragmentPosition, true);
+        //Adding to the Subscribed News Categories lists
+        addNewsSectionSubscribed(newsCategoryTitleStr, newsCategoryIdStr);
+    }
+
+    /**
+     * Method invoked by the Child ViewPager Fragment {@link MoreNewsFragment} of this Parent Fragment
+     * when the User wants to subscribe to the News Feeds of their choice
+     */
+    public void subscribeMoreNews() {
+        Log.d(LOG_TAG, "subscribeMoreNews: Started");
     }
 
 }
