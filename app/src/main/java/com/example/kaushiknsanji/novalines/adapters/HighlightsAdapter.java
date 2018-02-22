@@ -25,7 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Kaushik N Sanji on 05-Jan-18.
+ * Adapter class of the RecyclerView present in the layout 'R.layout.highlights_layout'
+ * inflated by {@link com.example.kaushiknsanji.novalines.adapterviews.HighlightsFragment}
+ * that is used along with the {@link android.support.v7.widget.LinearLayoutManager}
+ * to bind and display a list of {@link NewsSectionInfo} objects.
+ *
+ * @author Kaushik N Sanji
  */
 public class HighlightsAdapter extends RecyclerView.Adapter<HighlightsAdapter.ViewHolder>
         implements LoaderManager.LoaderCallbacks<DiffUtil.DiffResult> {
