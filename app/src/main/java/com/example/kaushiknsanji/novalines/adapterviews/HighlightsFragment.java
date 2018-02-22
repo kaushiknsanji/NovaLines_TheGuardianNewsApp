@@ -1,6 +1,5 @@
 package com.example.kaushiknsanji.novalines.adapterviews;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -29,7 +28,7 @@ import com.example.kaushiknsanji.novalines.adapters.HighlightsAdapter;
 import com.example.kaushiknsanji.novalines.drawerviews.HeadlinesFragment;
 import com.example.kaushiknsanji.novalines.errorviews.NetworkErrorFragment;
 import com.example.kaushiknsanji.novalines.models.NewsSectionInfo;
-import com.example.kaushiknsanji.novalines.settings.SettingsActivity;
+import com.example.kaushiknsanji.novalines.utils.IntentUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsHighlightsLoader;
 
@@ -40,6 +39,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Fragment that inflates the layout 'R.layout.highlights_layout'
+ * containing the {@link RecyclerView} used in the {@link com.example.kaushiknsanji.novalines.adapters.HeadlinesPagerAdapter}
+ * for the ViewPager shown in {@link HeadlinesFragment}.
+ *
+ * Responsible for displaying the count of Articles for the News Feeds from the
+ * subscribed News Categories/Sections.
+ *
  * @author Kaushik N Sanji
  */
 public class HighlightsFragment extends Fragment
@@ -280,7 +286,9 @@ public class HighlightsFragment extends Fragment
                 return true;
             case R.id.settings_action_id:
                 //For the settings menu option
-                openAppSettings();
+
+                //Loading App's Settings
+                IntentUtility.openAppSettings(getContext());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -512,7 +520,7 @@ public class HighlightsFragment extends Fragment
         switch (id) {
             case NewsHighlightsLoader.HIGHLIGHTS_LOADER:
                 //Returning the instance of NewsHighlightsLoader
-                return new NewsHighlightsLoader(getActivity());
+                return new NewsHighlightsLoader(getActivity(), ((HeadlinesFragment) getParentFragment()).getSubscribedNewsSectionIdsList());
             default:
                 return null;
         }
@@ -678,7 +686,7 @@ public class HighlightsFragment extends Fragment
     public void onItemClick(NewsSectionInfo newsSectionInfo) {
         Log.d(LOG_TAG, "onItemClick: Started");
         //Opening the News Category Tab for the News Section Title retrieved from the Item selected
-        ((HeadlinesFragment) getParentFragment()).openNewsCategoryTabByTitle(newsSectionInfo.getSectionName());
+        ((HeadlinesFragment) getParentFragment()).openNewsCategoryTabByTitle(newsSectionInfo.getSectionName(), newsSectionInfo.getSectionId());
     }
 
     /**
@@ -718,35 +726,30 @@ public class HighlightsFragment extends Fragment
 
                 //Casting the loader to NewsHighlightsLoader
                 NewsHighlightsLoader highlightsLoader = (NewsHighlightsLoader) loader;
+
                 //Retrieving the start date value used by the loader
                 long fromDateInMillis = highlightsLoader.getFromDateInMillis();
                 //Retrieving the current start date value set in the preference
                 long fromDatePrefInMillis = mPreferences.getLong(getString(R.string.pref_start_period_manual_key), Calendar.getInstance().getTimeInMillis());
 
-                Log.d(LOG_TAG, "checkAndReloadData: fromDateInMillis " + fromDateInMillis);
-                Log.d(LOG_TAG, "checkAndReloadData: fromDatePrefInMillis " + fromDatePrefInMillis);
+                //Retrieving the current list of Subscribed News Category Ids
+                List<String> currSubsNewsSectionIds = ((HeadlinesFragment) getParentFragment()).getSubscribedNewsSectionIdsList();
 
-                if (fromDateInMillis > 0 && fromDatePrefInMillis != fromDateInMillis) {
-                    //When the start date value of the News are different, then refresh the content
-                    Log.d(LOG_TAG, "checkAndReloadData: Reloading data");
+                if ((fromDateInMillis > 0 && fromDatePrefInMillis != fromDateInMillis)
+                        || mRecyclerAdapter.getItemCount() != currSubsNewsSectionIds.size()) {
+                    //If the start date value of the News are different, then refresh the content
+                    //or If the number of items previously loaded does not match with
+                    //that of the current Subscribed News Categories, then refresh the content
+                    Log.d(LOG_TAG, "checkAndReloadData: Reloading content");
 
-                    //Dispatching the content changed event to the loader to reload the content
-                    highlightsLoader.onContentChanged();
                     //Displaying the data load progress indicator
                     mSwipeContainer.setRefreshing(true);
+                    //Dispatching the content changed event to the loader to reload the content
+                    highlightsLoader.onContentChanged();
+
                 }
             }
         }
-    }
-
-    /**
-     * Method that loads the {@link SettingsActivity} when the Settings Menu option is clicked
-     */
-    private void openAppSettings() {
-        //Creating an explicit intent to SettingsActivity
-        Intent settingsIntent = new Intent(getContext(), SettingsActivity.class);
-        //Launching the Activity
-        startActivity(settingsIntent);
     }
 
 }
