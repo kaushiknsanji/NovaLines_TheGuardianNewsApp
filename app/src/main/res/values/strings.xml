@@ -22,6 +22,9 @@
     <!-- Text shown when the view/activity is not implemented -->
     <string name="not_implemented_text_info">Not Implemented</string>
 
+    <!-- Title of the common action menu item for refreshing the content -->
+    <string name="action_refresh">Refresh</string>
+
     <!-- ===================================== -->
     <!-- STRINGS USED IN THE NAVIGATION DRAWER -->
     <!-- ===================================== -->
@@ -222,13 +225,6 @@
 
     <!-- Title of the action menu item for Subscribing to More News Feeds -->
     <string name="more_news_action_subscribe">Subscribe</string>
-
-    <!-- ====================================== -->
-    <!-- STRINGS USED IN THE HEADLINES FRAGMENT -->
-    <!-- ====================================== -->
-
-    <!-- Title of the action menu item for refreshing the content -->
-    <string name="headline_action_refresh">Refresh</string>
 
     <!-- =========================== -->
     <!-- STRINGS USED FOR PAGINATION -->

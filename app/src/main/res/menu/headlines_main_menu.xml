@@ -5,7 +5,7 @@
         android:id="@+id/refresh_action_id"
         android:icon="@drawable/ic_refresh_white"
         android:orderInCategory="1"
-        android:title="@string/headline_action_refresh"
+        android:title="@string/action_refresh"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/settings_action_id"
