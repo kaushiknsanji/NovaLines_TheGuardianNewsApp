@@ -9,15 +9,23 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kaushiknsanji.novalines.R;
+import com.example.kaushiknsanji.novalines.utils.IntentUtility;
 import com.example.kaushiknsanji.novalines.utils.TextAppearanceUtility;
 
 /**
- * Created by Kaushik N Sanji on 28-Jan-18.
+ * Drawer Fragment that inflates the layout 'R.layout.favorites_layout'
+ * which displays a list of News Article items that have been marked as Favorite
+ * by the user.
+ *
+ * @author Kaushik N Sanji
  */
 public class FavoritesFragment extends Fragment {
 
@@ -42,6 +50,19 @@ public class FavoritesFragment extends Fragment {
      */
     public static FavoritesFragment newInstance() {
         return new FavoritesFragment();
+    }
+
+    /**
+     * Called to do initial creation of a fragment.
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     *                           a previous saved state, this is the state.
+     */
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //Indicating that this fragment has menu options to show
+        setHasOptionsMenu(true);
     }
 
     /**
@@ -79,6 +100,50 @@ public class FavoritesFragment extends Fragment {
 
         //Returning the prepared layout
         return rootView;
+    }
+
+    /**
+     * Initialize the contents of the Fragment host's standard options menu.  You
+     * should place your menu items in to <var>menu</var>.
+     *
+     * @param menu     The options menu in which you place your items.
+     * @param inflater The LayoutInflater object that can be used to inflate the Menu options
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //Inflating the Menu options from favorites_menu.xml
+        inflater.inflate(R.menu.favorites_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     * The default implementation simply returns false to have the normal
+     * processing happen.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     * @see #onCreateOptionsMenu
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //Handling based on the Menu item selected
+        switch (item.getItemId()) {
+            case R.id.refresh_action_id:
+                //For the refresh menu option
+
+                //As this Fragment has no data to show, this is not implemented
+                return true;
+            case R.id.settings_action_id:
+                //For the settings menu option
+
+                //Loading App's Settings
+                IntentUtility.openAppSettings(getContext());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
