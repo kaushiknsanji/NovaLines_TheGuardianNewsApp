@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.preference.PreferenceManager;
@@ -806,6 +807,25 @@ public class ArticlesFragment extends Fragment
     public void onItemClick(NewsArticleInfo newsArticleInfo) {
         //Launching the News Article in a Web Browser
         IntentUtility.openLink(getContext(), newsArticleInfo.getWebUrl());
+    }
+
+    /**
+     * Method invoked when "Share News" option is clicked from the Popup Menu
+     *
+     * @param newsArticleInfo is the corresponding {@link NewsArticleInfo} object of the item view
+     *                        in the Adapter
+     */
+    @Override
+    public void onShareNewsArticle(NewsArticleInfo newsArticleInfo) {
+        //Retrieving the Webpage URL
+        String webUrl = newsArticleInfo.getWebUrl();
+        //Building and launching the share intent, to share the Webpage
+        ShareCompat.IntentBuilder
+                .from(getActivity())
+                .setType("text/plain")
+                .setText(webUrl)
+                .setChooserTitle(R.string.news_share_chooser_title)
+                .startChooser();
     }
 
     /**

@@ -461,6 +461,15 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
      * on the Popup Menu options of the item views displayed by the RecyclerView's Adapter
      */
     public interface OnAdapterItemPopupMenuClickListener {
+
+        /**
+         * Method invoked when "Share News" option is clicked from the Popup Menu
+         *
+         * @param newsArticleInfo is the corresponding {@link NewsArticleInfo} object of the item view
+         *                        in the Adapter
+         */
+        void onShareNewsArticle(NewsArticleInfo newsArticleInfo);
+
         /**
          * Method invoked when "Read Later" option is clicked from the Popup Menu
          *
@@ -574,6 +583,13 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
                             public boolean onMenuItemClick(MenuItem item) {
                                 //Handling based on the menu item selected
                                 switch (item.getItemId()) {
+                                    case R.id.share_action_id:
+                                        //For the "Share News" action
+                                        if (mItemPopupMenuClickListener != null) {
+                                            //Propagating the call to the listener
+                                            mItemPopupMenuClickListener.onShareNewsArticle(newsArticleInfo);
+                                        }
+                                        return true;
                                     case R.id.read_later_action_id:
                                         //For the "Read later" action
                                         if (mItemPopupMenuClickListener != null) {
