@@ -189,9 +189,12 @@
 
     <!-- Menu action strings for the News article items -->
     <string name="article_action_share">Share News</string>
-    <string name="article_action_read_later">Read later</string>
-    <string name="article_action_favorite">Favorite this</string>
+    <string name="article_action_read_later">Read Later</string>
+    <string name="article_action_favorite">Favorite This</string>
     <string name="article_action_open_section">Open News Section</string>
+
+    <!-- Chooser Title shown for the "Share News" Menu action item -->
+    <string name="article_share_chooser_title">Share the news link with …</string>
 
     <!-- ========================================== -->
     <!-- STRINGS USED IN THE MORE NEWS FRAGMENT TAB -->
@@ -280,7 +283,5 @@
     <string name="nf_app_settings_btn_text">Check App Settings</string>
     <string name="nf_nw_settings_btn_text">Check Network</string>
     <string name="nf_refresh_btn_text">Refresh</string>
-
-    <string name="news_share_chooser_title">Share the news link with …</string>
 
 </resources>

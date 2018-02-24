@@ -824,7 +824,7 @@ public class ArticlesFragment extends Fragment
                 .from(getActivity())
                 .setType("text/plain")
                 .setText(webUrl)
-                .setChooserTitle(R.string.news_share_chooser_title)
+                .setChooserTitle(R.string.article_share_chooser_title)
                 .startChooser();
     }
 
