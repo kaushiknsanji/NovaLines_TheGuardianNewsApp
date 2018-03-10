@@ -592,9 +592,6 @@ public class HighlightsFragment extends Fragment
                             Log.d(LOG_TAG, "onLoadFinished: Network Failure");
                             //Displaying the "Network Error Layout"
                             showNetworkErrorLayout();
-                        } else {
-                            //When there is NO network issue and the current page has no data to be shown
-                            Log.d(LOG_TAG, "onLoadFinished: NO DATA RETURNED");
                         }
 
                     }
