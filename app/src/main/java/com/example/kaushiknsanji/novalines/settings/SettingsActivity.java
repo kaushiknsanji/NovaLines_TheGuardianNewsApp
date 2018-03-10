@@ -1,5 +1,6 @@
 package com.example.kaushiknsanji.novalines.settings;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     //Constant used as a Request Code for activities launching this
     //with an Intent that waits for a result
-    public static final int REQ_CODE = 1;
+    public static final int REQ_CODE = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,10 @@ public class SettingsActivity extends AppCompatActivity {
 
             //Setting the Toolbar as the custom Action Bar
             Toolbar toolbar = toolbarView.findViewById(R.id.toolbar_root);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //Setting the elevation
+                toolbar.setElevation(getResources().getDimensionPixelOffset(R.dimen.app_bar_elevation));
+            }
             setSupportActionBar(toolbar);
 
             //Finding the custom Toolbar Title Textview
