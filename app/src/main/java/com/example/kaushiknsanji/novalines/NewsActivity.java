@@ -1,6 +1,7 @@
 package com.example.kaushiknsanji.novalines;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,6 +29,7 @@ import com.example.kaushiknsanji.novalines.models.NavDrawerItem;
 import com.example.kaushiknsanji.novalines.settings.SettingsActivity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * The Main Activity of the App that inflates the layout 'R.layout.activity_news'
@@ -93,8 +95,8 @@ public class NewsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
 
-        //Loading the default values for the Preferences on the first Initial launch after install
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        //Initializing the Preferences
+        setupPreferences();
 
         //Finding the RecyclerView for the Navigation Drawer
         mNavRecyclerView = findViewById(R.id.nav_recycler_view_id);
@@ -109,6 +111,27 @@ public class NewsActivity extends AppCompatActivity
             //Load the HeadlinesFragment by default
             openNavItemByTitle(getString(R.string.headlines_title_str));
         }
+    }
+
+    /**
+     * Method that initializes the Preferences used by the app
+     */
+    private void setupPreferences() {
+        //Retrieving the SharedPreferences
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //Manually defaulting the value of 'from-date' if not set: START
+        String fromDateKeyStr = getString(R.string.pref_start_period_manual_key);
+        if (sharedPreferences.getLong(fromDateKeyStr, 0) == 0) {
+            //When not defaulted, setting the value to the current day date
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putLong(fromDateKeyStr, Calendar.getInstance().getTimeInMillis());
+            editor.apply(); //Applying the update
+        }
+        //Manually defaulting the value of 'from-date' if not set: END
+
+        //Loading the default values for the Preferences on the first Initial launch after install
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
     /**
@@ -128,8 +151,20 @@ public class NewsActivity extends AppCompatActivity
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        //Load the Drawer Item last shown
-        openNavItemByTitle(savedInstanceState.getString(SELTD_NAV_ITEM_TITLE_STR_KEY));
+        //Restoring the Item Title of the Drawer Fragment Item last shown
+        mSelectedNavFragmentItemTitle = savedInstanceState.getString(SELTD_NAV_FRAGMENT_ITEM_TITLE_STR_KEY);
+
+        //Retrieving the Title of the Item previously selected
+        mSelectedNavItemTitle = savedInstanceState.getString(SELTD_NAV_ITEM_TITLE_STR_KEY);
+
+        if (!mSelectedNavItemTitle.equals(getString(R.string.settings_title_str))
+                && !mSelectedNavItemTitle.equals(getString(R.string.about_title_str))) {
+            //Relaunching only when the Item previously selected was Not an Activity
+
+            //Reload the Drawer Item Fragment last shown
+            openNavItemByTitle(mSelectedNavItemTitle);
+        }
+
     }
 
     /**
@@ -363,6 +398,10 @@ public class NewsActivity extends AppCompatActivity
         } else if (mSelectedNavItemTitle.equals(getString(R.string.settings_title_str))) {
             //When Settings Navigation Menu is clicked
             openSettings();
+
+        } else if (mSelectedNavItemTitle.equals(getString(R.string.about_title_str))) {
+            //When "About" Navigation Menu is clicked
+            openAbout();
         }
 
         //Closing the Drawer if opened
@@ -422,6 +461,17 @@ public class NewsActivity extends AppCompatActivity
     }
 
     /**
+     * Method that loads the {@link AboutActivity} when the About Navigation Menu is
+     * clicked/selected.
+     */
+    private void openAbout() {
+        //Creating an explicit intent to AboutActivity
+        Intent aboutIntent = new Intent(this, AboutActivity.class);
+        //Launching the Activity with a Request Code
+        startActivityForResult(aboutIntent, AboutActivity.REQ_CODE);
+    }
+
+    /**
      * Method that replaces the Fragment at 'R.id.fragment_frame_id' with the Fragment and its Tag passed.
      * Prior to replacing, it checks whether the given Fragment is already present at 'R.id.fragment_frame_id'
      * or not.
@@ -458,8 +508,9 @@ public class NewsActivity extends AppCompatActivity
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SettingsActivity.REQ_CODE) {
-            //When the request is for the Settings Activity
+        if (requestCode == SettingsActivity.REQ_CODE
+                || requestCode == AboutActivity.REQ_CODE) {
+            //When the request is for the Settings/About Activity
             if (resultCode == RESULT_OK) {
                 //When the Result is OK
 
@@ -467,6 +518,8 @@ public class NewsActivity extends AppCompatActivity
                 mSelectedNavItemTitle = mSelectedNavFragmentItemTitle;
                 //Mark the Drawer Item as selected
                 mNavRecyclerAdapter.setSelectedItemByTitle(mSelectedNavItemTitle);
+                //If the Drawer is Open, then close the Drawer
+                mDrawerLayout.closeDrawers();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -478,7 +531,6 @@ public class NewsActivity extends AppCompatActivity
      */
     @Override
     public void onBackPressed() {
-        Log.d(LOG_TAG, "onBackPressed: Started");
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             //If the Drawer is Open, then close the Drawer
             mDrawerLayout.closeDrawers();
@@ -486,11 +538,29 @@ public class NewsActivity extends AppCompatActivity
         }
 
         if (!mSelectedNavItemTitle.equals(getString(R.string.headlines_title_str))) {
-            Log.d(LOG_TAG, "onBackPressed: mSelectedNavItemTitle(Before) " + mSelectedNavItemTitle);
-            //When the last Navigation Drawer Item shown is not the Headlines Navigation Menu,
+            //When the last Navigation Drawer Item shown is NOT the Headlines Navigation Menu,
             //then load the Headlines Fragment
             openNavItemByTitle(getString(R.string.headlines_title_str));
             return;
+        }
+
+        if (mSelectedNavItemTitle.equals(getString(R.string.headlines_title_str))) {
+            //When the last Navigation Drawer Item shown is the Headlines Navigation Menu
+
+            //Retrieving the fragment shown
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HeadlinesFragment.NAV_FRAGMENT_TAG);
+            if (fragment != null && fragment instanceof HeadlinesFragment) {
+                //Casting to HeadlinesFragment
+                HeadlinesFragment headlinesFragment = (HeadlinesFragment) fragment;
+
+                //On Back Press, if the last page shown by the ViewPager of the Fragment
+                //is not the first page (HighlightsFragment)
+                //then reset the ViewPager to display the first page again
+                if (headlinesFragment.getViewPager().getCurrentItem() > 0) {
+                    headlinesFragment.getViewPager().setCurrentItem(0);
+                    return;
+                }
+            }
         }
 
         super.onBackPressed();
