@@ -20,6 +20,8 @@ public class DatePickerPreference extends DialogPreference {
 
     //Constant used for logs
     private static final String LOG_TAG = DatePickerPreference.class.getSimpleName();
+    //Constant used as the default fallback value when the preference value is not available
+    private static final long FALLBACK_VALUE = Calendar.getInstance().getTimeInMillis();
     //Stores the reference to the Date Picker Layout Resource
     private final int mDialogLayoutResourceId = R.layout.pref_date_picker_dialog;
     //Stores the value of the Calendar date picked by the User, in milliseconds
@@ -79,7 +81,7 @@ public class DatePickerPreference extends DialogPreference {
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
         //Returning the current date as the default value in milliseconds
-        return Calendar.getInstance().getTimeInMillis();
+        return FALLBACK_VALUE;
     }
 
     /**
@@ -92,7 +94,7 @@ public class DatePickerPreference extends DialogPreference {
      */
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
-        setDateTimeInMillis(restorePersistedValue ? getPersistedLong(Calendar.getInstance().getTimeInMillis()) : (long) defaultValue);
+        setDateTimeInMillis(restorePersistedValue ? getPersistedLong(FALLBACK_VALUE) : (long) defaultValue);
     }
 
     /**
