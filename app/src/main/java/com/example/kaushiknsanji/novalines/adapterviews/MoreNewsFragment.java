@@ -206,7 +206,9 @@ public class MoreNewsFragment extends Fragment
         switch (item.getItemId()) {
             case R.id.subscribe_action_id:
                 //For the subscribe menu option
-                Log.d(LOG_TAG, "onOptionsItemSelected: You clicked subscribe more");
+
+                //Launching an activity to allow the user to subscribe to the News Feeds of their choice
+                ((HeadlinesFragment) getParentFragment()).subscribeMoreNews();
                 return true;
             case R.id.settings_action_id:
                 //For the settings menu option
