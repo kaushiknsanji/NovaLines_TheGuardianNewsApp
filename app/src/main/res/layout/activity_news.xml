@@ -12,8 +12,7 @@
     <FrameLayout
         android:id="@+id/fragment_frame_id"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true" />
+        android:layout_height="match_parent" />
 
     <!-- For the Navigation Drawer on the left -->
     <android.support.v7.widget.RecyclerView
@@ -21,6 +20,7 @@
         android:layout_width="@dimen/nav_header_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/navBackgroundColor" />
+        android:background="@color/navBackgroundColor"
+        android:fitsSystemWindows="true" />
 
 </android.support.v4.widget.DrawerLayout>
