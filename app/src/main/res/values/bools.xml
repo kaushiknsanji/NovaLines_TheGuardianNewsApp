@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default value for the "Start Period Preset/Manual" Preference setting -->
+    <bool name="pref_start_period_manual_override_default">true</bool>
+    <!-- Default value for the "Reset Settings" Preference setting -->
+    <bool name="pref_reset_settings_default">false</bool>
+</resources>
