@@ -36,6 +36,8 @@ public class PreferencesObserverUtility {
         keysToExclude.add(context.getString(R.string.pref_start_period_buffer_key));
         //Excluding the preference key that saves current day's date
         keysToExclude.add(context.getString(R.string.pref_today_date_key));
+        //Excluding the preference key that does the reset of all Settings
+        keysToExclude.add(context.getString(R.string.pref_reset_settings_key));
         //Adding the Preference Keys to be excluded : END
 
         //Returning the exclusion list

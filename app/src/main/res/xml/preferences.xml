@@ -34,7 +34,7 @@
     <android.support.v7.preference.PreferenceCategory android:title="@string/pref_start_period_category_title">
 
         <android.support.v7.preference.CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="@bool/pref_start_period_manual_override_default"
             android:key="@string/pref_start_period_manual_override_key"
             android:title="@string/pref_start_period_manual_override_title" />
 
@@ -58,5 +58,16 @@
             android:title="@string/pref_start_period_manual_title" />
 
     </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory android:title="@string/pref_defaults_category_title">
+
+        <com.example.kaushiknsanji.novalines.settings.ConfirmationPreference
+            android:defaultValue="@bool/pref_reset_settings_default"
+            android:dialogMessage="@string/pref_reset_settings_dialog_msg"
+            android:key="@string/pref_reset_settings_key"
+            android:title="@string/pref_reset_settings_title" />
+
+    </android.support.v7.preference.PreferenceCategory>
+
 
 </android.support.v7.preference.PreferenceScreen>
