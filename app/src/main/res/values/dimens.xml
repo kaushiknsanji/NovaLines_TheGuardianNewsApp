@@ -19,6 +19,9 @@
     <!-- For the NumberPicker used in both Pagination & Settings -->
     <dimen name="number_picker_min_width">68dp</dimen>
 
+    <!-- Indicator height of the selected Tab in TabLayout -->
+    <dimen name="tab_indicator_height">4dp</dimen>
+
     <!-- ======================================= -->
     <!-- FOR THE NAVIGATION HEADER OF THE DRAWER -->
     <!-- ======================================= -->
@@ -198,5 +201,22 @@
     <dimen name="nfhi_resolution_text_size">21sp</dimen>
     <dimen name="nfhi_resolution_btn_text_size">18sp</dimen>
     <dimen name="nfhi_resolution_btn_drawable_padding">4dp</dimen>
+
+    <!-- ====================== -->
+    <!-- FOR THE ABOUT ACTIVITY -->
+    <!-- ====================== -->
+    <dimen name="abt_card_parent_padding">16dp</dimen>
+    <dimen name="abt_card_corner_radius">8dp</dimen>
+    <dimen name="abt_title_text_size">48sp</dimen>
+    <dimen name="abt_info_content_text_size">18sp</dimen>
+    <dimen name="abt_info_content_internal_margin">12dp</dimen>
+    <dimen name="abt_info_text_content_margin">16dp</dimen>
+    <dimen name="abt_pwd_by_layout_content_padding">8dp</dimen>
+    <dimen name="abt_guardian_roundel_image_size">56dp</dimen>
+    <dimen name="abt_pwd_by_text_margin_left">8dp</dimen>
+    <dimen name="abt_theguardian_image_margin_top">4dp</dimen>
+    <dimen name="abt_buttons_size">56dp</dimen>
+    <dimen name="abt_theguardian_image_width">180dp</dimen>
+    <dimen name="abt_pwd_by_text_size">15sp</dimen>
 
 </resources>

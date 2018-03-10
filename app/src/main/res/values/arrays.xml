@@ -26,6 +26,7 @@
     <string-array name="pref_start_period_preset_entries">
         <item>Start of the Week</item>
         <item>Start of the Month</item>
+        <item>Start of Today</item>
     </string-array>
 
     <!-- IDs of the fixed News Topics shown in the Headlines -->
@@ -50,7 +51,7 @@
         <item>thumbnail</item>
     </string-array>
 
-    <!-- List of resolution texts and button texts for
+    <!-- List of resolution texts, button texts and drawables for
     resolving the "No Feed available" scenario -->
     <string-array name="nf_resolution_texts">
         <item>@string/nf_app_settings_resolution_text</item>

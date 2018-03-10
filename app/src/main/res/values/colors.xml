@@ -10,6 +10,8 @@
     <color name="defaultBackgroundColor">#F2F2F2</color>
     <!-- Common Black/Dark Grey color used in the App -->
     <color name="nearBlackColor">#484F53</color>
+    <!-- Common color used for the Action Text in the Snackbar -->
+    <color name="snackBarActionTextColorAmberA400">#ffc400</color>
 
     <!-- ==================== -->
     <!-- VIEWPAGER TAB COLORS -->
@@ -71,6 +73,12 @@
     <color name="colorIndigo500">#3f51b5</color>
     <color name="colorPurple500">#9c27b0</color>
     <color name="colorPink500">#e91e63</color>
+
+    <!-- ===================== -->
+    <!-- ABOUT ACTIVITY COLORS -->
+    <!-- ===================== -->
+    <color name="abtPwdByBackgroundBlueColor">#0D7CAD</color>
+    <color name="abtTextContentColor">@color/nearBlackColor</color>
 
     <!-- Color used as a background for info card items -->
     <color name="infoCardBackgroundColor">@color/nearBlackColor</color>

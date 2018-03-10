@@ -25,6 +25,9 @@
     <!-- Title of the common action menu item for refreshing the content -->
     <string name="action_refresh">Refresh</string>
 
+    <!-- Title of the common UNDO action provided by the Snackbar -->
+    <string name="snackbar_action_undo">UNDO</string>
+
     <!-- ===================================== -->
     <!-- STRINGS USED IN THE NAVIGATION DRAWER -->
     <!-- ===================================== -->
@@ -49,7 +52,6 @@
 
     <!-- A String resource to describe the "close drawer" action for accessibility -->
     <string name="drawer_close">Close navigation drawer</string>
-
 
     <!-- =================== -->
     <!-- PREFERENCES STRINGS -->
@@ -151,6 +153,18 @@
         <xliff:g example="7" id="buffer_days">%1$d</xliff:g> days
     </string>
 
+    <!-- Title shown for the Defaults Preference Category -->
+    <string name="pref_defaults_category_title">Defaults</string>
+
+    <!--Key used for the "Reset Settings" preference setting-->
+    <string name="pref_reset_settings_key" translatable="false">reset</string>
+
+    <!--Title shown for the "Reset Settings" preference setting-->
+    <string name="pref_reset_settings_title">Reset Settings</string>
+
+    <!--Dialog message shown for the "Reset Settings" preference setting-->
+    <string name="pref_reset_settings_dialog_msg">Reset all to defaults?</string>
+
     <!-- Key used for the "Page to Display" Preference setting
     which is not shown in the settings screen -->
     <string name="pref_page_index_key" translatable="false">page</string>
@@ -175,6 +189,7 @@
         News since <xliff:g example="January 01, 2017" id="date_str">%1$s</xliff:g>
     </string>
 
+    <!-- Common Text shown for each of the News Highlight items -->
     <string name="hl_new_stories_text_line">New Stories in</string>
 
     <!-- ========================================= -->
@@ -195,6 +210,15 @@
 
     <!-- Chooser Title shown for the "Share News" Menu action item -->
     <string name="article_share_chooser_title">Share the news link with …</string>
+
+    <!-- Snackbar message shown when a particular News is added to Favorites when requested by the user -->
+    <string name="article_favorited_snack">News marked as Favorite [ic_favorite_selected].</string>
+    <!-- Snackbar message shown when a particular News is added to Bookmarks when requested by the user -->
+    <string name="article_bookmarked_snack">News bookmarked [ic_bookmark_selected].</string>
+    <!-- Snackbar message shown when a particular News which is added to Favorites needs to be undone -->
+    <string name="article_favorited_undo_snack">Favorited News deleted.</string>
+    <!-- Snackbar message shown when a particular News which is added to Bookmarks needs to be undone -->
+    <string name="article_bookmarked_undo_snack">Bookmarked News deleted.</string>
 
     <!-- ========================================== -->
     <!-- STRINGS USED IN THE MORE NEWS FRAGMENT TAB -->
@@ -229,6 +253,9 @@
 
     <!-- Title of the action menu item for Subscribing to More News Feeds -->
     <string name="more_news_action_subscribe">Subscribe</string>
+
+    <!-- Message displayed when the user requests to subscribe to more News Categories/Sections -->
+    <string name="more_news_subscribe_acton_toast">Multiple News Category Feed subscription will be available in the future</string>
 
     <!-- =========================== -->
     <!-- STRINGS USED FOR PAGINATION -->
@@ -283,5 +310,25 @@
     <string name="nf_app_settings_btn_text">Check App Settings</string>
     <string name="nf_nw_settings_btn_text">Check Network</string>
     <string name="nf_refresh_btn_text">Refresh</string>
+
+    <!-- ================================== -->
+    <!-- STRINGS USED IN THE ABOUT ACTIVITY -->
+    <!-- ================================== -->
+    <string name="abt_content_textline_1">App designed and developed by &lt;b&gt;Kaushik N Sanji&lt;/b&gt; as part of the project coursework done for the &lt;b&gt;Android Basics Nanodegree&lt;/b&gt; course offered by &lt;b&gt;Udacity&lt;/b&gt;.</string>
+    <string name="abt_content_textline_2">
+        App is designed as a client to the &lt;b&gt;Guardian News&lt;/b&gt;.
+        Currently, implements only the section endpoint.
+        It parses the News Feed for the subscribed News category and displays the list of News Articles in Cards.
+        On top of these News Articles, many useful features are provided, like -&lt;br/&gt;
+        1. Sharing the News Article.
+        &lt;br/&gt;2. Saving the News Article to Bookmarks for Reading later.
+        &lt;br/&gt;3. Saving the News Article to Favorites.
+        &lt;br/&gt;4. Jumping to a particular News Category.
+    </string>
+    <string name="news_api_link" translatable="false">http://open-platform.theguardian.com/documentation</string>
+    <string name="udacity_course_link" translatable="false">https://in.udacity.com/course/android-basics-nanodegree-by-google--nd803</string>
+    <string name="github_profile_link" translatable="false">https://github.com/kaushiknsanji</string>
+    <string name="linkedin_profile_link" translatable="false">https://www.linkedin.com/in/kaushiknsanji</string>
+    <string name="abt_pwd_by_text">Powered by</string>
 
 </resources>

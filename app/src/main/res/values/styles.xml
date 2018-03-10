@@ -72,6 +72,7 @@
     <!-- Style for the Tabs -->
     <style name="TabStyle" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@color/tabIndicatorColor</item>
+        <item name="tabIndicatorHeight">@dimen/tab_indicator_height</item>
         <item name="tabSelectedTextColor">@color/tabIndicatorColor</item>
         <item name="tabBackground">@color/colorPrimary</item>
         <!-- Spread the tabs to fill the entire screen width : START -->
@@ -110,6 +111,12 @@
             @dimen/info_card_margin_right
         </item>
         <item name="android:layout_marginRight">@dimen/info_card_margin_right</item>
+    </style>
+
+    <!-- Child Style for the About card used in the AboutActivity of the app -->
+    <style name="AboutInfoCardStyle" parent="BaseCardViewStyle">
+        <item name="cardBackgroundColor">@android:color/white</item>
+        <item name="cardCornerRadius">@dimen/abt_card_corner_radius</item>
     </style>
 
     <!-- ============================== -->
@@ -165,6 +172,25 @@
         <item name="android:layout_width">@dimen/std_btn_size_48dip</item>
         <item name="android:layout_height">@dimen/std_btn_size_48dip</item>
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <!-- ============================= -->
+    <!-- STYLES USED IN ABOUT ACTIVITY -->
+    <!-- ============================= -->
+    <!-- Style for the Clickable ImageViews shown in the About Activity -->
+    <style name="AboutClickableImageViewStyle">
+        <item name="android:layout_width">@dimen/abt_buttons_size</item>
+        <item name="android:layout_height">@dimen/abt_buttons_size</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <!-- Style for the Text content shown in the About Activity -->
+    <style name="AboutContentTextStyle">
+        <item name="android:layout_width">@dimen/match_constraint_0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/abt_info_content_internal_margin</item>
+        <item name="android:textSize">@dimen/abt_info_content_text_size</item>
+        <item name="android:textColor">@color/abtTextContentColor</item>
     </style>
 
 </resources>
