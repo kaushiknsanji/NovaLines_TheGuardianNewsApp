@@ -546,6 +546,8 @@ public class HeadlinesFragment extends Fragment
                     //Hiding the Pagination Panel for a fragment without Paginated view
                     showPaginationPanel(fragment, false);
                 }
+                //Triggering a new data load only if any parameters have changed
+                articlesFragment.checkAndReloadData();
             } else {
                 //For other Fragment instances
 
@@ -831,7 +833,19 @@ public class HeadlinesFragment extends Fragment
      * when the User wants to subscribe to the News Feeds of their choice
      */
     public void subscribeMoreNews() {
-        Log.d(LOG_TAG, "subscribeMoreNews: Started");
+        //(Will launch an Activity to allow users to add/remove news feed subscriptions, in future implementation)
+
+        //Currently, displaying a toast indicating that the feature will be available in future implementation
+        Toast.makeText(getContext(), R.string.more_news_subscribe_acton_toast, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * Getter method for the {@link ViewPager} shown by this fragment
+     *
+     * @return the {@link ViewPager} shown by this fragment
+     */
+    public ViewPager getViewPager() {
+        return mViewPager;
     }
 
 }
