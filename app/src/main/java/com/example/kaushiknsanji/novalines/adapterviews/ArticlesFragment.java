@@ -3,11 +3,13 @@ package com.example.kaushiknsanji.novalines.adapterviews;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.preference.PreferenceManager;
@@ -20,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.adapters.ArticlesAdapter;
@@ -33,6 +36,7 @@ import com.example.kaushiknsanji.novalines.utils.NewsURLGenerator;
 import com.example.kaushiknsanji.novalines.utils.PreferencesObserverUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewItemDecorUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
+import com.example.kaushiknsanji.novalines.utils.TextAppearanceUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsArticlesLoader;
 
 import java.net.URL;
@@ -632,10 +636,12 @@ public class ArticlesFragment extends Fragment
                         //When not on first page, reset the 'page' setting value to 1,
                         //to refresh the content and show the first page if possible
                         ((HeadlinesFragment) getParentFragment()).resetStartPageIndex();
+
+                    } else {
+                        //Otherwise, displaying the "No Feed Layout" when there is no data
+                        showNoFeedLayout();
                     }
 
-                    //Displaying the "No Feed Layout"  when there is no data
-                    showNoFeedLayout();
                 }
 
             }
@@ -836,7 +842,22 @@ public class ArticlesFragment extends Fragment
      */
     @Override
     public void onMarkForRead(NewsArticleInfo newsArticleInfo) {
+        //(Adding entry to the Bookmarks table in future implementation)
 
+        //Displaying the Snackbar on success: START
+        //Initializing an empty Snackbar
+        Snackbar snackbar = Snackbar.make(getParentFragment().getView(), "", Snackbar.LENGTH_LONG);
+        //Setting the Action
+        snackbar.setAction(getString(R.string.snackbar_action_undo), new BookmarkedNewsUndoListener(newsArticleInfo));
+        //Setting the Action Text Color
+        snackbar.setActionTextColor(ContextCompat.getColor(getContext(), R.color.snackBarActionTextColorAmberA400));
+        //Setting the Text along with replacing the placeholders for drawables with their corresponding resource: START
+        TextView sbTextView = snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        sbTextView.setText(R.string.article_bookmarked_snack, TextView.BufferType.SPANNABLE);
+        TextAppearanceUtility.replaceTextWithImage(getContext(), sbTextView);
+        //Setting the Text along with replacing the placeholders for drawables with their corresponding resource: END
+        snackbar.show(); //Displaying the prepared Snackbar
+        //Displaying the Snackbar on success: END
     }
 
     /**
@@ -847,7 +868,22 @@ public class ArticlesFragment extends Fragment
      */
     @Override
     public void onMarkAsFav(NewsArticleInfo newsArticleInfo) {
+        //(Adding entry to the Favorites table in future implementation)
 
+        //Displaying the Snackbar on success: START
+        //Initializing an empty Snackbar
+        Snackbar snackbar = Snackbar.make(getParentFragment().getView(), "", Snackbar.LENGTH_LONG);
+        //Setting the Action
+        snackbar.setAction(getString(R.string.snackbar_action_undo), new FavoritedNewsUndoListener(newsArticleInfo));
+        //Setting the Action Text Color
+        snackbar.setActionTextColor(ContextCompat.getColor(getContext(), R.color.snackBarActionTextColorAmberA400));
+        //Setting the Text along with replacing the placeholders for drawables with their corresponding resource: START
+        TextView sbTextView = snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        sbTextView.setText(R.string.article_favorited_snack, TextView.BufferType.SPANNABLE);
+        TextAppearanceUtility.replaceTextWithImage(getContext(), sbTextView);
+        //Setting the Text along with replacing the placeholders for drawables with their corresponding resource: END
+        snackbar.show(); //Displaying the prepared Snackbar
+        //Displaying the Snackbar on success: END
     }
 
     /**
@@ -896,7 +932,7 @@ public class ArticlesFragment extends Fragment
      * Method that compares the URL previously used by an existing loader
      * with the URL generated using the current parameters to trigger a new data load only if necessary
      */
-    private void checkAndReloadData() {
+    public void checkAndReloadData() {
         if (getActivity() != null && getUserVisibleHint()) {
             //When attached to an Activity and the current fragment is the one viewed by the user
             Log.d(LOG_TAG + "_" + mNewsTopicId, "checkAndReloadData: Started");
@@ -918,6 +954,72 @@ public class ArticlesFragment extends Fragment
                     triggerLoad(true);
                 }
             }
+        }
+    }
+
+    /**
+     * Class that implements the {@link android.view.View.OnClickListener}
+     * to provide the UNDO action for the Snackbar that is shown
+     * when the user adds a News to the Bookmarks for Reading later
+     */
+    private class BookmarkedNewsUndoListener implements View.OnClickListener {
+
+        //The NewsArticleInfo object of the entry that was added to the Bookmarks
+        final NewsArticleInfo newsArticleInfo;
+
+        /**
+         * Constructor of {@link BookmarkedNewsUndoListener}
+         *
+         * @param newsArticleInfo is the {@link NewsArticleInfo} object of the entry that was added to the Bookmarks
+         */
+        private BookmarkedNewsUndoListener(NewsArticleInfo newsArticleInfo) {
+            this.newsArticleInfo = newsArticleInfo;
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param view The view that was clicked.
+         */
+        @Override
+        public void onClick(View view) {
+            //(Removing the entry added to the Bookmarks table in future implementation)
+
+            //Displaying the Snackbar on success of the removal of the entry
+            Snackbar.make(getParentFragment().getView(), getString(R.string.article_bookmarked_undo_snack), Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Class that implements the {@link android.view.View.OnClickListener}
+     * to provide the UNDO action for the Snackbar that is shown
+     * when the user adds a News to the Favorites
+     */
+    private class FavoritedNewsUndoListener implements View.OnClickListener {
+
+        //The NewsArticleInfo object of the entry that was added to the Favorites
+        final NewsArticleInfo newsArticleInfo;
+
+        /**
+         * Constructor of {@link FavoritedNewsUndoListener}
+         *
+         * @param newsArticleInfo is the {@link NewsArticleInfo} object of the entry that was added to the Favorites
+         */
+        private FavoritedNewsUndoListener(NewsArticleInfo newsArticleInfo) {
+            this.newsArticleInfo = newsArticleInfo;
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param view The view that was clicked.
+         */
+        @Override
+        public void onClick(View view) {
+            //(Removing the entry added to the Favorites table in future implementation)
+
+            //Displaying the Snackbar on success of the removal of the entry
+            Snackbar.make(getParentFragment().getView(), getString(R.string.article_favorited_undo_snack), Snackbar.LENGTH_SHORT).show();
         }
     }
 
