@@ -202,21 +202,19 @@ public class HighlightsFragment extends Fragment
     public void onResume() {
         super.onResume();
 
-        if (mInitialLaunch) {
-            //On Initial launch of this Fragment
+        //Registering the Preference Change Listener
+        mPreferences.registerOnSharedPreferenceChangeListener(this);
 
-            //Recalculating and applying the Date setting if required
-            enforceDateSetting();
+        //Recalculating and applying the Date setting if required
+        enforceDateSetting();
 
-        } else {
+        if (!mInitialLaunch) {
             //On subsequent launch of this Fragment
 
             //Triggering a new data load only if the Start date of the News has changed
             checkAndReloadData();
         }
 
-        //Registering the Preference Change Listener
-        mPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     /**
@@ -235,6 +233,7 @@ public class HighlightsFragment extends Fragment
         //as it will be a subsequent launch when the Fragment is resumed
         mInitialLaunch = false;
     }
+
 
     /**
      * Called to ask the fragment to save its current dynamic state, so it
@@ -303,9 +302,10 @@ public class HighlightsFragment extends Fragment
     private void enforceDateSetting() {
         Log.d(LOG_TAG, "enforceDateSetting: Started");
         //Retrieving the state of the "Start Period Preset/Manual" CheckBoxPreference
-        boolean state = mPreferences.getBoolean(getString(R.string.pref_start_period_manual_override_key), false);
+        boolean presetState = mPreferences.getBoolean(getString(R.string.pref_start_period_manual_override_key),
+                getResources().getBoolean(R.bool.pref_start_period_manual_override_default));
 
-        if (!state) {
+        if (!presetState) {
             //When in Preset mode (False condition)
 
             //Creating an instance of today's date for comparison and as a default value
@@ -316,40 +316,75 @@ public class HighlightsFragment extends Fragment
             //Retrieving the Preference key that saves the current day's date
             String currentDayDateKeyStr = getString(R.string.pref_today_date_key);
 
-            //Retrieving the current date stored in the preference
-            long currentDatePrefInMillis = mPreferences.getLong(currentDayDateKeyStr, todayCalendar.getTimeInMillis());
+            //Retrieving the current day's date stored in the preference
+            long currentDatePrefInMillis = mPreferences.getLong(currentDayDateKeyStr, 0);
 
-            //Calculating the difference between the two dates in days: START
-            long diffTimeInMillis = todayCalendar.getTimeInMillis() - currentDatePrefInMillis;
-            long diffInDays = TimeUnit.MILLISECONDS.toDays(diffTimeInMillis);
-            //Calculating the difference between the two dates in days: END
+            Log.d(LOG_TAG, "enforceDateSetting: todayCalendar " + todayCalendar.getTimeInMillis());
+            Log.d(LOG_TAG, "enforceDateSetting: pref_today_date_key " + currentDatePrefInMillis);
+            Log.d(LOG_TAG, "enforceDateSetting: diff " + String.valueOf(todayCalendar.getTimeInMillis() - currentDatePrefInMillis));
 
-            if (diffInDays > 0) {
-                //When today's date is different, trigger the preset start date calculation
+            if (currentDatePrefInMillis > 0) {
+                //When the value was previously stored in the 'date-today' setting
 
-                //Retrieving the Preference key that saves the start date for the News
-                String fromDateKeyStr = getString(R.string.pref_start_period_manual_key);
+                //Calculating the difference between the two dates in days: START
+                long diffTimeInMillis = todayCalendar.getTimeInMillis() - currentDatePrefInMillis;
+                long diffInDays = TimeUnit.MILLISECONDS.toDays(diffTimeInMillis);
+                //Calculating the difference between the two dates in days: END
 
-                //Retrieving the start date value from the preference
-                long fromDatePrefInMillis = mPreferences.getLong(fromDateKeyStr, todayCalendar.getTimeInMillis());
+                if (diffInDays > 0) {
+                    //When today's date is different, initiate the preset start date calculation
 
-                //Opening the Editor to update the same value
+                    //Getting the current calendar instance
+                    Calendar dateCalendar = Calendar.getInstance();
+
+                    //Retrieving the "Preset Start Period" Preference value
+                    String presetStartPeriodSelected = mPreferences.getString(getString(R.string.pref_start_period_preset_key),
+                            getString(R.string.pref_start_period_preset_default));
+
+                    //Retrieving the list of values used in the "Preset Start Period" Preference
+                    String[] availablePresets = getResources().getStringArray(R.array.pref_start_period_preset_entries);
+
+                    if (presetStartPeriodSelected.equals(availablePresets[0])) {
+                        //When the option selected was "Start of the Week"
+
+                        //Setting the calendar to the locale's week's start day
+                        dateCalendar.set(Calendar.DAY_OF_WEEK, dateCalendar.getFirstDayOfWeek());
+                    } else if (presetStartPeriodSelected.equals(availablePresets[1])) {
+                        //When the option selected was "Start of the Month"
+
+                        //Setting the calendar to the start of the Month
+                        dateCalendar.set(Calendar.DAY_OF_MONTH, 1);
+                    }
+                    //For the option "Start of Today", we are using the current day date AS-IS
+
+                    //Retrieving the buffer value selected on the "Buffer to Start Period" Preference
+                    int bufferDaysSelected = mPreferences.getInt(getString(R.string.pref_start_period_buffer_key),
+                            getResources().getInteger(R.integer.pref_start_period_buffer_default_value));
+
+                    //Subtracting the calendar date by the Buffer value selected
+                    dateCalendar.add(Calendar.DAY_OF_YEAR, -bufferDaysSelected);
+
+                    //Opening the Editor to update the above value in the 'from-date' setting
+                    SharedPreferences.Editor prefEditor = mPreferences.edit();
+                    prefEditor.putLong(getString(R.string.pref_start_period_manual_key),
+                            dateCalendar.getTimeInMillis());
+                    prefEditor.apply(); //applying the changes
+
+                    Log.d(LOG_TAG, "enforceDateSetting: Reapplied");
+
+                    //Updating the 'date-today' setting to reflect the current day's date
+                    prefEditor.putLong(currentDayDateKeyStr, todayCalendar.getTimeInMillis());
+                    prefEditor.apply(); //applying the changes
+                }
+
+            } else {
+                //When the value was NOT previously stored in the 'date-today' setting
+
+                //Opening the Editor to update current day's date in 'date-today' setting
                 SharedPreferences.Editor prefEditor = mPreferences.edit();
-
-                //Changing the start date value to trigger the change in 'from-date' setting
-                prefEditor.putLong(fromDateKeyStr, fromDatePrefInMillis - 1);
-                prefEditor.apply(); //applying the changes
-
-                //Changing the start date value to its previous value,
-                //to re-trigger the change in 'from-date' setting
-                //forcing the calculation of Preset start date
-                prefEditor.putLong(fromDateKeyStr, fromDatePrefInMillis);
-                prefEditor.apply(); //applying the changes
-
-                Log.d(LOG_TAG, "enforceDateSetting: Reapplied");
-
                 //Updating the 'date-today' setting to reflect the current day's date
                 prefEditor.putLong(currentDayDateKeyStr, todayCalendar.getTimeInMillis());
+                prefEditor.apply(); //applying the changes
             }
 
         }
