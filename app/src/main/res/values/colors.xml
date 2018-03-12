@@ -32,8 +32,9 @@
     <color name="bookmarksIconColorGreen700">#388e3c</color>
     <color name="favoritesIconColorRed500">#f44336</color>
     <color name="newspaperIconColorIndigo700">#303f9f</color>
-    <color name="settingsIconColorPurple700">#7b1fa2</color>
-    <color name="aboutIconColorPink700">#c2185b</color>
+    <color name="searchIconColorPurple700">#7b1fa2</color>
+    <color name="settingsIconColorLightGreenA100">#ccff90</color>
+    <color name="aboutIconColorTealA100">#a7ffeb</color>
 
     <!-- ============================== -->
     <!-- NEWS HIGHLIGHTS CONTENT COLORS -->
@@ -86,6 +87,8 @@
     <color name="bookmarkMsgTextColor">@color/nearBlackColor</color>
     <!-- Color used for the Text shown in Favorited News Layout for No results condition -->
     <color name="favMsgTextColor">@color/nearBlackColor</color>
+    <!-- Color used for the Text shown in Random News Layout for intro text -->
+    <color name="searchMsgIntroTextColor">@color/nearBlackColor</color>
     <!-- Color used for the Text shown in Network Error Layout -->
     <color name="networkErrorMsgTextColor">@color/nearBlackColor</color>
     <!-- Color used for the Text shown in More News Layout -->
