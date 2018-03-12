@@ -350,9 +350,9 @@ public class NewsActivity extends AppCompatActivity
         //Item 4 is the Divider
         navDrawerItemsList.add(new NavDrawerItem(R.layout.nav_item_divider, -1, ""));
         //Item 5 is the Settings Menu
-        navDrawerItemsList.add(new NavDrawerItem(R.layout.nav_item, R.drawable.ic_settings_selector, getString(R.string.settings_title_str)));
+        navDrawerItemsList.add(new NavDrawerItem(R.layout.nav_item, R.drawable.ic_settings_accent, getString(R.string.settings_title_str)));
         //Item 6 is the About Menu
-        navDrawerItemsList.add(new NavDrawerItem(R.layout.nav_item, R.drawable.ic_about_selector, getString(R.string.about_title_str)));
+        navDrawerItemsList.add(new NavDrawerItem(R.layout.nav_item, R.drawable.ic_about_accent, getString(R.string.about_title_str)));
 
         //Returning the prepared list of NavDrawerItem
         return navDrawerItemsList;
