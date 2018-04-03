@@ -57,7 +57,7 @@ public class NewsArticlesDiffLoader extends AsyncTaskLoader<DiffUtil.DiffResult>
         //Instantiating the DiffUtil for the difference computation
         NewsArticleInfoDiffUtility diffUtility = new NewsArticleInfoDiffUtility(mOldArticleInfoList, mNewArticleInfoList);
         //Computing the difference and returning the result
-        return DiffUtil.calculateDiff(diffUtility);
+        return DiffUtil.calculateDiff(diffUtility, false); //False, as RecyclerView items are stationary
     }
 
     /**
