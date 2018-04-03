@@ -1,11 +1,11 @@
 package com.example.kaushiknsanji.novalines.drawerviews;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +24,8 @@ import com.example.kaushiknsanji.novalines.adapters.HeadlinesPagerAdapter;
 import com.example.kaushiknsanji.novalines.adapterviews.ArticlesFragment;
 import com.example.kaushiknsanji.novalines.adapterviews.HighlightsFragment;
 import com.example.kaushiknsanji.novalines.adapterviews.MoreNewsFragment;
-import com.example.kaushiknsanji.novalines.dialogs.PaginationNumberPickerDialogFragment;
+import com.example.kaushiknsanji.novalines.interfaces.IPaginationView;
+import com.example.kaushiknsanji.novalines.presenters.PaginationPresenter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +44,7 @@ import java.util.Arrays;
 public class HeadlinesFragment extends Fragment
         implements TabLayout.OnTabSelectedListener,
         View.OnClickListener,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener, IPaginationView {
 
     //Constant used for logs
     private static final String LOG_TAG = HeadlinesFragment.class.getSimpleName();
@@ -73,6 +74,8 @@ public class HeadlinesFragment extends Fragment
     private ImageButton mPageNextButton;
     private ImageButton mPagePreviousButton;
     private ImageButton mPageMoreButton;
+    //For the Pagination Presenter
+    private PaginationPresenter mPaginationPresenter;
     //For managing the subscribed list of News categories
     private ArrayList<String> mSubscribedNewsSectionNamesList;
     private ArrayList<String> mSubscribedNewsSectionIdsList;
@@ -150,6 +153,10 @@ public class HeadlinesFragment extends Fragment
         mPagePreviousButton.setOnClickListener(this);
         mPageMoreButton.setOnClickListener(this);
 
+        //Registering the Pagination Presenter
+        mPaginationPresenter = new PaginationPresenter();
+        mPaginationPresenter.attachView(this);
+
         if (savedInstanceState == null) {
             //On initial launch of this Fragment
 
@@ -224,57 +231,7 @@ public class HeadlinesFragment extends Fragment
      * Method that resets the 'page' (Page to Display) setting to 1, when not 1
      */
     public void resetStartPageIndex() {
-        //Retrieving the preference key string of 'page'
-        String startIndexPrefKeyStr = getString(R.string.pref_page_index_key);
-        //Retrieving the default value of 'page' setting
-        int startIndexPrefKeyDefaultValue = getResources().getInteger(R.integer.pref_page_index_default_value);
-        //Retrieving the current value of 'page' setting
-        int startIndex = mPreferences.getInt(startIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
-
-        if (startIndex != 1) {
-            //When the 'page' setting value is not equal to 1
-
-            //Opening the Editor to update the value
-            SharedPreferences.Editor prefEditor = mPreferences.edit();
-            //Setting to its default value, which is 1
-            prefEditor.putInt(startIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
-            prefEditor.apply(); //applying the changes
-        }
-    }
-
-    /**
-     * Method that resets the 'page' (Page to Display) setting of a particular fragment to 1, when not 1
-     *
-     * @param lastViewedPageIndex is the index of the last page viewed by the user
-     *                            which is specific to the fragment and not stored as a SharedPreference
-     */
-    public void resetLastViewedPageIndex(int lastViewedPageIndex) {
-        //Retrieving the preference key string of 'page'
-        String startIndexPrefKeyStr = getString(R.string.pref_page_index_key);
-        //Retrieving the default value of 'page' setting
-        int startIndexPrefKeyDefaultValue = getResources().getInteger(R.integer.pref_page_index_default_value);
-        //Retrieving the current value of 'page' setting
-        int startIndex = mPreferences.getInt(startIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
-
-        if (lastViewedPageIndex > 1) {
-            //When the index of the last page viewed is greater than 1
-
-            //Opening the Editor to update the value
-            SharedPreferences.Editor prefEditor = mPreferences.edit();
-            //Setting the 'page' setting value to lastViewedPageIndex
-            prefEditor.putInt(startIndexPrefKeyStr, lastViewedPageIndex);
-            prefEditor.apply(); //applying the changes
-            //Setting the 'page' setting value to its default value, which is 1
-            //(This resets the start page to the first page for the current fragment)
-            prefEditor.putInt(startIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
-            prefEditor.apply(); //applying the changes
-
-        } else if (startIndex > 1) {
-            //When the 'page' (Page to Display) setting is greater than 1 but not the last page viewed
-
-            //Resetting the 'page' (Page to Display) setting value to 1
-            resetStartPageIndex();
-        }
+        mPaginationPresenter.resetStartPageIndex();
     }
 
     /**
@@ -286,41 +243,7 @@ public class HeadlinesFragment extends Fragment
      *                      will be applied to 'endIndex' preference setting
      */
     public void resetEndPageIndex(int endIndexValue) {
-        //Retrieving the preference key string of 'endIndex'
-        String endIndexPrefKeyStr = getString(R.string.pref_page_max_value_key);
-        //Retrieving the default value of 'page' setting
-        int startIndexPrefKeyDefaultValue = getResources().getInteger(R.integer.pref_page_index_default_value);
-        //Flag to check whether the state of Pagination Buttons needs an update
-        boolean updateButtonsStateReqd = false;
-
-        //Opening the Editor to update the value
-        SharedPreferences.Editor prefEditor = mPreferences.edit();
-        if (endIndexValue <= 0) {
-            //Defaulting the 'endIndex' setting to the default value of 'page' setting when
-            //the value passed is 0 (or less)
-            prefEditor.putInt(endIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
-        } else {
-            //When the endIndex value specific to the fragment is more than 0
-
-            //Retrieving the current value of endIndex from the preference
-            int endIndexPrefValue = mPreferences.getInt(endIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
-
-            if (endIndexPrefValue == endIndexValue) {
-                //When the endIndex values are same, there will be no change in Preference value
-                //Hence manual update of Pagination Buttons state is required
-                updateButtonsStateReqd = true;
-            }
-
-            //honouring the value passed when greater than 0
-            prefEditor.putInt(endIndexPrefKeyStr, endIndexValue);
-        }
-
-        prefEditor.apply(); //applying the changes
-
-        if (updateButtonsStateReqd) {
-            //When set to true, updating the state of Pagination Buttons
-            updatePaginationButtonsState();
-        }
+        mPaginationPresenter.resetEndPageIndex(endIndexValue);
     }
 
     /**
@@ -328,71 +251,7 @@ public class HeadlinesFragment extends Fragment
      * based on the current setting
      */
     public void updatePaginationButtonsState() {
-
-        //Retrieving the 'page' (Page to Display) setting value
-        int startIndex = mPreferences.getInt(getString(R.string.pref_page_index_key),
-                getResources().getInteger(R.integer.pref_page_index_default_value));
-
-        //Retrieving the 'endIndex' preference value
-        int endIndex = mPreferences.getInt(getString(R.string.pref_page_max_value_key),
-                startIndex);
-
-        Log.d(LOG_TAG, "updatePaginationButtonsState: startIndex " + startIndex);
-        Log.d(LOG_TAG, "updatePaginationButtonsState: endIndex " + endIndex);
-
-        if (startIndex == endIndex && startIndex != 1) {
-            //When the last page is reached
-
-            //Disabling the page-last and page-next buttons
-            mPageLastButton.setEnabled(false);
-            mPageNextButton.setEnabled(false);
-
-            //Enabling the rest
-            mPageFirstButton.setEnabled(true);
-            mPagePreviousButton.setEnabled(true);
-            mPageMoreButton.setEnabled(true);
-
-            Log.d(LOG_TAG, "updatePaginationButtonsState: last buttons disabled");
-
-        }
-        if (startIndex == endIndex && startIndex == 1) {
-            //When the first and last page is same, and only one page is existing
-
-            //Disabling all the buttons
-            mPageLastButton.setEnabled(false);
-            mPageNextButton.setEnabled(false);
-            mPageFirstButton.setEnabled(false);
-            mPagePreviousButton.setEnabled(false);
-            mPageMoreButton.setEnabled(false);
-
-            Log.d(LOG_TAG, "updatePaginationButtonsState: all buttons disabled");
-
-        } else if (startIndex != endIndex && startIndex == 1) {
-            //When the first page is reached, and last page is not same as first page
-
-            //Disabling the page-first and page-previous buttons
-            mPageFirstButton.setEnabled(false);
-            mPagePreviousButton.setEnabled(false);
-
-            //Enabling the rest
-            mPageMoreButton.setEnabled(true);
-            mPageLastButton.setEnabled(true);
-            mPageNextButton.setEnabled(true);
-
-            Log.d(LOG_TAG, "updatePaginationButtonsState: first buttons disabled");
-
-        } else if (startIndex != endIndex) {
-            //Enabling all the buttons when first and last page are different
-            mPageFirstButton.setEnabled(true);
-            mPagePreviousButton.setEnabled(true);
-            mPageMoreButton.setEnabled(true);
-            mPageLastButton.setEnabled(true);
-            mPageNextButton.setEnabled(true);
-
-            Log.d(LOG_TAG, "updatePaginationButtonsState: all buttons enabled");
-
-        }
-
+        mPaginationPresenter.updatePaginationButtonsState();
     }
 
     /**
@@ -538,7 +397,7 @@ public class HeadlinesFragment extends Fragment
                 if (articlesFragment.isPaginatedView()) {
                     //Resetting the 'page' setting and 'endIndex' setting when the fragment is
                     //for News Topics with Paginated results
-                    resetLastViewedPageIndex(articlesFragment.getLastViewedPageIndex());
+                    mPaginationPresenter.resetLastViewedPageIndex(articlesFragment.getLastViewedPageIndex());
                     resetEndPageIndex(articlesFragment.getLastPageIndex());
                     //Show/Hide Pagination panel based on the position of the currently visible item at the top
                     articlesFragment.checkAndEnablePaginationPanel();
@@ -630,84 +489,8 @@ public class HeadlinesFragment extends Fragment
      */
     @Override
     public void onClick(View view) {
-
-        //Retrieving the preference key string of 'Page to Display' setting, that is, the 'page'
-        String startIndexPrefKeyStr = getString(R.string.pref_page_index_key);
-        //Retrieving the 'page' (Page to Display) setting value
-        int startIndex = mPreferences.getInt(startIndexPrefKeyStr,
-                getResources().getInteger(R.integer.pref_page_index_default_value));
-        //Opening the Editor to update the value
-        SharedPreferences.Editor prefEditor = mPreferences.edit();
-
-        //Executing the click action based on the view's id
-        switch (view.getId()) {
-            case R.id.page_first_button_id:
-                //On Page First action, updating the 'page' setting to 1
-                prefEditor.putInt(startIndexPrefKeyStr, 1);
-                prefEditor.apply(); //applying the changes
-                //Displaying a Toast Message
-                Toast.makeText(getContext(), getString(R.string.navigate_page_first_msg), Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.page_previous_button_id:
-                //On Page Previous action, updating the 'page' setting
-                //to a value less than itself by 1
-                startIndex = startIndex - 1;
-                prefEditor.putInt(startIndexPrefKeyStr, startIndex);
-                prefEditor.apply(); //applying the changes
-                //Displaying a Toast Message
-                Toast.makeText(getContext(), getString(R.string.navigate_page_x_msg, startIndex), Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.page_more_button_id:
-                //On Page More action, displaying a Number Picker Dialog
-                //to allow the user to make the choice of viewing a random page
-
-                //Retrieving the Minimum and Maximum values for the NumberPicker
-                int minValue = getResources().getInteger(R.integer.pref_page_index_default_value);
-                int maxValue = mPreferences.getInt(getString(R.string.pref_page_max_value_key),
-                        minValue);
-
-                //Retrieving the instance of the Dialog to be shown through the FragmentManager
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                PaginationNumberPickerDialogFragment numberPickerDialogFragment
-                        = (PaginationNumberPickerDialogFragment) fragmentManager.findFragmentByTag(PaginationNumberPickerDialogFragment.PAGN_DIALOG_FRAGMENT_TAG);
-
-                if (numberPickerDialogFragment == null) {
-                    //When there is no instance attached, that is the dialog is not active
-
-                    //Creating the DialogFragment Instance
-                    numberPickerDialogFragment = PaginationNumberPickerDialogFragment.newInstance(minValue, maxValue);
-
-                    //Displaying the DialogFragment
-                    numberPickerDialogFragment.show(fragmentManager,
-                            PaginationNumberPickerDialogFragment.PAGN_DIALOG_FRAGMENT_TAG);
-                }
-                break;
-
-            case R.id.page_next_button_id:
-                //On Page Next action, updating the 'page' setting
-                //to a value greater than itself by 1
-                startIndex = startIndex + 1;
-                prefEditor.putInt(startIndexPrefKeyStr, startIndex);
-                prefEditor.apply(); //applying the changes
-                //Displaying a Toast Message
-                Toast.makeText(getContext(), getString(R.string.navigate_page_x_msg, startIndex), Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.page_last_button_id:
-                //On Page Last action, updating the 'page' setting to
-                //a value equal to that of the predetermined 'endIndex' preference value
-                prefEditor.putInt(startIndexPrefKeyStr,
-                        mPreferences.getInt(getString(R.string.pref_page_max_value_key),
-                                startIndex));
-                prefEditor.apply(); //applying the changes
-                //Displaying a Toast Message
-                Toast.makeText(getContext(), getString(R.string.navigate_page_last_msg), Toast.LENGTH_SHORT).show();
-                break;
-
-        }
-
+        //Delegating to the Pagination Presenter to handle
+        mPaginationPresenter.onPaginationButtonClick(view);
     }
 
     /**
@@ -756,10 +539,10 @@ public class HeadlinesFragment extends Fragment
         if (fragment.getUserVisibleHint()) {
             if (visibility) {
                 //Displaying the Pagination Panel when True
-                mPaginationPanel.setVisibility(View.VISIBLE);
+                mPaginationPresenter.showPaginationPanel();
             } else {
                 //Hiding the Pagination Panel when False
-                mPaginationPanel.setVisibility(View.GONE);
+                mPaginationPresenter.hidePaginationPanel();
             }
         }
 
@@ -846,6 +629,99 @@ public class HeadlinesFragment extends Fragment
      */
     public ViewPager getViewPager() {
         return mViewPager;
+    }
+
+    /**
+     * Called when the fragment is no longer in use.  This is called
+     * after {@link #onStop()} and before {@link #onDetach()}.
+     */
+    @Override
+    public void onDestroy() {
+        //Unregistering the Pagination Presenter
+        mPaginationPresenter.detachView();
+        super.onDestroy();
+    }
+
+    /**
+     * This method returns the {@link Context}
+     * of the Activity/Fragment implementing {@link IPaginationView}
+     *
+     * @return {@link Context} of the Activity/Fragment
+     */
+    @Override
+    public Context getViewContext() {
+        return getContext();
+    }
+
+    /**
+     * Method that returns the {@link View}
+     * of the Pagination Panel
+     *
+     * @return {@link View} of the Pagination Panel
+     */
+    @Override
+    public View getPaginationPanel() {
+        return mPaginationPanel;
+    }
+
+    /**
+     * Method that returns the {@link ImageButton}
+     * which is a Pagination Button that takes the user
+     * to the very First Page
+     *
+     * @return The Pagination {@link ImageButton} for the First Page
+     */
+    @Override
+    public ImageButton getPageFirstButton() {
+        return mPageFirstButton;
+    }
+
+    /**
+     * Method that returns the {@link ImageButton}
+     * which is a Pagination Button that takes the user
+     * to the Last page
+     *
+     * @return The Pagination {@link ImageButton} for the Last Page
+     */
+    @Override
+    public ImageButton getPageLastButton() {
+        return mPageLastButton;
+    }
+
+    /**
+     * Method that returns the {@link ImageButton}
+     * which is a Pagination Button that takes the user
+     * to the Next page
+     *
+     * @return The Pagination {@link ImageButton} for the Next Page
+     */
+    @Override
+    public ImageButton getPageNextButton() {
+        return mPageNextButton;
+    }
+
+    /**
+     * Method that returns the {@link ImageButton}
+     * which is a Pagination Button that takes the user
+     * to the Previous Page
+     *
+     * @return The Pagination {@link ImageButton} for the Previous Page
+     */
+    @Override
+    public ImageButton getPagePreviousButton() {
+        return mPagePreviousButton;
+    }
+
+    /**
+     * Method that returns the {@link ImageButton}
+     * which is a Pagination Button that takes the user
+     * to the Page selected by the user in the corresponding dialog
+     *
+     * @return The Pagination {@link ImageButton} for the User Selected Page
+     */
+    @Override
+    public ImageButton getPageMoreButton() {
+        return mPageMoreButton;
     }
 
 }
