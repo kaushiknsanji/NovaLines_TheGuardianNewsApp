@@ -33,6 +33,8 @@ public class NewsURLGenerator {
     private static final String NEWS_BASE_URL = "https://content.guardianapis.com";
     //Constant for the International Path Segment of the Base URL
     private static final String INTERNATIONAL_PATH_SEGMENT = "international";
+    //Constant for the Search Path Segment of the Base URL
+    private static final String SEARCH_PATH_SEGMENT = "search";
     //Constants for the API KEY Query Parameter used for requesting data
     private static final String API_KEY_PARAM_NAME = "api-key";
     private static final String API_KEY_PARAM_VALUE = "test";
@@ -96,6 +98,34 @@ public class NewsURLGenerator {
         } else {
             appendSectionGenericParams(sectionIdStr, uriBuilder);
         }
+
+        //Appending the API KEY for the request
+        appendApiKeyParam(uriBuilder);
+
+        //Preparing and returning the URL Object formed
+        return buildURL(uriBuilder);
+    }
+
+    /**
+     * Method that prepares and returns a URL for the Search query being passed
+     *
+     * @param searchQueryStr is a String containing the Search query for the News required
+     * @return URL object for the Search query passed
+     */
+    public URL createSearchURL(final String searchQueryStr) {
+        //Returning NULL when the Search Query passed is empty
+        if (TextUtils.isEmpty(searchQueryStr)) {
+            return null;
+        }
+
+        //Forming the Base URI with the BASE URL constant
+        Uri uriObject = Uri.parse(NEWS_BASE_URL);
+
+        //Retrieving the URI Builder
+        Uri.Builder uriBuilder = uriObject.buildUpon();
+
+        //Appending Query Parameters based on the search query
+        appendSearchGenericParams(searchQueryStr, uriBuilder);
 
         //Appending the API KEY for the request
         appendApiKeyParam(uriBuilder);
@@ -172,7 +202,7 @@ public class NewsURLGenerator {
 
     /**
      * Method that appends the Section's segment to the URI Path
-     * and its related Query Parameters based on the 'Section ID' passed
+     * and its related Query Parameters for the 'Section ID' passed
      *
      * @param sectionIdStr is the Section ID of the News content required
      * @param uriBuilder   is the Builder of URI which has some prebuilt URI
@@ -181,7 +211,34 @@ public class NewsURLGenerator {
     private void appendSectionGenericParams(final String sectionIdStr, Uri.Builder uriBuilder) {
         //Appending the passed 'Section ID' as a segment to the URI Path
         uriBuilder.appendPath(sectionIdStr);
+        //Appending all the Query Parameters
+        appendGenericQueryParams(uriBuilder);
+    }
 
+    /**
+     * Method that appends the Search segment to the URI Path
+     * and its related Query Parameters for the Search query passed
+     *
+     * @param searchQueryStr is a String containing the Search query for the News required
+     * @param uriBuilder     is the Builder of URI which has some prebuilt URI
+     */
+    @SuppressLint("SimpleDateFormat")
+    private void appendSearchGenericParams(final String searchQueryStr, Uri.Builder uriBuilder) {
+        //Appending the 'search' segment to the URI Path
+        uriBuilder.appendPath(SEARCH_PATH_SEGMENT);
+        //Appending the Search query parameter for the Search query passed
+        uriBuilder.appendQueryParameter("q", searchQueryStr);
+        //Appending all the Query Parameters
+        appendGenericQueryParams(uriBuilder);
+    }
+
+    /**
+     * Method that appends all the Generic Query Parameters to the URI
+     *
+     * @param uriBuilder is the Builder of URI which has some prebuilt URI
+     */
+    @SuppressLint("SimpleDateFormat")
+    private void appendGenericQueryParams(Uri.Builder uriBuilder) {
         //Appending the 'from-date' preference setting: START
         String fromDateKeyStr = mAppContext.getString(R.string.pref_start_period_manual_key);
         long fromDateInMillis = mSharedPreferences.getLong(fromDateKeyStr, Calendar.getInstance().getTimeInMillis());
