@@ -42,7 +42,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/nfhi_internal_margin"
             android:layout_marginStart="@dimen/nfhi_internal_margin"
-            android:bufferType="spannable"
             android:textColor="@color/nfhiResolutionTextColor"
             android:textSize="@dimen/nfhi_resolution_text_size"
             app:layout_constraintEnd_toEndOf="parent"
