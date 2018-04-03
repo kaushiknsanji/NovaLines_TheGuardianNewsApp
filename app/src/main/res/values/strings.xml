@@ -47,6 +47,9 @@
     <!-- Title used for Favorited News Navigation Menu -->
     <string name="favorites_title_str">Favorited News</string>
 
+    <!-- Title used for Random News Navigation Menu -->
+    <string name="random_news_title_str">Random News</string>
+
     <!-- A String resource to describe the "open drawer" action for accessibility -->
     <string name="drawer_open">Open navigation drawer</string>
 
@@ -307,23 +310,31 @@
     <string name="nf_app_settings_resolution_text">The Start date of the News might be incorrectly set. Open the app settings [ic_settings_black] and reset all to defaults.</string>
     <string name="nf_network_settings_resolution_text">Network Connectivity might be stale. Enable and disable the Airplane mode [ic_airplanemode_black] to see if it resolves.</string>
     <string name="nf_refresh_resolution_text">No News feed available from Guardian News Server. Try refreshing [ic_refresh_black] or visit us back after sometime.</string>
+    <string name="nf_search_resolution_text">The Search query entered might NOT have yielded any results. Please validate the query or test with something meaningful like &lt;b&gt;Music&lt;/b&gt;.</string>
     <string name="nf_app_settings_btn_text">Check App Settings</string>
     <string name="nf_nw_settings_btn_text">Check Network</string>
     <string name="nf_refresh_btn_text">Refresh</string>
+
+    <!-- ====================================== -->
+    <!-- STRINGS USED IN THE RANDOM NEWS LAYOUT -->
+    <!-- ====================================== -->
+    <string name="random_news_intro_text">This page displays the News Articles based on your search query. To Search for the News, click the &lt;b&gt;Search box&lt;/b&gt; above and enter some words to search. Search results can be refined with the use of &lt;b&gt;AND/OR/NOT&lt;/b&gt; keywords along with logical braces &lt;b&gt;\'(\)\'&lt;/b&gt;\; also with quotation marks &lt;b&gt;\'"\'&lt;/b&gt; for exact phrase search.</string>
+    <string name="random_news_page_info_text">Search Intro</string>
+    <string name="search_news_hint_text">Search News…</string>
 
     <!-- ================================== -->
     <!-- STRINGS USED IN THE ABOUT ACTIVITY -->
     <!-- ================================== -->
     <string name="abt_content_textline_1">App designed and developed by &lt;b&gt;Kaushik N Sanji&lt;/b&gt; as part of the project coursework done for the &lt;b&gt;Android Basics Nanodegree&lt;/b&gt; course offered by &lt;b&gt;Udacity&lt;/b&gt;.</string>
     <string name="abt_content_textline_2">
-        App is designed as a client to the &lt;b&gt;Guardian News&lt;/b&gt;.
-        Currently, implements only the section endpoint.
-        It parses the News Feed for the subscribed News category and displays the list of News Articles in Cards.
+        App acts as a client to the &lt;b&gt;Guardian News&lt;/b&gt;.
+        It implements the &lt;b&gt;section&lt;/b&gt; and &lt;b&gt;search&lt;/b&gt; endpoints.
+        It parses the News Feed for the subscribed News category or the searched News and displays the list of News Articles in Cards.
         On top of these News Articles, many useful features are provided, like -&lt;br/&gt;
-        1. Sharing the News Article.
-        &lt;br/&gt;2. Saving the News Article to Bookmarks for Reading later.
-        &lt;br/&gt;3. Saving the News Article to Favorites.
-        &lt;br/&gt;4. Jumping to a particular News Category.
+        \u2022 Sharing the News Article.
+        &lt;br/&gt;\u2022 Saving the News Article to Bookmarks for Reading later.
+        &lt;br/&gt;\u2022 Saving the News Article to Favorites.
+        &lt;br/&gt;\u2022 Jumping to a particular News Category.
     </string>
     <string name="news_api_link" translatable="false">http://open-platform.theguardian.com/documentation</string>
     <string name="udacity_course_link" translatable="false">https://in.udacity.com/course/android-basics-nanodegree-by-google--nd803</string>

@@ -25,9 +25,11 @@
     <!-- For the Navigation Header Text background -->
     <color name="navHeaderTextBackgroundColor">#BF484F53</color>
     <!-- For the Navigation Drawer background -->
-    <color name="navBackgroundColor">@color/nearBlackColor</color>
+    <color name="navBackgroundColorBlueGrey900">#263238</color>
     <!-- For the Navigation Item Divider -->
     <color name="navDividerColor">#EAE8E3</color>
+    <!-- For the currently non-selected item -->
+    <color name="navItemUnselectedColorBlueGrey100">#cfd8dc</color>
     <!-- For the Navigation Icons when selected -->
     <color name="bookmarksIconColorGreen700">#388e3c</color>
     <color name="favoritesIconColorRed500">#f44336</color>

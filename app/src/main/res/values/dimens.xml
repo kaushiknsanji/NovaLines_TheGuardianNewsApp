@@ -108,8 +108,8 @@
     <!-- FOR THE PAGINATION BUTTONS -->
     <!-- ========================== -->
     <dimen name="pagination_button_size">48dp</dimen>
-    <dimen name="pagination_button_margin_left">6dp</dimen>
-    <dimen name="pagination_button_margin_right">6dp</dimen>
+    <dimen name="pagination_button_margin_left">4dp</dimen>
+    <dimen name="pagination_button_margin_right">4dp</dimen>
     <dimen name="pagination_button_margin_bottom">6dp</dimen>
     <dimen name="pagination_button_elevation">2dp</dimen>
 
@@ -212,11 +212,19 @@
     <dimen name="abt_info_content_internal_margin">12dp</dimen>
     <dimen name="abt_info_text_content_margin">16dp</dimen>
     <dimen name="abt_pwd_by_layout_content_padding">8dp</dimen>
+    <dimen name="abt_pwd_by_layout_margin_top">16dp</dimen>
     <dimen name="abt_guardian_roundel_image_size">56dp</dimen>
-    <dimen name="abt_pwd_by_text_margin_left">8dp</dimen>
+    <dimen name="abt_theguardian_image_left">8dp</dimen>
     <dimen name="abt_theguardian_image_margin_top">4dp</dimen>
     <dimen name="abt_buttons_size">56dp</dimen>
     <dimen name="abt_theguardian_image_width">180dp</dimen>
     <dimen name="abt_pwd_by_text_size">15sp</dimen>
+
+    <!-- ========================== -->
+    <!-- FOR THE RANDOM NEWS LAYOUT -->
+    <!-- ========================== -->
+    <dimen name="search_msg_text_margin_bottom">8dp</dimen>
+    <dimen name="search_msg_text_margin_top">16dp</dimen>
+    <dimen name="search_msg_text_size">18sp</dimen>
 
 </resources>
