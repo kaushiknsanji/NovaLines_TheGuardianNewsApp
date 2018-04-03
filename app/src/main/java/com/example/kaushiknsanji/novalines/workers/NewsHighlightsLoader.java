@@ -230,4 +230,14 @@ public class NewsHighlightsLoader extends AsyncTaskLoader<List<NewsSectionInfo>>
         return mFromDateInMillis;
     }
 
+    /**
+     * Method that returns a list of {@link NewsSectionInfo} objects parsed
+     * from the response
+     *
+     * @return List of {@link NewsSectionInfo} objects parsed.
+     */
+    public List<NewsSectionInfo> getNewsSectionInfoList() {
+        return mNewsSectionInfoList;
+    }
+
 }
