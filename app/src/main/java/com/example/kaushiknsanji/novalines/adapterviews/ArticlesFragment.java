@@ -1,15 +1,15 @@
 package com.example.kaushiknsanji.novalines.adapterviews;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.app.ShareCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.preference.PreferenceManager;
@@ -22,21 +22,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.adapters.ArticlesAdapter;
 import com.example.kaushiknsanji.novalines.drawerviews.HeadlinesFragment;
 import com.example.kaushiknsanji.novalines.errorviews.NetworkErrorFragment;
 import com.example.kaushiknsanji.novalines.errorviews.NoFeedResolutionFragment;
+import com.example.kaushiknsanji.novalines.interfaces.IArticleActionView;
+import com.example.kaushiknsanji.novalines.interfaces.IRefreshActionView;
 import com.example.kaushiknsanji.novalines.models.NewsArticleInfo;
 import com.example.kaushiknsanji.novalines.observers.BaseRecyclerViewScrollListener;
+import com.example.kaushiknsanji.novalines.presenters.BookmarkActionPresenter;
+import com.example.kaushiknsanji.novalines.presenters.FavoriteActionPresenter;
 import com.example.kaushiknsanji.novalines.utils.IntentUtility;
 import com.example.kaushiknsanji.novalines.utils.NewsURLGenerator;
 import com.example.kaushiknsanji.novalines.utils.PreferencesObserverUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewItemDecorUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
-import com.example.kaushiknsanji.novalines.utils.TextAppearanceUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsArticlesLoader;
 
 import java.net.URL;
@@ -60,7 +62,7 @@ public class ArticlesFragment extends Fragment
         ArticlesAdapter.OnAdapterItemDataSwapListener,
         ArticlesAdapter.OnAdapterItemClickListener,
         ArticlesAdapter.OnAdapterItemPopupMenuClickListener,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener, IArticleActionView, IRefreshActionView {
 
     //Constant used for logs
     private static final String LOG_TAG = ArticlesFragment.class.getSimpleName();
@@ -128,6 +130,10 @@ public class ArticlesFragment extends Fragment
     //Saves the top visible Adapter Item position
     private int mVisibleItemViewPosition;
 
+    //Presenters for handling the Bookmark and Favorite Actions
+    private BookmarkActionPresenter mBookmarkActionPresenter;
+    private FavoriteActionPresenter mFavoriteActionPresenter;
+
     /**
      * Static constructor of the Fragment {@link ArticlesFragment}
      *
@@ -187,8 +193,6 @@ public class ArticlesFragment extends Fragment
         int fragmentPosId = arguments.getInt(FRAGMENT_POS_INDEX_INT_KEY);
         int fragmentId = getId(); //Getting the current Fragment ID constant
 
-        Log.d(LOG_TAG + "_" + mNewsTopicId, "onCreateView: Started");
-
         if (!mNewsTopicId.equals(getString(R.string.top_stories_section_id))
                 && !mNewsTopicId.equals(getString(R.string.most_visited_section_id))) {
             //Setting the pagination boolean to True for News Topics
@@ -203,11 +207,6 @@ public class ArticlesFragment extends Fragment
             mLoaderIds[index] = startLoaderId + index;
         }
         //Initializing the Array of Loader IDs: END
-
-        Log.d(LOG_TAG + "_" + mNewsTopicId, "onCreateView: mNewsTopicId " + mNewsTopicId);
-        Log.d(LOG_TAG + "_" + mNewsTopicId, "onCreateView: mLoaderId  - 1 " + mLoaderIds[0]);
-        Log.d(LOG_TAG + "_" + mNewsTopicId, "onCreateView: mLoaderId  - 2 " + mLoaderIds[1]);
-        Log.d(LOG_TAG + "_" + mNewsTopicId, "onCreateView: getId " + getId());
 
         //Finding the SwipeRefreshLayout
         mSwipeContainer = rootView.findViewById(R.id.swipe_container_id);
@@ -299,6 +298,16 @@ public class ArticlesFragment extends Fragment
 
         //UnRegistering the Preference Change Listener
         mPreferences.unregisterOnSharedPreferenceChangeListener(this);
+
+        //Unregistering the Bookmark Action Presenter
+        if (mBookmarkActionPresenter != null) {
+            mBookmarkActionPresenter.detachView();
+        }
+
+        //Unregistering the Favorite Action Presenter
+        if (mFavoriteActionPresenter != null) {
+            mFavoriteActionPresenter.detachView();
+        }
     }
 
     /**
@@ -438,7 +447,6 @@ public class ArticlesFragment extends Fragment
 
         //Setting the Adapter on the RecyclerView
         mRecyclerView.setAdapter(mRecyclerAdapter);
-
     }
 
     /**
@@ -468,6 +476,7 @@ public class ArticlesFragment extends Fragment
      * Method that triggers a content refresh
      * based on whether the content is Paginated or Single Page
      */
+    @Override
     public void triggerRefresh() {
         //Resetting the top visible item position to 0, prior to refresh
         mVisibleItemViewPosition = 0;
@@ -584,7 +593,6 @@ public class ArticlesFragment extends Fragment
         if (id == mLoaderIds[0]) {
             //Returning the Instance of NewsArticlesLoader
             URL sectionURL = mUrlGenerator.createSectionURL(mNewsTopicId);
-            Log.d(LOG_TAG + "_" + mNewsTopicId, "onCreateLoader: NewsTopicId " + mNewsTopicId);
             Log.d(LOG_TAG + "_" + mNewsTopicId, "onCreateLoader: SectionURL " + sectionURL);
             return new NewsArticlesLoader(getActivity(), sectionURL);
         }
@@ -672,9 +680,11 @@ public class ArticlesFragment extends Fragment
         //When the layout needs to be shown
         mErrorView.setVisibility(View.VISIBLE);
         //Displaying the "No Feed Layout"
-        replaceFragment(NoFeedResolutionFragment.newInstance(), NoFeedResolutionFragment.FRAGMENT_TAG);
+        replaceFragment(NoFeedResolutionFragment.newInstance(getString(R.string.headlines_title_str)), NoFeedResolutionFragment.FRAGMENT_TAG);
         //Ensuring the Progress is always not shown in this case
         mSwipeContainer.setRefreshing(false);
+        //Hiding the Pagination Panel
+        ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
         //Hiding other components
         enableDefaultComponents(false);
     }
@@ -691,6 +701,8 @@ public class ArticlesFragment extends Fragment
         replaceFragment(NetworkErrorFragment.newInstance(), NetworkErrorFragment.FRAGMENT_TAG);
         //Ensuring the Progress is always not shown in this case
         mSwipeContainer.setRefreshing(false);
+        //Hiding the Pagination Panel
+        ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
         //Hiding other components
         enableDefaultComponents(false);
     }
@@ -799,8 +811,13 @@ public class ArticlesFragment extends Fragment
         //Hiding the Progress Indicator after the data load completion
         mSwipeContainer.setRefreshing(false);
 
-        //Scrolling over to first item after data load
-        scrollToItemPosition(mVisibleItemViewPosition, false);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Scrolling over to first item after data load with a delay of 10ms
+                scrollToItemPosition(mVisibleItemViewPosition, false);
+            }
+        }, 10); //This delay is for the animations to complete
     }
 
     /**
@@ -823,15 +840,9 @@ public class ArticlesFragment extends Fragment
      */
     @Override
     public void onShareNewsArticle(NewsArticleInfo newsArticleInfo) {
-        //Retrieving the Webpage URL
-        String webUrl = newsArticleInfo.getWebUrl();
-        //Building and launching the share intent, to share the Webpage
-        ShareCompat.IntentBuilder
-                .from(getActivity())
-                .setType("text/plain")
-                .setText(webUrl)
-                .setChooserTitle(R.string.article_share_chooser_title)
-                .startChooser();
+        //Building and launching the share intent, to share the Webpage URL
+        IntentUtility.shareText(getActivity(), newsArticleInfo.getWebUrl(),
+                getString(R.string.article_share_chooser_title));
     }
 
     /**
@@ -844,20 +855,11 @@ public class ArticlesFragment extends Fragment
     public void onMarkForRead(NewsArticleInfo newsArticleInfo) {
         //(Adding entry to the Bookmarks table in future implementation)
 
-        //Displaying the Snackbar on success: START
-        //Initializing an empty Snackbar
-        Snackbar snackbar = Snackbar.make(getParentFragment().getView(), "", Snackbar.LENGTH_LONG);
-        //Setting the Action
-        snackbar.setAction(getString(R.string.snackbar_action_undo), new BookmarkedNewsUndoListener(newsArticleInfo));
-        //Setting the Action Text Color
-        snackbar.setActionTextColor(ContextCompat.getColor(getContext(), R.color.snackBarActionTextColorAmberA400));
-        //Setting the Text along with replacing the placeholders for drawables with their corresponding resource: START
-        TextView sbTextView = snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        sbTextView.setText(R.string.article_bookmarked_snack, TextView.BufferType.SPANNABLE);
-        TextAppearanceUtility.replaceTextWithImage(getContext(), sbTextView);
-        //Setting the Text along with replacing the placeholders for drawables with their corresponding resource: END
-        snackbar.show(); //Displaying the prepared Snackbar
-        //Displaying the Snackbar on success: END
+        //Delegating to the Presenter to the add the selected News Article to Bookmarks: START
+        mBookmarkActionPresenter = new BookmarkActionPresenter();
+        mBookmarkActionPresenter.attachView(this);
+        mBookmarkActionPresenter.addBookmark(newsArticleInfo);
+        //Delegating to the Presenter to the add the selected News Article to Bookmarks: END
     }
 
     /**
@@ -870,20 +872,11 @@ public class ArticlesFragment extends Fragment
     public void onMarkAsFav(NewsArticleInfo newsArticleInfo) {
         //(Adding entry to the Favorites table in future implementation)
 
-        //Displaying the Snackbar on success: START
-        //Initializing an empty Snackbar
-        Snackbar snackbar = Snackbar.make(getParentFragment().getView(), "", Snackbar.LENGTH_LONG);
-        //Setting the Action
-        snackbar.setAction(getString(R.string.snackbar_action_undo), new FavoritedNewsUndoListener(newsArticleInfo));
-        //Setting the Action Text Color
-        snackbar.setActionTextColor(ContextCompat.getColor(getContext(), R.color.snackBarActionTextColorAmberA400));
-        //Setting the Text along with replacing the placeholders for drawables with their corresponding resource: START
-        TextView sbTextView = snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        sbTextView.setText(R.string.article_favorited_snack, TextView.BufferType.SPANNABLE);
-        TextAppearanceUtility.replaceTextWithImage(getContext(), sbTextView);
-        //Setting the Text along with replacing the placeholders for drawables with their corresponding resource: END
-        snackbar.show(); //Displaying the prepared Snackbar
-        //Displaying the Snackbar on success: END
+        //Delegating to the Presenter to the add the selected News Article to Favorites: START
+        mFavoriteActionPresenter = new FavoriteActionPresenter();
+        mFavoriteActionPresenter.attachView(this);
+        mFavoriteActionPresenter.addFavorite(newsArticleInfo);
+        //Delegating to the Presenter to the add the selected News Article to Favorites: END
     }
 
     /**
@@ -958,69 +951,25 @@ public class ArticlesFragment extends Fragment
     }
 
     /**
-     * Class that implements the {@link android.view.View.OnClickListener}
-     * to provide the UNDO action for the Snackbar that is shown
-     * when the user adds a News to the Bookmarks for Reading later
+     * This method returns the {@link Context}
+     * of the Activity/Fragment implementing {@link IArticleActionView}
+     *
+     * @return {@link Context} of the Activity/Fragment
      */
-    private class BookmarkedNewsUndoListener implements View.OnClickListener {
-
-        //The NewsArticleInfo object of the entry that was added to the Bookmarks
-        final NewsArticleInfo newsArticleInfo;
-
-        /**
-         * Constructor of {@link BookmarkedNewsUndoListener}
-         *
-         * @param newsArticleInfo is the {@link NewsArticleInfo} object of the entry that was added to the Bookmarks
-         */
-        private BookmarkedNewsUndoListener(NewsArticleInfo newsArticleInfo) {
-            this.newsArticleInfo = newsArticleInfo;
-        }
-
-        /**
-         * Called when a view has been clicked.
-         *
-         * @param view The view that was clicked.
-         */
-        @Override
-        public void onClick(View view) {
-            //(Removing the entry added to the Bookmarks table in future implementation)
-
-            //Displaying the Snackbar on success of the removal of the entry
-            Snackbar.make(getParentFragment().getView(), getString(R.string.article_bookmarked_undo_snack), Snackbar.LENGTH_SHORT).show();
-        }
+    @Override
+    public Context getViewContext() {
+        return getContext();
     }
 
     /**
-     * Class that implements the {@link android.view.View.OnClickListener}
-     * to provide the UNDO action for the Snackbar that is shown
-     * when the user adds a News to the Favorites
+     * Method that returns the Root {@link View}
+     * of the Activity/Fragment implementing {@link IArticleActionView}
+     *
+     * @return The Root {@link View} of the implementing Activity/Fragment
      */
-    private class FavoritedNewsUndoListener implements View.OnClickListener {
-
-        //The NewsArticleInfo object of the entry that was added to the Favorites
-        final NewsArticleInfo newsArticleInfo;
-
-        /**
-         * Constructor of {@link FavoritedNewsUndoListener}
-         *
-         * @param newsArticleInfo is the {@link NewsArticleInfo} object of the entry that was added to the Favorites
-         */
-        private FavoritedNewsUndoListener(NewsArticleInfo newsArticleInfo) {
-            this.newsArticleInfo = newsArticleInfo;
-        }
-
-        /**
-         * Called when a view has been clicked.
-         *
-         * @param view The view that was clicked.
-         */
-        @Override
-        public void onClick(View view) {
-            //(Removing the entry added to the Favorites table in future implementation)
-
-            //Displaying the Snackbar on success of the removal of the entry
-            Snackbar.make(getParentFragment().getView(), getString(R.string.article_favorited_undo_snack), Snackbar.LENGTH_SHORT).show();
-        }
+    @Override
+    public View getRootView() {
+        return getParentFragment().getView();
     }
 
     /**
