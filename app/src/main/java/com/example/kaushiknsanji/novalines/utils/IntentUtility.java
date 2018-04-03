@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ShareCompat;
 
 import com.example.kaushiknsanji.novalines.settings.SettingsActivity;
 
@@ -59,6 +61,23 @@ public class IntentUtility {
             //Launching the corresponding Activity and passing it the Intent
             context.startActivity(webIntent);
         }
+    }
+
+    /**
+     * Method that opens up an app chooser for sharing the text content passed.
+     *
+     * @param launchingActivity is the {@link FragmentActivity} initiating this share action
+     * @param textToShare       is the text String to be shared
+     * @param chooserTitle      is the Title text to be shown for the chooser dialog
+     */
+    public static void shareText(FragmentActivity launchingActivity, String textToShare, String chooserTitle) {
+        //Building and launching the share intent, to share the text content
+        ShareCompat.IntentBuilder
+                .from(launchingActivity)
+                .setType("text/plain")
+                .setText(textToShare)
+                .setChooserTitle(chooserTitle)
+                .startChooser();
     }
 
 }
