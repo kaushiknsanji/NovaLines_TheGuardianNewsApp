@@ -118,10 +118,10 @@ public class WindowBoxedImageView extends AppCompatImageView {
      */
     @Override
     public void setImageBitmap(Bitmap bm) {
-        //Propagating the call to super class
-        super.setImageBitmap(bm);
         //Applying a black background for the black bar appearance
         setBackgroundColor(ContextCompat.getColor(getContext(), android.R.color.black));
+        //Propagating the call to super class
+        super.setImageBitmap(bm);
     }
 
     /**
@@ -131,10 +131,10 @@ public class WindowBoxedImageView extends AppCompatImageView {
      */
     @Override
     public void setImageResource(int resId) {
-        //Propagating the call to super class
-        super.setImageResource(resId);
         //Applying a black background for the black bar appearance
         setBackgroundColor(ContextCompat.getColor(getContext(), android.R.color.black));
+        //Propagating the call to super class
+        super.setImageResource(resId);
     }
 
 }
