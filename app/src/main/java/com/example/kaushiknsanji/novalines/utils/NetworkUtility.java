@@ -25,7 +25,7 @@ public class NetworkUtility {
         //Retrieving the current active default data network
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         //Checking the connectivity status and returning its state
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
 }
