@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:elevation="@dimen/app_bar_elevation">
+
+        <!-- App Toolbar -->
+        <include
+            android:id="@+id/toolbar_id"
+            layout="@layout/toolbar_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways|snap" />
+
+        <!-- SearchView for searching some random news -->
+        <FrameLayout
+            android:id="@+id/search_container_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:background="@android:color/white">
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/search_view_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                app:iconifiedByDefault="false"
+                app:queryHint="@string/search_news_hint_text" />
+
+        </FrameLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <!-- For the content -->
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/search_results_scrollview_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/defaultBackgroundColor"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- For the Refreshable RecyclerView that displays the results/errors -->
+            <include
+                android:id="@+id/search_results_content_id"
+                layout="@layout/articles_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+            <!-- For displaying the instructions on how to use during initial load -->
+            <include
+                android:id="@+id/random_news_intro_id"
+                layout="@layout/random_news_intro"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
+
+        </FrameLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <!-- For the Pagination Buttons at the bottom -->
+    <include
+        android:id="@+id/pagination_panel_id"
+        layout="@layout/pagination_panel_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_anchor="@+id/search_results_scrollview_id"
+        app:layout_anchorGravity="center|bottom" />
+
+</android.support.design.widget.CoordinatorLayout>
