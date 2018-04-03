@@ -1,39 +1,62 @@
 package com.example.kaushiknsanji.novalines.cache;
 
 import android.graphics.Bitmap;
-import android.util.LruCache;
+import android.support.v4.util.LruCache;
 
 /**
- * Application level class that saves the Bitmaps downloaded in a Memory Cache
+ * Class that saves the Bitmaps downloaded, in a Memory Cache {@link LruCache}
  *
  * @author Kaushik N Sanji
  */
 public class BitmapImageCache {
+    //Constant for Cache size of the Memory Cache
+    private static final int DEFAULT_CACHE_SIZE = 25 * 1024 * 1024; //25MB in bytes
+
+    //For the Singleton instance of this
+    private static BitmapImageCache sInstance;
 
     //Memory Cache to save the Bitmaps downloaded
-    private static LruCache<String, Bitmap> mMemoryCache;
+    private LruCache<String, Bitmap> mMemoryCache;
 
-    static {
-        //Static constructor invoked only on the first time when loaded into VM
+    /**
+     * Private Constructor of {@link BitmapImageCache}
+     */
+    private BitmapImageCache() {
+        //Retrieving the current Max Memory available (in bytes)
+        final int maxMemory = (int) Runtime.getRuntime().maxMemory();
+        //Calculating the safe usable Max Memory which is 1/8th of the current Max Memory available
+        final int maxMemoryThreshold = maxMemory / 8;
+        //Selecting the cache size based on the current availability
+        final int cacheSizeSelected = DEFAULT_CACHE_SIZE > maxMemoryThreshold ? maxMemoryThreshold : DEFAULT_CACHE_SIZE;
 
-        //Retrieving the current Max Memory available for the VM
-        final int maxMemory = (int) Runtime.getRuntime().maxMemory() / 1024;
-
-        //Setting the cache size to be 1/8th of the Max Memory
-        final int cacheSize = maxMemory / 8;
-
-        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+        //Initializing the Memory Cache
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSizeSelected) {
             /**
              * Returns the size of the entry for {@code key} and {@code value} in
-             * terms of kilobytes rather than the number of entries
+             * terms of bytes rather than the number of entries
              */
             @Override
             protected int sizeOf(String key, Bitmap bitmap) {
                 //Size of the cache now returned will be the size of the entries
-                //measured in kilobytes rather than the number of entries
-                return bitmap.getByteCount() / 1024;
+                //measured in bytes rather than the number of entries
+                return bitmap.getByteCount();
             }
+
         };
+    }
+
+    /**
+     * Singleton Constructor of {@link BitmapImageCache}
+     *
+     * @return Instance of {@link BitmapImageCache}
+     */
+    private static BitmapImageCache getInstance() {
+        if (sInstance == null) {
+            //Creating the instance when not available
+            sInstance = new BitmapImageCache();
+        }
+        //Using the previously created instance
+        return sInstance;
     }
 
     /**
@@ -43,7 +66,7 @@ public class BitmapImageCache {
      * @return Bitmap of the Image for the Image URL mentioned
      */
     public static Bitmap getBitmapFromCache(String imageURLStr) {
-        return mMemoryCache.get(imageURLStr);
+        return getInstance().mMemoryCache.get(imageURLStr);
     }
 
     /**
@@ -55,7 +78,7 @@ public class BitmapImageCache {
     public static void addBitmapToCache(String imageURLStr, Bitmap bitmap) {
         if (getBitmapFromCache(imageURLStr) == null
                 && bitmap != null) {
-            mMemoryCache.put(imageURLStr, bitmap);
+            getInstance().mMemoryCache.put(imageURLStr, bitmap);
         }
     }
 
@@ -63,7 +86,7 @@ public class BitmapImageCache {
      * Method that clears the entire Memory Cache
      */
     public static void clearCache() {
-        mMemoryCache.evictAll();
+        getInstance().mMemoryCache.evictAll();
     }
 
 }
