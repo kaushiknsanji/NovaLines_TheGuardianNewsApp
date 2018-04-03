@@ -3,7 +3,7 @@
     android:id="@+id/nav_item_div_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/navBackgroundColor"
+    android:background="@color/navBackgroundColorBlueGrey900"
     android:paddingBottom="@dimen/nav_item_div_pad_bottom"
     android:paddingEnd="@dimen/nav_item_div_pad_right"
     android:paddingLeft="@dimen/nav_item_div_pad_left"
