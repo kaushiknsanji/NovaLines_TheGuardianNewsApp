@@ -25,6 +25,7 @@ import com.example.kaushiknsanji.novalines.cache.BitmapImageCache;
 import com.example.kaushiknsanji.novalines.drawerviews.BookmarksFragment;
 import com.example.kaushiknsanji.novalines.drawerviews.FavoritesFragment;
 import com.example.kaushiknsanji.novalines.drawerviews.HeadlinesFragment;
+import com.example.kaushiknsanji.novalines.drawerviews.RandomNewsFragment;
 import com.example.kaushiknsanji.novalines.models.NavDrawerItem;
 import com.example.kaushiknsanji.novalines.settings.SettingsActivity;
 
@@ -61,6 +62,7 @@ public class NewsActivity extends AppCompatActivity
     private String mSelectedNavItemTitle;
     //For storing the Navigation Fragment item currently/previously selected
     private String mSelectedNavFragmentItemTitle;
+
     //Initializing FragmentManager's FragmentLifecycleCallbacks
     //for setting up the Drawer Toggle for each Fragment containing custom Toolbar
     private FragmentManager.FragmentLifecycleCallbacks
@@ -80,6 +82,7 @@ public class NewsActivity extends AppCompatActivity
             super.onFragmentActivityCreated(fm, fragment, savedInstanceState);
 
             if (fragment instanceof HeadlinesFragment
+                    || fragment instanceof RandomNewsFragment
                     || fragment instanceof BookmarksFragment
                     || fragment instanceof FavoritesFragment) {
                 //When the Fragment is an instance of one of the Fragments used by the Navigation Drawer,
@@ -343,15 +346,17 @@ public class NewsActivity extends AppCompatActivity
         navDrawerItemsList.add(new NavDrawerItem(R.layout.nav_header, -1, ""));
         //Item 1 is the Headlines Menu
         navDrawerItemsList.add(new NavDrawerItem(R.layout.nav_item, R.drawable.ic_newspaper_selector, getString(R.string.headlines_title_str)));
-        //Item 2 is the Bookmarked News Menu
+        //Item 2 is the Random News Menu
+        navDrawerItemsList.add(new NavDrawerItem(R.layout.nav_item, R.drawable.ic_search_selector, getString(R.string.random_news_title_str)));
+        //Item 3 is the Bookmarked News Menu
         navDrawerItemsList.add(new NavDrawerItem(R.layout.nav_item, R.drawable.ic_bookmark_selector, getString(R.string.bookmarked_news_title_str)));
-        //Item 3 is the Favorited News Menu
+        //Item 4 is the Favorited News Menu
         navDrawerItemsList.add(new NavDrawerItem(R.layout.nav_item, R.drawable.ic_favorite_selector, getString(R.string.favorites_title_str)));
-        //Item 4 is the Divider
+        //Item 5 is the Divider
         navDrawerItemsList.add(new NavDrawerItem(R.layout.nav_item_divider, -1, ""));
-        //Item 5 is the Settings Menu
+        //Item 6 is the Settings Menu
         navDrawerItemsList.add(new NavDrawerItem(R.layout.nav_item, R.drawable.ic_settings_accent, getString(R.string.settings_title_str)));
-        //Item 6 is the About Menu
+        //Item 7 is the About Menu
         navDrawerItemsList.add(new NavDrawerItem(R.layout.nav_item, R.drawable.ic_about_accent, getString(R.string.about_title_str)));
 
         //Returning the prepared list of NavDrawerItem
@@ -380,6 +385,12 @@ public class NewsActivity extends AppCompatActivity
         if (mSelectedNavItemTitle.equals(getString(R.string.headlines_title_str))) {
             //When Headlines Navigation Menu is clicked
             openHeadlines(); //Launching the Headlines Fragment
+            //Saving the Title to another member to keep track of the last fragment launched
+            mSelectedNavFragmentItemTitle = mSelectedNavItemTitle;
+
+        } else if (mSelectedNavItemTitle.equals(getString(R.string.random_news_title_str))) {
+            //When Random News Navigation Menu is clicked
+            openRandomNews(); //Launching the Random News Fragment
             //Saving the Title to another member to keep track of the last fragment launched
             mSelectedNavFragmentItemTitle = mSelectedNavItemTitle;
 
@@ -429,6 +440,15 @@ public class NewsActivity extends AppCompatActivity
     private void openHeadlines() {
         //Replacing any Fragment shown at 'R.id.fragment_frame_id' with a TAG
         replaceFragment(HeadlinesFragment.newInstance(), HeadlinesFragment.NAV_FRAGMENT_TAG);
+    }
+
+    /**
+     * Method that loads the {@link RandomNewsFragment} when the Random News Navigation Menu is
+     * clicked/selected.
+     */
+    private void openRandomNews() {
+        //Replacing any Fragment shown at 'R.id.fragment_frame_id' with a TAG
+        replaceFragment(RandomNewsFragment.newInstance(), RandomNewsFragment.NAV_FRAGMENT_TAG);
     }
 
     /**
