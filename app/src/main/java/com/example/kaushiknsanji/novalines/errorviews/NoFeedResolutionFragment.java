@@ -15,12 +15,13 @@ import android.widget.TextView;
 
 import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.adapters.NoFeedResolutionAdapter;
-import com.example.kaushiknsanji.novalines.adapterviews.ArticlesFragment;
+import com.example.kaushiknsanji.novalines.interfaces.IRefreshActionView;
 import com.example.kaushiknsanji.novalines.models.NoFeedInfo;
 import com.example.kaushiknsanji.novalines.utils.IntentUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewItemDecorUtility;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -38,6 +39,9 @@ public class NoFeedResolutionFragment extends Fragment
     //Public Constant for use as Fragment's Tag
     public static final String FRAGMENT_TAG = LOG_TAG;
 
+    //Constant used as the Bundle Key for the Parameter that identifies the fragment which displays this
+    private static final String PARENT_FRAG_TITLE_STR_KEY = "ParentFragment.Title";
+
     //For the RecyclerView of No Feed Resolution Items
     private RecyclerView mRecyclerView;
 
@@ -46,8 +50,17 @@ public class NoFeedResolutionFragment extends Fragment
      *
      * @return Instance of this Fragment {@link NoFeedResolutionFragment}
      */
-    public static NoFeedResolutionFragment newInstance() {
-        return new NoFeedResolutionFragment();
+    public static NoFeedResolutionFragment newInstance(String parentFragmentTitleStr) {
+        NoFeedResolutionFragment noFeedResolutionFragment = new NoFeedResolutionFragment();
+
+        //Saving the arguments passed, in a Bundle: START
+        final Bundle bundle = new Bundle(1);
+        bundle.putString(PARENT_FRAG_TITLE_STR_KEY, parentFragmentTitleStr);
+        noFeedResolutionFragment.setArguments(bundle);
+        //Saving the arguments passed, in a Bundle: END
+
+        //Returning the instance
+        return noFeedResolutionFragment;
     }
 
     /**
@@ -89,12 +102,22 @@ public class NoFeedResolutionFragment extends Fragment
      * and Decoration for the RecyclerView to show the resolution items
      */
     private void setupRecyclerView() {
-        //Retrieving the data for the RecyclerView: START
-        String[] resolutionTexts = getResources().getStringArray(R.array.nf_resolution_texts);
-        String[] resolutionButtonTexts = getResources().getStringArray(R.array.nf_resolution_btn_texts);
-        String[] resolutionButtonDrawablePaths = getResources().getStringArray(R.array.nf_resolution_btn_drawables);
-        int noOfResolutions = resolutionTexts.length;
-        //Retrieving the data for the RecyclerView: END
+        //Retrieving the resolution data for the RecyclerView: START
+        List<String> resolutionTextList = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.nf_resolution_texts)));
+        List<String> resolutionButtonTextList = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.nf_resolution_btn_texts)));
+        List<String> resolutionButtonDrawablePathList = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.nf_resolution_btn_drawables)));
+
+        //Adding resolution data specific to the requesting Parent Fragment: START
+        String parentFragmentTitleStr = getArguments().getString(PARENT_FRAG_TITLE_STR_KEY);
+        if (parentFragmentTitleStr != null && parentFragmentTitleStr.equals(getString(R.string.random_news_title_str))) {
+            //For RandomNewsFragment
+            resolutionTextList.add(getString(R.string.nf_search_resolution_text));
+            resolutionButtonTextList.add("");
+            resolutionButtonDrawablePathList.add("");
+        }
+        //Adding resolution data specific to the requesting Parent Fragment: END
+        int noOfResolutions = resolutionTextList.size();
+        //Retrieving the resolution data for the RecyclerView: END
 
         //Initializing the LinearLayoutManager with Vertical Orientation and start to end layout direction
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -108,17 +131,17 @@ public class NoFeedResolutionFragment extends Fragment
             //Creating the NoFeedInfo object to store the current data
             NoFeedInfo noFeedInfo = new NoFeedInfo();
             noFeedInfo.setResolutionItemNumber(index + 1);
-            noFeedInfo.setResolutionText(resolutionTexts[index]);
-            noFeedInfo.setResolutionButtonText(resolutionButtonTexts[index]);
+            noFeedInfo.setResolutionText(resolutionTextList.get(index));
+            noFeedInfo.setResolutionButtonText(resolutionButtonTextList.get(index));
 
-            if (resolutionButtonDrawablePaths[index].startsWith("res")) {
+            if (resolutionButtonDrawablePathList.get(index).startsWith("res")) {
                 //When there is an image that needs to be shown with the button
 
-                int startIndex = resolutionButtonDrawablePaths[index].lastIndexOf("/");
-                int endIndex = resolutionButtonDrawablePaths[index].lastIndexOf(".");
+                int startIndex = resolutionButtonDrawablePathList.get(index).lastIndexOf("/");
+                int endIndex = resolutionButtonDrawablePathList.get(index).lastIndexOf(".");
                 noFeedInfo.setResolutionButtonCompoundDrawableRes(
                         getResources().getIdentifier(
-                                resolutionButtonDrawablePaths[index].substring(startIndex + 1, endIndex),
+                                resolutionButtonDrawablePathList.get(index).substring(startIndex + 1, endIndex),
                                 "drawable",
                                 getActivity().getPackageName()
                         )
@@ -185,12 +208,10 @@ public class NoFeedResolutionFragment extends Fragment
             //Launching Network Settings
             IntentUtility.openNetworkSettings(getContext());
         } else if (resolutionButtonText.equals(getString(R.string.nf_refresh_btn_text))) {
-            //Triggering a refresh based on the Parent Fragment
+            //Triggering a refresh based on the Parent Fragment type
             Fragment parentFragment = getParentFragment();
-            if (parentFragment != null && parentFragment instanceof ArticlesFragment) {
-                //When the Parent Fragment is ArticlesFragment
-                ArticlesFragment articlesFragment = (ArticlesFragment) parentFragment;
-                articlesFragment.triggerRefresh();
+            if (parentFragment != null && parentFragment instanceof IRefreshActionView) {
+                ((IRefreshActionView) parentFragment).triggerRefresh();
             }
         }
     }

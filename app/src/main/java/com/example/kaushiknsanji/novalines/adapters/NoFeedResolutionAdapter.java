@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,42 +120,54 @@ public class NoFeedResolutionAdapter extends RecyclerView.Adapter<NoFeedResoluti
         holder.resolutionNumberTextView.setTypeface(mResolutionNumberTextTypeface);
 
         //Updating the Resolution Text
-        holder.resolutionTextView.setText(noFeedInfo.getResolutionText());
-        //Replacing the placeholder for drawables in Text with their corresponding image
-        TextAppearanceUtility.replaceTextWithImage(mContext, holder.resolutionTextView);
+        TextAppearanceUtility.setHtmlText(holder.resolutionTextView, noFeedInfo.getResolutionText());
         //Setting the Font
         holder.resolutionTextView.setTypeface(mResolutionTextTypeface);
+        //Replacing the placeholder for drawables in Text with their corresponding image
+        TextAppearanceUtility.replaceTextWithImage(mContext, holder.resolutionTextView);
 
-        //Updating the Resolution Button Text
-        holder.resolutionButton.setText(noFeedInfo.getResolutionButtonText());
+        //Checking for the Resolution Button Text
+        String resolutionButtonText = noFeedInfo.getResolutionButtonText();
+        if (!TextUtils.isEmpty(resolutionButtonText)) {
+            //Updating the Resolution Button Text and its icon when Button Text is present
 
-        //Checking if any Compound Drawable is set, that needs to be displayed on the Resolution Button
-        int resolutionBtnCompoundDrawableRes = noFeedInfo.getResolutionButtonCompoundDrawableRes();
-        if (resolutionBtnCompoundDrawableRes > 0) {
-            //When the Drawable is present
+            //Ensuring the Button is visible
+            holder.resolutionButton.setVisibility(View.VISIBLE);
 
-            //Setting the Left Compound Drawable
-            holder.resolutionButton.setCompoundDrawablesWithIntrinsicBounds(
-                    ContextCompat.getDrawable(mContext, resolutionBtnCompoundDrawableRes),
-                    null,
-                    null,
-                    null
-            );
-            //Setting the Compound Drawable Padding
-            holder.resolutionButton.setCompoundDrawablePadding(mContext.getResources().getDimensionPixelSize(R.dimen.nfhi_resolution_btn_drawable_padding));
+            //Updating the Resolution Button Text
+            holder.resolutionButton.setText(noFeedInfo.getResolutionButtonText());
+
+            //Checking if any Compound Drawable is set, that needs to be displayed on the Resolution Button
+            int resolutionBtnCompoundDrawableRes = noFeedInfo.getResolutionButtonCompoundDrawableRes();
+            if (resolutionBtnCompoundDrawableRes > 0) {
+                //When the Drawable is present
+
+                //Setting the Left Compound Drawable
+                holder.resolutionButton.setCompoundDrawablesWithIntrinsicBounds(
+                        ContextCompat.getDrawable(mContext, resolutionBtnCompoundDrawableRes),
+                        null,
+                        null,
+                        null
+                );
+                //Setting the Compound Drawable Padding
+                holder.resolutionButton.setCompoundDrawablePadding(mContext.getResources().getDimensionPixelSize(R.dimen.nfhi_resolution_btn_drawable_padding));
+            } else {
+                //When the Drawable is absent
+
+                //Resetting the Left Compound Drawable
+                holder.resolutionButton.setCompoundDrawablesWithIntrinsicBounds(
+                        null,
+                        null,
+                        null,
+                        null
+                );
+
+                //Resetting the Compound Drawable Padding
+                holder.resolutionButton.setCompoundDrawablePadding(0);
+            }
         } else {
-            //When the Drawable is absent
-
-            //Resetting the Left Compound Drawable
-            holder.resolutionButton.setCompoundDrawablesWithIntrinsicBounds(
-                    null,
-                    null,
-                    null,
-                    null
-            );
-
-            //Resetting the Compound Drawable Padding
-            holder.resolutionButton.setCompoundDrawablePadding(0);
+            //Hiding the Button when there is no Text
+            holder.resolutionButton.setVisibility(View.GONE);
         }
 
         //Populating the data onto the Template View using the NoFeedInfo object: END
