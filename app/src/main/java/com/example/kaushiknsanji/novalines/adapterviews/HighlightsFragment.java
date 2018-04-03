@@ -3,6 +3,8 @@ package com.example.kaushiknsanji.novalines.adapterviews;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,6 +30,7 @@ import com.example.kaushiknsanji.novalines.adapters.HighlightsAdapter;
 import com.example.kaushiknsanji.novalines.drawerviews.HeadlinesFragment;
 import com.example.kaushiknsanji.novalines.errorviews.NetworkErrorFragment;
 import com.example.kaushiknsanji.novalines.models.NewsSectionInfo;
+import com.example.kaushiknsanji.novalines.utils.DateUtility;
 import com.example.kaushiknsanji.novalines.utils.IntentUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsHighlightsLoader;
@@ -36,7 +39,6 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Fragment that inflates the layout 'R.layout.highlights_layout'
@@ -310,8 +312,6 @@ public class HighlightsFragment extends Fragment
 
             //Creating an instance of today's date for comparison and as a default value
             Calendar todayCalendar = Calendar.getInstance();
-            //Removing the time part from the current date
-            pruneTimePart(todayCalendar);
 
             //Retrieving the Preference key that saves the current day's date
             String currentDayDateKeyStr = getString(R.string.pref_today_date_key);
@@ -319,19 +319,10 @@ public class HighlightsFragment extends Fragment
             //Retrieving the current day's date stored in the preference
             long currentDatePrefInMillis = mPreferences.getLong(currentDayDateKeyStr, 0);
 
-            Log.d(LOG_TAG, "enforceDateSetting: todayCalendar " + todayCalendar.getTimeInMillis());
-            Log.d(LOG_TAG, "enforceDateSetting: pref_today_date_key " + currentDatePrefInMillis);
-            Log.d(LOG_TAG, "enforceDateSetting: diff " + String.valueOf(todayCalendar.getTimeInMillis() - currentDatePrefInMillis));
-
             if (currentDatePrefInMillis > 0) {
                 //When the value was previously stored in the 'date-today' setting
 
-                //Calculating the difference between the two dates in days: START
-                long diffTimeInMillis = todayCalendar.getTimeInMillis() - currentDatePrefInMillis;
-                long diffInDays = TimeUnit.MILLISECONDS.toDays(diffTimeInMillis);
-                //Calculating the difference between the two dates in days: END
-
-                if (diffInDays > 0) {
+                if (!DateUtility.isSameDay(todayCalendar.getTimeInMillis(), currentDatePrefInMillis)) {
                     //When today's date is different, initiate the preset start date calculation
 
                     //Getting the current calendar instance
@@ -442,7 +433,7 @@ public class HighlightsFragment extends Fragment
         //Creating an instance of today's date for comparison and as a default value
         Calendar todayCalendar = Calendar.getInstance();
         //Removing the time part from the current date
-        pruneTimePart(todayCalendar);
+        DateUtility.pruneTimePart(todayCalendar);
 
         //Retrieving the start date value from the preference
         long fromDatePrefInMillis = mPreferences.getLong(getString(R.string.pref_start_period_manual_key), todayCalendar.getTimeInMillis());
@@ -450,12 +441,10 @@ public class HighlightsFragment extends Fragment
         Calendar fromDateCalendar = Calendar.getInstance();
         fromDateCalendar.setTimeInMillis(fromDatePrefInMillis);
         //Removing the time part from the start date
-        pruneTimePart(fromDateCalendar);
+        DateUtility.pruneTimePart(fromDateCalendar);
 
-        //Calculating the difference between the two dates in days: START
-        long diffTimeInMillis = todayCalendar.getTimeInMillis() - fromDateCalendar.getTimeInMillis();
-        long diffInDays = TimeUnit.MILLISECONDS.toDays(diffTimeInMillis);
-        //Calculating the difference between the two dates in days: END
+        //Calculating the difference between the two dates in days
+        long diffInDays = DateUtility.getDifferenceInDays(todayCalendar, fromDateCalendar);
 
         //Setting the Text based on the difference in days between the start date and the current date
         if (diffInDays == 0) {
@@ -472,18 +461,6 @@ public class HighlightsFragment extends Fragment
 
         //Setting the Font
         mHeadlineTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.gabriela), Typeface.BOLD);
-    }
-
-    /**
-     * Method that removes/strips the time part from the calendar
-     *
-     * @param calendar is the Calendar instance on which the time part needs to be unset/cleared
-     */
-    private void pruneTimePart(Calendar calendar) {
-        calendar.clear(Calendar.HOUR_OF_DAY);
-        calendar.clear(Calendar.MINUTE);
-        calendar.clear(Calendar.SECOND);
-        calendar.clear(Calendar.MILLISECOND);
     }
 
     /**
@@ -655,7 +632,6 @@ public class HighlightsFragment extends Fragment
      * and takes care of setting the dependent view visibility flags to false
      */
     private void hideErrorView() {
-        Log.d(LOG_TAG, "hideErrorView: Started");
         //Hiding the "Error View"
         mErrorView.setVisibility(View.GONE);
         //Setting the "Network Error Layout" visibility flag to false
@@ -705,8 +681,13 @@ public class HighlightsFragment extends Fragment
         //Hiding the Progress Indicator after the data load completion
         mSwipeContainer.setRefreshing(false);
 
-        //Scrolling over to first item after data load
-        scrollToItemPosition(mVisibleItemViewPosition, false);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Scrolling over to first item after data load with a delay of 10ms
+                scrollToItemPosition(mVisibleItemViewPosition, false);
+            }
+        }, 10); //This delay is for the animations to complete
     }
 
     /**
@@ -750,7 +731,7 @@ public class HighlightsFragment extends Fragment
     private void checkAndReloadData() {
         if (getActivity() != null) {
             //When attached to an Activity
-            Log.d(LOG_TAG, "checkAndReloadData: Started");
+
             //Retrieving the current loader of the Fragment
             LoaderManager loaderManager = getActivity().getSupportLoaderManager();
             Loader<List<NewsSectionInfo>> loader = loaderManager.getLoader(NewsHighlightsLoader.HIGHLIGHTS_LOADER);
@@ -768,18 +749,20 @@ public class HighlightsFragment extends Fragment
                 //Retrieving the current list of Subscribed News Category Ids
                 List<String> currSubsNewsSectionIds = ((HeadlinesFragment) getParentFragment()).getSubscribedNewsSectionIdsList();
 
-                if ((fromDateInMillis > 0 && fromDatePrefInMillis != fromDateInMillis)
-                        || mRecyclerAdapter.getItemCount() != currSubsNewsSectionIds.size()) {
-                    //If the start date value of the News are different, then refresh the content
-                    //or If the number of items previously loaded does not match with
-                    //that of the current Subscribed News Categories, then refresh the content
-                    Log.d(LOG_TAG, "checkAndReloadData: Reloading content");
+                //Retrieving the current list of NewsSectionInfo objects from the Loader
+                List<NewsSectionInfo> newsSectionInfoListFromLoader = highlightsLoader.getNewsSectionInfoList();
 
+                if (fromDateInMillis > 0 && fromDatePrefInMillis != fromDateInMillis) {
+                    //If the start date value of the News are different, then refresh the content
                     //Displaying the data load progress indicator
                     mSwipeContainer.setRefreshing(true);
                     //Dispatching the content changed event to the loader to reload the content
                     highlightsLoader.onContentChanged();
 
+                } else if (newsSectionInfoListFromLoader != null && newsSectionInfoListFromLoader.size() != currSubsNewsSectionIds.size()) {
+                    //If the number of items previously loaded does not match with
+                    //that of the current list of Subscribed News Categories, then reload the data
+                    triggerLoad(true);
                 }
             }
         }
