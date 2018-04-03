@@ -1,5 +1,7 @@
 package com.example.kaushiknsanji.novalines.utils;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 
@@ -16,11 +18,16 @@ import java.util.List;
  */
 public class NewsSectionInfoDiffUtility extends DiffUtil.Callback {
 
+    //Bundle key constants used for the changes in payload content: START
+    //For the Article Count
+    public static final String PAYLOAD_ARTICLE_COUNT_INT_KEY = "Payload.ArticleCount";
+    //For the Section Name
+    public static final String PAYLOAD_SECTION_NAME_STR_KEY = "Payload.SectionName";
     //Stores the Current list of NewsSectionInfo objects
     private List<NewsSectionInfo> mOldSectionInfoList;
-
     //Stores the New list of NewsSectionInfo objects
     private List<NewsSectionInfo> mNewSectionInfoList;
+    //Bundle key constants used for the changes in payload content: END
 
     /**
      * Constructor of {@link NewsSectionInfoDiffUtility}
@@ -90,5 +97,48 @@ public class NewsSectionInfoDiffUtility extends DiffUtil.Callback {
         //Returning the result of comparison of the News Article Count
         return mOldSectionInfoList.get(oldItemPosition).getNewsArticleCount()
                 == mNewSectionInfoList.get(newItemPosition).getNewsArticleCount();
+    }
+
+    /**
+     * When {@link #areItemsTheSame(int, int)} returns {@code true} for two items and
+     * {@link #areContentsTheSame(int, int)} returns false for them, DiffUtil
+     * calls this method to get a payload about the change.
+     * <p>
+     * For example, if you are using DiffUtil with {@link RecyclerView}, you can return the
+     * particular field that changed in the item and your
+     * {@link RecyclerView.ItemAnimator ItemAnimator} can use that
+     * information to run the correct animation.
+     * <p>
+     * Default implementation returns {@code null}.
+     *
+     * @param oldItemPosition The position of the item in the old list
+     * @param newItemPosition The position of the item in the new list
+     * @return A payload object that represents the change between the two items.
+     */
+    @Nullable
+    @Override
+    public Object getChangePayload(int oldItemPosition, int newItemPosition) {
+        //Using a Bundle to pass the changes that are to be made
+        Bundle bundle = new Bundle(2); //There are only two items, hence fixing the capacity
+
+        //Getting the NewsSectionInfo objects at the position
+        NewsSectionInfo oldSectionInfo = mOldSectionInfoList.get(oldItemPosition);
+        NewsSectionInfo newSectionInfo = mNewSectionInfoList.get(newItemPosition);
+
+        //Evaluating the differences and adding them to the Bundle: START
+        if (oldSectionInfo.getNewsArticleCount() != newSectionInfo.getNewsArticleCount()) {
+            bundle.putInt(PAYLOAD_ARTICLE_COUNT_INT_KEY, newSectionInfo.getNewsArticleCount());
+        }
+
+        if (!oldSectionInfo.getSectionName().equals(newSectionInfo.getSectionName())) {
+            bundle.putString(PAYLOAD_SECTION_NAME_STR_KEY, newSectionInfo.getSectionName());
+        }
+        //Evaluating the differences and adding them to the Bundle: END
+
+        //Returning null when no change is found
+        if (bundle.size() == 0) return null;
+
+        //Returning the Payload prepared
+        return bundle;
     }
 }

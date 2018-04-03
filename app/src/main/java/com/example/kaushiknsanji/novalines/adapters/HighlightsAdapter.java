@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.models.NewsSectionInfo;
+import com.example.kaushiknsanji.novalines.utils.NewsSectionInfoDiffUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsHighlightsDiffLoader;
 
 import java.util.ArrayList;
@@ -129,19 +130,64 @@ public class HighlightsAdapter extends RecyclerView.Adapter<HighlightsAdapter.Vi
         //Populating the data onto the Template View using the NewsSectionInfo object: START
 
         //Updating the total article count under the News Section
-        int newsArticleCount = newsSectionInfo.getNewsArticleCount();
-        if (newsArticleCount <= 1000) {
-            //Displaying the count AS-IS when it less than or equal to 1000
-            holder.newsArticleCountTextView.setText(String.valueOf(newsArticleCount));
-        } else {
-            //Displaying the count as "1000+" when the count is more than 1000
-            holder.newsArticleCountTextView.setText(TextUtils.concat(String.valueOf(newsArticleCount), "+"));
-        }
+        updateNewsArticleCount(holder.newsArticleCountTextView, newsSectionInfo.getNewsArticleCount());
 
         //Updating the News Section Name
         holder.newsSectionTextView.setText(newsSectionInfo.getSectionName());
 
         //Populating the data onto the Template View using the NewsSectionInfo object: END
+    }
+
+    /**
+     * Called by RecyclerView to display the data at the specified position. This method
+     * should update the contents of the {@link ViewHolder#itemView} to reflect the item at
+     * the given position.
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     * @param payloads A non-null list of merged payloads. Can be empty list if requires full
+     */
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
+        if (payloads.isEmpty()) {
+            //Calling to Super when there is no payload
+            super.onBindViewHolder(holder, position, payloads);
+        } else {
+            //When Payloads are present
+
+            //Retrieving the Bundle from the payload
+            Bundle bundle = (Bundle) payloads.get(0);
+            for (String keyStr : bundle.keySet()) {
+                switch (keyStr) {
+                    case NewsSectionInfoDiffUtility.PAYLOAD_ARTICLE_COUNT_INT_KEY:
+                        //Updating the total article count under the News Section
+                        updateNewsArticleCount(holder.newsArticleCountTextView, bundle.getInt(keyStr));
+                        break;
+                    case NewsSectionInfoDiffUtility.PAYLOAD_SECTION_NAME_STR_KEY:
+                        //Updating the News Section Name
+                        holder.newsSectionTextView.setText(bundle.getString(keyStr));
+                        break;
+                }
+            }
+
+        }
+    }
+
+    /**
+     * Method that binds the News Article Count to the TextView 'R.id.news_count_text_id'
+     *
+     * @param textView         is the TextView 'R.id.news_count_text_id'
+     * @param newsArticleCount is the Integer Count of News Articles in the Section
+     */
+    private void updateNewsArticleCount(TextView textView, int newsArticleCount) {
+        if (newsArticleCount <= 1000) {
+            //Displaying the count AS-IS when it less than or equal to 1000
+            textView.setText(String.valueOf(newsArticleCount));
+        } else {
+            //Displaying the count as "1000+" when the count is more than 1000
+            textView.setText(TextUtils.concat(String.valueOf(1000), "+"));
+        }
     }
 
     /**
@@ -183,12 +229,12 @@ public class HighlightsAdapter extends RecyclerView.Adapter<HighlightsAdapter.Vi
      */
     private void doSwapItemData(DiffUtil.DiffResult diffResult, @NonNull List<NewsSectionInfo> newSectionInfoList) {
         Log.d(LOG_TAG, "doSwapItemData: Started");
+        //Informing the adapter about the changes required, so that it triggers the notify accordingly
+        diffResult.dispatchUpdatesTo(this);
+
         //Clearing the Adapter's data to load the new list of NewsSectionInfo objects
         mNewsSectionInfoList.clear();
         mNewsSectionInfoList.addAll(newSectionInfoList);
-
-        //Informing the adapter about the changes required, so that it triggers the notify accordingly
-        diffResult.dispatchUpdatesTo(this);
 
         Log.d(LOG_TAG, "doSwapItemData: mItemDataSwapListener " + mItemDataSwapListener);
         //Dispatching the Item Data Swap event to the listener
