@@ -1,15 +1,13 @@
 package com.example.kaushiknsanji.novalines.workers;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.models.NewsSectionInfo;
 import com.example.kaushiknsanji.novalines.utils.NetworkUtility;
 import com.example.kaushiknsanji.novalines.utils.NewsSectionInfoParserUtility;
 import com.example.kaushiknsanji.novalines.utils.NewsURLGenerator;
+import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -93,9 +91,7 @@ public class NewsHighlightsLoader extends AsyncTaskLoader<List<NewsSectionInfo>>
             //Iterating over the Subscribed News Sections to retrieve their data: END
 
             //Retrieving the start date value of the News from the preference
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-            mFromDateInMillis = preferences.getLong(context.getString(R.string.pref_start_period_manual_key),
-                    Calendar.getInstance().getTimeInMillis());
+            mFromDateInMillis = PreferencesUtility.getStartPeriodValue(context, Calendar.getInstance().getTimeInMillis());
 
             //Returning the result prepared
             return newsSectionInfoList;

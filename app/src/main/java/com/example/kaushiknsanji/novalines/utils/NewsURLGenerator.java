@@ -2,9 +2,7 @@ package com.example.kaushiknsanji.novalines.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -40,20 +38,17 @@ public class NewsURLGenerator {
     private static final String API_KEY_PARAM_VALUE = "test";
     //Stores reference to App Context
     private Context mAppContext;
-    //Stores reference to the Preferences used by the App
-    private SharedPreferences mSharedPreferences;
     //Stores whether the URL Generation is required for only Article Count purposes
     private boolean mCountMode;
 
     /**
      * Constructor that gives the instance of {@link NewsURLGenerator}
-     * (This constructor is not meant for Article Count purpose)
+     * (This constructor is NOT meant for Article Count purpose)
      *
      * @param context is the Context of the Activity/Fragment or App
      */
     public NewsURLGenerator(Context context) {
         mAppContext = context.getApplicationContext();
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mAppContext);
         mCountMode = false;
     }
 
@@ -69,7 +64,6 @@ public class NewsURLGenerator {
      */
     public NewsURLGenerator(Context context, boolean countMode) {
         mAppContext = context.getApplicationContext();
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mAppContext);
         mCountMode = countMode;
     }
 
@@ -174,12 +168,14 @@ public class NewsURLGenerator {
         //Appending the 'international' segment to the URI Path
         uriBuilder.appendPath(INTERNATIONAL_PATH_SEGMENT);
 
-        //Appending the 'from-date' preference setting: START
-        String fromDateKeyStr = mAppContext.getString(R.string.pref_start_period_manual_key);
-        long fromDateInMillis = mSharedPreferences.getLong(fromDateKeyStr, Calendar.getInstance().getTimeInMillis());
-        uriBuilder.appendQueryParameter(fromDateKeyStr,
-                (new SimpleDateFormat("yyyy-MM-dd")).format(new Date(fromDateInMillis)));
-        //Appending the 'from-date' preference setting: END
+        //Appending the 'from-date' preference setting
+        uriBuilder.appendQueryParameter(
+                PreferencesUtility.getStartPeriodKey(mAppContext),
+                (new SimpleDateFormat("yyyy-MM-dd"))
+                        .format(new Date(
+                                PreferencesUtility.getStartPeriodValue(mAppContext, Calendar.getInstance().getTimeInMillis())
+                        ))
+        );
 
         //Appending the list of fields for filtering required content from the result: START
         String[] fieldsFilterArray = mAppContext.getResources().getStringArray(R.array.show_fields_filter);
@@ -239,14 +235,14 @@ public class NewsURLGenerator {
      */
     @SuppressLint("SimpleDateFormat")
     private void appendGenericQueryParams(Uri.Builder uriBuilder) {
-        //Appending the 'from-date' preference setting: START
-        String fromDateKeyStr = mAppContext.getString(R.string.pref_start_period_manual_key);
-        long fromDateInMillis = mSharedPreferences.getLong(fromDateKeyStr, Calendar.getInstance().getTimeInMillis());
+        //Appending the 'from-date' preference setting
         uriBuilder.appendQueryParameter(
-                fromDateKeyStr,
-                (new SimpleDateFormat("yyyy-MM-dd")).format(new Date(fromDateInMillis))
+                PreferencesUtility.getStartPeriodKey(mAppContext),
+                (new SimpleDateFormat("yyyy-MM-dd"))
+                        .format(new Date(
+                                PreferencesUtility.getStartPeriodValue(mAppContext, Calendar.getInstance().getTimeInMillis())
+                        ))
         );
-        //Appending the 'from-date' preference setting: END
 
         //Appending the list of fields for filtering required content from the result: START
         String[] fieldsFilterArray = mAppContext.getResources().getStringArray(R.array.show_fields_filter);
@@ -256,51 +252,37 @@ public class NewsURLGenerator {
         );
         //Appending the list of fields for filtering required content from the result: END
 
-        //Appending the 'order-by' preference setting: START
-        String orderByKeyStr = mAppContext.getString(R.string.pref_sort_by_key);
+        //Appending the 'order-by' preference setting
         uriBuilder.appendQueryParameter(
-                orderByKeyStr,
-                mSharedPreferences.getString(orderByKeyStr,
-                        mAppContext.getString(R.string.pref_sort_by_default))
+                PreferencesUtility.getSortByKey(mAppContext),
+                PreferencesUtility.getSortByValue(mAppContext)
         );
-        //Appending the 'order-by' preference setting: END
 
-        //Appending the 'order-date' preference setting: START
-        String orderDateKeyStr = mAppContext.getString(R.string.pref_sort_on_key);
+        //Appending the 'order-date' preference setting
         uriBuilder.appendQueryParameter(
-                orderDateKeyStr,
-                mSharedPreferences.getString(orderDateKeyStr,
-                        mAppContext.getString(R.string.pref_sort_on_default))
+                PreferencesUtility.getSortBasedOnKey(mAppContext),
+                PreferencesUtility.getSortBasedOnValue(mAppContext)
         );
-        //Appending the 'order-date' preference setting: END
 
-        //Appending the 'page-size' preference setting: START
-        String pageSizeKeyStr = mAppContext.getString(R.string.pref_items_per_page_key);
+        //Appending the 'page-size' preference setting
         uriBuilder.appendQueryParameter(
-                pageSizeKeyStr,
-                String.valueOf(
-                        mSharedPreferences.getInt(pageSizeKeyStr,
-                                mAppContext.getResources().getInteger(R.integer.pref_items_per_page_default_value))
-                )
+                PreferencesUtility.getItemsPerPageKey(mAppContext),
+                String.valueOf(PreferencesUtility.getItemsPerPageValue(mAppContext))
         );
-        //Appending the 'page-size' preference setting: END
 
         //Appending the 'page' preference setting: START
-        String pageIndexKeyStr = mAppContext.getString(R.string.pref_page_index_key);
+        String pageIndexKeyStr = PreferencesUtility.getStartPageIndexKey(mAppContext);
         if (mCountMode) {
             //Defaulting the 'page' setting value to 1, for Count purpose
             uriBuilder.appendQueryParameter(
                     pageIndexKeyStr,
-                    String.valueOf(mAppContext.getResources().getInteger(R.integer.pref_page_index_default_value))
+                    String.valueOf(PreferencesUtility.getDefaultStartPageIndex(mAppContext))
             );
         } else {
             //Using the current 'page' setting value for Generic purpose
             uriBuilder.appendQueryParameter(
                     pageIndexKeyStr,
-                    String.valueOf(
-                            mSharedPreferences.getInt(pageIndexKeyStr,
-                                    mAppContext.getResources().getInteger(R.integer.pref_page_index_default_value))
-                    )
+                    String.valueOf(PreferencesUtility.getStartPageIndex(mAppContext))
             );
         }
         //Appending the 'page' preference setting: END

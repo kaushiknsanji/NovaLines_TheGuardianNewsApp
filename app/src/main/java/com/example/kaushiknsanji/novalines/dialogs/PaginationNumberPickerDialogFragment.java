@@ -2,12 +2,10 @@ package com.example.kaushiknsanji.novalines.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +13,7 @@ import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.example.kaushiknsanji.novalines.R;
+import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
 
 /**
  * {@link DialogFragment} class that inflates the layout 'R.layout.page_number_picker_dialog'
@@ -38,9 +37,6 @@ public class PaginationNumberPickerDialogFragment extends DialogFragment
 
     //Stores the number picked by the user
     private int mSelectedValue;
-
-    //For the Settings SharedPreferences
-    private SharedPreferences mPreferences;
 
     /**
      * Static constructor of the DialogFragment {@link PaginationNumberPickerDialogFragment}
@@ -70,9 +66,6 @@ public class PaginationNumberPickerDialogFragment extends DialogFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Retrieving the instance of SharedPreferences
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
     /**
@@ -109,8 +102,7 @@ public class PaginationNumberPickerDialogFragment extends DialogFragment
             mSelectedValue = savedInstanceState.getInt(NUMBER_PICKER_SEL_VALUE_INT_KEY);
         } else {
             //Defaulting the selected value to the current value of the 'page' (Page to Display) setting
-            mSelectedValue = mPreferences.getInt(getString(R.string.pref_page_index_key),
-                    getResources().getInteger(R.integer.pref_page_index_default_value));
+            mSelectedValue = PreferencesUtility.getStartPageIndex(getContext());
         }
         numberPicker.setValue(mSelectedValue);
         //Updating the preselected value of the NumberPicker: END
@@ -145,11 +137,8 @@ public class PaginationNumberPickerDialogFragment extends DialogFragment
             case R.id.page_number_picker_set_btn_id:
                 //When the Positive button is clicked
 
-                //Opening the Preferences Editor
-                SharedPreferences.Editor prefEditor = mPreferences.edit();
                 //Updating the 'page' value
-                prefEditor.putInt(getString(R.string.pref_page_index_key), mSelectedValue);
-                prefEditor.apply(); //Applying the changes
+                PreferencesUtility.updateStartPageIndex(getContext(), mSelectedValue);
 
                 dismiss(); //Dismissing the dialog in the end
 

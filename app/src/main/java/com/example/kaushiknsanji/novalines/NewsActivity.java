@@ -1,7 +1,6 @@
 package com.example.kaushiknsanji.novalines;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,6 +27,7 @@ import com.example.kaushiknsanji.novalines.drawerviews.HeadlinesFragment;
 import com.example.kaushiknsanji.novalines.drawerviews.RandomNewsFragment;
 import com.example.kaushiknsanji.novalines.models.NavDrawerItem;
 import com.example.kaushiknsanji.novalines.settings.SettingsActivity;
+import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -120,18 +120,11 @@ public class NewsActivity extends AppCompatActivity
      * Method that initializes the Preferences used by the app
      */
     private void setupPreferences() {
-        //Retrieving the SharedPreferences
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        //Manually defaulting the value of 'from-date' if not set: START
-        String fromDateKeyStr = getString(R.string.pref_start_period_manual_key);
-        if (sharedPreferences.getLong(fromDateKeyStr, 0) == 0) {
-            //When not defaulted, setting the value to the current day date
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putLong(fromDateKeyStr, Calendar.getInstance().getTimeInMillis());
-            editor.apply(); //Applying the update
+        //Manually defaulting the value of 'from-date' if not set
+        if (PreferencesUtility.getStartPeriodValue(this, 0) == 0) {
+            //When 'from-date' is NOT defaulted, setting the value to the current day date
+            PreferencesUtility.updateStartPeriodValue(this, Calendar.getInstance().getTimeInMillis());
         }
-        //Manually defaulting the value of 'from-date' if not set: END
 
         //Loading the default values for the Preferences on the first Initial launch after install
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);

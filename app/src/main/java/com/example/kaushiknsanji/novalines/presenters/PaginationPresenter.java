@@ -2,7 +2,6 @@ package com.example.kaushiknsanji.novalines.presenters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -12,6 +11,7 @@ import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.dialogs.PaginationNumberPickerDialogFragment;
 import com.example.kaushiknsanji.novalines.interfaces.IGenericPresenter;
 import com.example.kaushiknsanji.novalines.interfaces.IPaginationView;
+import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
 
 /**
  * A Presenter Interface for the Pagination panel 'R.id.pagination_panel_id'
@@ -32,8 +32,6 @@ public class PaginationPresenter implements IGenericPresenter<IPaginationView> {
     private IPaginationView mPaginationView;
     //For the Context of the Activity/Fragment
     private Context mContext;
-    //For the SharedPreferences
-    private SharedPreferences mPreferences;
 
     /**
      * Default Constructor of {@link PaginationPresenter}
@@ -53,7 +51,6 @@ public class PaginationPresenter implements IGenericPresenter<IPaginationView> {
         //Associating this Presenter with the Pagination View passed
         mPaginationView = view;
         mContext = mPaginationView.getViewContext();
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
     /**
@@ -65,28 +62,17 @@ public class PaginationPresenter implements IGenericPresenter<IPaginationView> {
         //Removing the references held by this Presenter
         mPaginationView = null;
         mContext = null;
-        mPreferences = null;
     }
 
     /**
      * Method that resets the 'page' (Page to Display) setting to 1, when not 1
      */
     public void resetStartPageIndex() {
-        //Retrieving the preference key string of 'page'
-        String startIndexPrefKeyStr = mContext.getString(R.string.pref_page_index_key);
-        //Retrieving the default value of 'page' setting
-        int startIndexPrefKeyDefaultValue = mContext.getResources().getInteger(R.integer.pref_page_index_default_value);
-        //Retrieving the current value of 'page' setting
-        int startIndex = mPreferences.getInt(startIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
-
-        if (startIndex != 1) {
+        if (PreferencesUtility.getStartPageIndex(mContext) != 1) {
             //When the 'page' setting value is not equal to 1
 
-            //Opening the Editor to update the value
-            SharedPreferences.Editor prefEditor = mPreferences.edit();
-            //Setting to its default value, which is 1
-            prefEditor.putInt(startIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
-            prefEditor.apply(); //applying the changes
+            //Updating to its default value, which is 1
+            PreferencesUtility.updateStartPageIndex(mContext, PreferencesUtility.getDefaultStartPageIndex(mContext));
         }
     }
 
@@ -97,27 +83,17 @@ public class PaginationPresenter implements IGenericPresenter<IPaginationView> {
      *                            which is specific to the paginated view and not stored as a SharedPreference
      */
     public void resetLastViewedPageIndex(int lastViewedPageIndex) {
-        //Retrieving the preference key string of 'page'
-        String startIndexPrefKeyStr = mContext.getString(R.string.pref_page_index_key);
-        //Retrieving the default value of 'page' setting
-        int startIndexPrefKeyDefaultValue = mContext.getResources().getInteger(R.integer.pref_page_index_default_value);
-        //Retrieving the current value of 'page' setting
-        int startIndex = mPreferences.getInt(startIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
-
         if (lastViewedPageIndex > 1) {
             //When the index of the last page viewed is greater than 1
 
-            //Opening the Editor to update the value
-            SharedPreferences.Editor prefEditor = mPreferences.edit();
-            //Setting the 'page' setting value to lastViewedPageIndex
-            prefEditor.putInt(startIndexPrefKeyStr, lastViewedPageIndex);
-            prefEditor.apply(); //applying the changes
-            //Setting the 'page' setting value to its default value, which is 1
-            //(This resets the start page to the first page for the current paginated view)
-            prefEditor.putInt(startIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
-            prefEditor.apply(); //applying the changes
+            //Updating the 'page' setting value to lastViewedPageIndex
+            PreferencesUtility.updateStartPageIndex(mContext, lastViewedPageIndex);
 
-        } else if (startIndex > 1) {
+            //Updating the 'page' setting value to its default value, which is 1
+            //(This reapplication resets the start page to the first page for the current paginated view)
+            PreferencesUtility.updateStartPageIndex(mContext, PreferencesUtility.getDefaultStartPageIndex(mContext));
+
+        } else if (PreferencesUtility.getStartPageIndex(mContext) > 1) {
             //When the 'page' (Page to Display) setting is greater than 1 but not the last page viewed
 
             //Resetting the 'page' (Page to Display) setting value to 1
@@ -134,36 +110,25 @@ public class PaginationPresenter implements IGenericPresenter<IPaginationView> {
      *                      will be applied to 'endIndex' preference setting
      */
     public void resetEndPageIndex(int endIndexValue) {
-        //Retrieving the preference key string of 'endIndex'
-        String endIndexPrefKeyStr = mContext.getString(R.string.pref_page_max_value_key);
-        //Retrieving the default value of 'page' setting
-        int startIndexPrefKeyDefaultValue = mContext.getResources().getInteger(R.integer.pref_page_index_default_value);
         //Flag to check whether the state of Pagination Buttons needs an update
         boolean updateButtonsStateReqd = false;
 
-        //Opening the Editor to update the value
-        SharedPreferences.Editor prefEditor = mPreferences.edit();
         if (endIndexValue <= 0) {
             //Defaulting the 'endIndex' setting to the default value of 'page' setting when
             //the value passed is 0 (or less)
-            prefEditor.putInt(endIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
+            PreferencesUtility.updateLastPageIndex(mContext, PreferencesUtility.getDefaultStartPageIndex(mContext));
         } else {
             //When the endIndex value specific to the paginated view is more than 0
 
-            //Retrieving the current value of endIndex from the preference
-            int endIndexPrefValue = mPreferences.getInt(endIndexPrefKeyStr, startIndexPrefKeyDefaultValue);
-
-            if (endIndexPrefValue == endIndexValue) {
-                //When the endIndex values are same, there will be no change in Preference value
+            if (PreferencesUtility.getLastPageIndex(mContext) == endIndexValue) {
+                //When the endIndex value is same as that in preference, there will be no change in Preference value
                 //Hence manual update of Pagination Buttons state is required
                 updateButtonsStateReqd = true;
             }
 
             //honouring the value passed when greater than 0
-            prefEditor.putInt(endIndexPrefKeyStr, endIndexValue);
+            PreferencesUtility.updateLastPageIndex(mContext, endIndexValue);
         }
-
-        prefEditor.apply(); //applying the changes
 
         if (updateButtonsStateReqd) {
             //When set to true, updating the state of Pagination Buttons
@@ -178,12 +143,10 @@ public class PaginationPresenter implements IGenericPresenter<IPaginationView> {
     public void updatePaginationButtonsState() {
 
         //Retrieving the 'page' (Page to Display) setting value
-        int startIndex = mPreferences.getInt(mContext.getString(R.string.pref_page_index_key),
-                mContext.getResources().getInteger(R.integer.pref_page_index_default_value));
+        int startIndex = PreferencesUtility.getStartPageIndex(mContext);
 
         //Retrieving the 'endIndex' preference value
-        int endIndex = mPreferences.getInt(mContext.getString(R.string.pref_page_max_value_key),
-                startIndex);
+        int endIndex = PreferencesUtility.getLastPageIndex(mContext, startIndex);
 
         if (startIndex == endIndex && startIndex != 1) {
             //When the last page is reached
@@ -254,20 +217,14 @@ public class PaginationPresenter implements IGenericPresenter<IPaginationView> {
      * <b>FALSE</b> otherwise
      */
     public boolean onPaginationButtonClick(View view) {
-        //Retrieving the preference key string of 'Page to Display' setting, that is, the 'page'
-        String startIndexPrefKeyStr = mContext.getString(R.string.pref_page_index_key);
-        //Retrieving the 'page' (Page to Display) setting value
-        int startIndex = mPreferences.getInt(startIndexPrefKeyStr,
-                mContext.getResources().getInteger(R.integer.pref_page_index_default_value));
-        //Opening the Editor to update the value
-        SharedPreferences.Editor prefEditor = mPreferences.edit();
+        //Retrieving the current 'page' (Page to Display) setting value
+        int startIndex = PreferencesUtility.getStartPageIndex(mContext);
 
         //Executing the click action based on the view's id
         switch (view.getId()) {
             case R.id.page_first_button_id:
                 //On Page First action, updating the 'page' setting to 1
-                prefEditor.putInt(startIndexPrefKeyStr, 1);
-                prefEditor.apply(); //applying the changes
+                PreferencesUtility.updateStartPageIndex(mContext, 1);
                 //Displaying a Toast Message
                 Toast.makeText(mContext, mContext.getString(R.string.navigate_page_first_msg), Toast.LENGTH_SHORT).show();
                 return true;
@@ -276,8 +233,7 @@ public class PaginationPresenter implements IGenericPresenter<IPaginationView> {
                 //On Page Previous action, updating the 'page' setting
                 //to a value less than itself by 1
                 startIndex = startIndex - 1;
-                prefEditor.putInt(startIndexPrefKeyStr, startIndex);
-                prefEditor.apply(); //applying the changes
+                PreferencesUtility.updateStartPageIndex(mContext, startIndex);
                 //Displaying a Toast Message
                 Toast.makeText(mContext, mContext.getString(R.string.navigate_page_x_msg, startIndex), Toast.LENGTH_SHORT).show();
                 return true;
@@ -285,11 +241,6 @@ public class PaginationPresenter implements IGenericPresenter<IPaginationView> {
             case R.id.page_more_button_id:
                 //On Page More action, displaying a Number Picker Dialog
                 //to allow the user to make the choice of viewing a random page
-
-                //Retrieving the Minimum and Maximum values for the NumberPicker
-                int minValue = mContext.getResources().getInteger(R.integer.pref_page_index_default_value);
-                int maxValue = mPreferences.getInt(mContext.getString(R.string.pref_page_max_value_key),
-                        minValue);
 
                 //Retrieving the instance of the Dialog to be shown through the FragmentManager
                 FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
@@ -300,7 +251,12 @@ public class PaginationPresenter implements IGenericPresenter<IPaginationView> {
                     //When there is no instance attached, that is the dialog is not active
 
                     //Creating the DialogFragment Instance
-                    numberPickerDialogFragment = PaginationNumberPickerDialogFragment.newInstance(minValue, maxValue);
+                    numberPickerDialogFragment = PaginationNumberPickerDialogFragment.newInstance(
+                            //Using the default 'Page to Display' setting value as the minimum value
+                            PreferencesUtility.getDefaultStartPageIndex(mContext),
+                            //Using the 'endIndex' setting value as the maximum value
+                            PreferencesUtility.getLastPageIndex(mContext)
+                    );
 
                     //Displaying the DialogFragment
                     numberPickerDialogFragment.show(fragmentManager,
@@ -312,8 +268,7 @@ public class PaginationPresenter implements IGenericPresenter<IPaginationView> {
                 //On Page Next action, updating the 'page' setting
                 //to a value greater than itself by 1
                 startIndex = startIndex + 1;
-                prefEditor.putInt(startIndexPrefKeyStr, startIndex);
-                prefEditor.apply(); //applying the changes
+                PreferencesUtility.updateStartPageIndex(mContext, startIndex);
                 //Displaying a Toast Message
                 Toast.makeText(mContext, mContext.getString(R.string.navigate_page_x_msg, startIndex), Toast.LENGTH_SHORT).show();
                 return true;
@@ -321,10 +276,8 @@ public class PaginationPresenter implements IGenericPresenter<IPaginationView> {
             case R.id.page_last_button_id:
                 //On Page Last action, updating the 'page' setting to
                 //a value equal to that of the predetermined 'endIndex' preference value
-                prefEditor.putInt(startIndexPrefKeyStr,
-                        mPreferences.getInt(mContext.getString(R.string.pref_page_max_value_key),
-                                startIndex));
-                prefEditor.apply(); //applying the changes
+                PreferencesUtility.updateStartPageIndex(mContext,
+                        PreferencesUtility.getLastPageIndex(mContext, startIndex));
                 //Displaying a Toast Message
                 Toast.makeText(mContext, mContext.getString(R.string.navigate_page_last_msg), Toast.LENGTH_SHORT).show();
                 return true;

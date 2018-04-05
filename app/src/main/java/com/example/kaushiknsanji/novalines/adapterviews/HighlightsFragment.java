@@ -32,6 +32,7 @@ import com.example.kaushiknsanji.novalines.errorviews.NetworkErrorFragment;
 import com.example.kaushiknsanji.novalines.models.NewsSectionInfo;
 import com.example.kaushiknsanji.novalines.utils.DateUtility;
 import com.example.kaushiknsanji.novalines.utils.IntentUtility;
+import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsHighlightsLoader;
 
@@ -303,21 +304,15 @@ public class HighlightsFragment extends Fragment
      */
     private void enforceDateSetting() {
         Log.d(LOG_TAG, "enforceDateSetting: Started");
-        //Retrieving the state of the "Start Period Preset/Manual" CheckBoxPreference
-        boolean presetState = mPreferences.getBoolean(getString(R.string.pref_start_period_manual_override_key),
-                getResources().getBoolean(R.bool.pref_start_period_manual_override_default));
 
-        if (!presetState) {
+        if (!PreferencesUtility.getStartPeriodOverrideValue(getContext(), mPreferences)) {
             //When in Preset mode (False condition)
 
             //Creating an instance of today's date for comparison and as a default value
             Calendar todayCalendar = Calendar.getInstance();
 
-            //Retrieving the Preference key that saves the current day's date
-            String currentDayDateKeyStr = getString(R.string.pref_today_date_key);
-
             //Retrieving the current day's date stored in the preference
-            long currentDatePrefInMillis = mPreferences.getLong(currentDayDateKeyStr, 0);
+            long currentDatePrefInMillis = PreferencesUtility.getCurrentDayDateValue(getContext(), mPreferences, 0);
 
             if (currentDatePrefInMillis > 0) {
                 //When the value was previously stored in the 'date-today' setting
@@ -329,11 +324,10 @@ public class HighlightsFragment extends Fragment
                     Calendar dateCalendar = Calendar.getInstance();
 
                     //Retrieving the "Preset Start Period" Preference value
-                    String presetStartPeriodSelected = mPreferences.getString(getString(R.string.pref_start_period_preset_key),
-                            getString(R.string.pref_start_period_preset_default));
+                    String presetStartPeriodSelected = PreferencesUtility.getPresetStartPeriodValue(getContext(), mPreferences);
 
                     //Retrieving the list of values used in the "Preset Start Period" Preference
-                    String[] availablePresets = getResources().getStringArray(R.array.pref_start_period_preset_entries);
+                    String[] availablePresets = PreferencesUtility.getPossiblePresetStartPeriodValues(getContext());
 
                     if (presetStartPeriodSelected.equals(availablePresets[0])) {
                         //When the option selected was "Start of the Week"
@@ -349,33 +343,25 @@ public class HighlightsFragment extends Fragment
                     //For the option "Start of Today", we are using the current day date AS-IS
 
                     //Retrieving the buffer value selected on the "Buffer to Start Period" Preference
-                    int bufferDaysSelected = mPreferences.getInt(getString(R.string.pref_start_period_buffer_key),
-                            getResources().getInteger(R.integer.pref_start_period_buffer_default_value));
+                    int bufferDaysSelected = PreferencesUtility.getStartPeriodBufferValue(getContext(), mPreferences);
 
                     //Subtracting the calendar date by the Buffer value selected
                     dateCalendar.add(Calendar.DAY_OF_YEAR, -bufferDaysSelected);
 
-                    //Opening the Editor to update the above value in the 'from-date' setting
-                    SharedPreferences.Editor prefEditor = mPreferences.edit();
-                    prefEditor.putLong(getString(R.string.pref_start_period_manual_key),
-                            dateCalendar.getTimeInMillis());
-                    prefEditor.apply(); //applying the changes
+                    //Updating the above value in the 'from-date' setting
+                    PreferencesUtility.updateStartPeriodValue(getContext(), mPreferences, dateCalendar.getTimeInMillis());
 
                     Log.d(LOG_TAG, "enforceDateSetting: Reapplied");
 
                     //Updating the 'date-today' setting to reflect the current day's date
-                    prefEditor.putLong(currentDayDateKeyStr, todayCalendar.getTimeInMillis());
-                    prefEditor.apply(); //applying the changes
+                    PreferencesUtility.updateCurrentDayDateValue(getContext(), mPreferences, todayCalendar.getTimeInMillis());
                 }
 
             } else {
                 //When the value was NOT previously stored in the 'date-today' setting
 
-                //Opening the Editor to update current day's date in 'date-today' setting
-                SharedPreferences.Editor prefEditor = mPreferences.edit();
                 //Updating the 'date-today' setting to reflect the current day's date
-                prefEditor.putLong(currentDayDateKeyStr, todayCalendar.getTimeInMillis());
-                prefEditor.apply(); //applying the changes
+                PreferencesUtility.updateCurrentDayDateValue(getContext(), mPreferences, todayCalendar.getTimeInMillis());
             }
 
         }
@@ -435,11 +421,9 @@ public class HighlightsFragment extends Fragment
         //Removing the time part from the current date
         DateUtility.pruneTimePart(todayCalendar);
 
-        //Retrieving the start date value from the preference
-        long fromDatePrefInMillis = mPreferences.getLong(getString(R.string.pref_start_period_manual_key), todayCalendar.getTimeInMillis());
         //Creating the calendar for the start date
         Calendar fromDateCalendar = Calendar.getInstance();
-        fromDateCalendar.setTimeInMillis(fromDatePrefInMillis);
+        fromDateCalendar.setTimeInMillis(PreferencesUtility.getStartPeriodValue(getContext(), mPreferences, todayCalendar.getTimeInMillis()));
         //Removing the time part from the start date
         DateUtility.pruneTimePart(fromDateCalendar);
 
@@ -713,7 +697,7 @@ public class HighlightsFragment extends Fragment
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.pref_start_period_manual_key))) {
+        if (key.equals(PreferencesUtility.getStartPeriodKey(getContext()))) {
             //When the Start Date of the News is changed
             Log.d(LOG_TAG, "onSharedPreferenceChanged: Updating " + key);
 
@@ -744,7 +728,7 @@ public class HighlightsFragment extends Fragment
                 //Retrieving the start date value used by the loader
                 long fromDateInMillis = highlightsLoader.getFromDateInMillis();
                 //Retrieving the current start date value set in the preference
-                long fromDatePrefInMillis = mPreferences.getLong(getString(R.string.pref_start_period_manual_key), Calendar.getInstance().getTimeInMillis());
+                long fromDatePrefInMillis = PreferencesUtility.getStartPeriodValue(getContext(), mPreferences, Calendar.getInstance().getTimeInMillis());
 
                 //Retrieving the current list of Subscribed News Category Ids
                 List<String> currSubsNewsSectionIds = ((HeadlinesFragment) getParentFragment()).getSubscribedNewsSectionIdsList();

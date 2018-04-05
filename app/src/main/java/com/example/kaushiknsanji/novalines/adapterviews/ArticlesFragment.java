@@ -37,6 +37,7 @@ import com.example.kaushiknsanji.novalines.presenters.FavoriteActionPresenter;
 import com.example.kaushiknsanji.novalines.utils.IntentUtility;
 import com.example.kaushiknsanji.novalines.utils.NewsURLGenerator;
 import com.example.kaushiknsanji.novalines.utils.PreferencesObserverUtility;
+import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewItemDecorUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsArticlesLoader;
@@ -484,7 +485,7 @@ public class ArticlesFragment extends Fragment
         if (mIsPaginatedView) {
             //For Paginated Results
 
-            if (getStartPageIndex() > 1) {
+            if (PreferencesUtility.getStartPageIndex(getContext(), mPreferences) > 1) {
                 //When not on first page, reset the 'page' setting value to 1
                 //to refresh the content and show the first page
                 ((HeadlinesFragment) getParentFragment()).resetStartPageIndex();
@@ -640,7 +641,7 @@ public class ArticlesFragment extends Fragment
                     Log.d(LOG_TAG + "_" + mNewsTopicId, "onLoadFinished: NO DATA RETURNED");
 
                     //Retrying for Paginated Results if the current page is not the first page
-                    if (mIsPaginatedView && getStartPageIndex() > 1) {
+                    if (mIsPaginatedView && PreferencesUtility.getStartPageIndex(getContext(), mPreferences) > 1) {
                         //When not on first page, reset the 'page' setting value to 1,
                         //to refresh the content and show the first page if possible
                         ((HeadlinesFragment) getParentFragment()).resetStartPageIndex();
@@ -777,20 +778,6 @@ public class ArticlesFragment extends Fragment
     }
 
     /**
-     * Method that returns the current 'page' (Page to Display) setting value
-     * from the SharedPreferences
-     *
-     * @return Integer value of the current 'page' (Page to Display) setting
-     */
-    private int getStartPageIndex() {
-        //Returning the current value of 'page' (Page to Display) setting
-        return mPreferences.getInt(
-                getString(R.string.pref_page_index_key),
-                getResources().getInteger(R.integer.pref_page_index_default_value)
-        );
-    }
-
-    /**
      * Called when a swipe gesture triggers a refresh.
      */
     @Override
@@ -907,11 +894,11 @@ public class ArticlesFragment extends Fragment
 
             if (getUserVisibleHint()) {
                 //When the current fragment is the one viewed by the user
-                if (key.equals(getString(R.string.pref_page_index_key))) {
+                if (key.equals(PreferencesUtility.getStartPageIndexKey(getContext()))) {
                     //On the change in 'page' setting value
 
                     //Saving the 'page' setting value as the index of the last page viewed
-                    mLastViewedPageIndex = getStartPageIndex();
+                    mLastViewedPageIndex = PreferencesUtility.getStartPageIndex(getContext(), mPreferences);
                 }
             }
 

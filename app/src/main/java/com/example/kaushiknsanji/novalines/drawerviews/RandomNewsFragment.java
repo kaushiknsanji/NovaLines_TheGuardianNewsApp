@@ -47,6 +47,7 @@ import com.example.kaushiknsanji.novalines.presenters.PaginationPresenter;
 import com.example.kaushiknsanji.novalines.utils.IntentUtility;
 import com.example.kaushiknsanji.novalines.utils.NewsURLGenerator;
 import com.example.kaushiknsanji.novalines.utils.PreferencesObserverUtility;
+import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewItemDecorUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
 import com.example.kaushiknsanji.novalines.utils.TextAppearanceUtility;
@@ -1008,7 +1009,7 @@ public class RandomNewsFragment extends Fragment
                     Log.d(LOG_TAG, "onLoadFinished: NO DATA RETURNED");
 
                     //Retrying if the current page is not the first page
-                    if (getStartPageIndex() > 1) {
+                    if (PreferencesUtility.getStartPageIndex(getContext(), mPreferences) > 1) {
                         //When not on first page, reset the 'page' setting value to 1,
                         //to refresh the content and show the first page if possible
                         mPaginationPresenter.resetStartPageIndex();
@@ -1161,20 +1162,6 @@ public class RandomNewsFragment extends Fragment
     }
 
     /**
-     * Method that returns the current 'page' (Page to Display) setting value
-     * from the SharedPreferences
-     *
-     * @return Integer value of the current 'page' (Page to Display) setting
-     */
-    private int getStartPageIndex() {
-        //Returning the current value of 'page' (Page to Display) setting
-        return mPreferences.getInt(
-                getString(R.string.pref_page_index_key),
-                getResources().getInteger(R.integer.pref_page_index_default_value)
-        );
-    }
-
-    /**
      * Method that triggers a content refresh
      */
     @Override
@@ -1182,7 +1169,7 @@ public class RandomNewsFragment extends Fragment
         //Resetting the top visible item position to 0, prior to refresh
         mVisibleItemViewPosition = 0;
 
-        if (getStartPageIndex() > 1) {
+        if (PreferencesUtility.getStartPageIndex(getContext(), mPreferences) > 1) {
             //When not on first page, reset the 'page' setting value to 1
             //to refresh the content and show the first page
             mPaginationPresenter.resetStartPageIndex();

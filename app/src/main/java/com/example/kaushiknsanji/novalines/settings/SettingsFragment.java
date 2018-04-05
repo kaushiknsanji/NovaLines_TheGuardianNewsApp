@@ -1,5 +1,6 @@
 package com.example.kaushiknsanji.novalines.settings;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -12,6 +13,7 @@ import android.support.v7.preference.PreferenceScreen;
 import android.text.TextUtils;
 
 import com.example.kaushiknsanji.novalines.R;
+import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -29,6 +31,9 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     //OOB Constant used as an identifier for the DialogFragments
     private static final String DIALOG_FRAGMENT_TAG = "android.support.v7.preference.PreferenceFragment.DIALOG";
+    //Context of the Fragment
+    private Context mContext;
+
 
     /**
      * Called during {@link #onCreate(Bundle)} to supply the preferences for this fragment.
@@ -42,15 +47,17 @@ public class SettingsFragment extends PreferenceFragmentCompat
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         //Load Preferences from XML Resource
         addPreferencesFromResource(R.xml.preferences);
+        //Get Context
+        mContext = getContext();
         //Bind Preferences' summary to their value: START
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sort_by_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sort_on_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_items_per_page_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_start_period_manual_override_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_start_period_preset_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_start_period_buffer_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_start_period_manual_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_reset_settings_key)));
+        bindPreferenceSummaryToValue(findPreference(PreferencesUtility.getSortByKey(mContext)));
+        bindPreferenceSummaryToValue(findPreference(PreferencesUtility.getSortBasedOnKey(mContext)));
+        bindPreferenceSummaryToValue(findPreference(PreferencesUtility.getItemsPerPageKey(mContext)));
+        bindPreferenceSummaryToValue(findPreference(PreferencesUtility.getStartPeriodOverrideKey(mContext)));
+        bindPreferenceSummaryToValue(findPreference(PreferencesUtility.getPresetStartPeriodKey(mContext)));
+        bindPreferenceSummaryToValue(findPreference(PreferencesUtility.getStartPeriodBufferKey(mContext)));
+        bindPreferenceSummaryToValue(findPreference(PreferencesUtility.getStartPeriodKey(mContext)));
+        bindPreferenceSummaryToValue(findPreference(PreferencesUtility.getResetSettingsKey(mContext)));
         //Bind Preferences' summary to their value: END
 
         //Enabling the preferences dependent on "Start Period Preset/Manual" CheckBoxPreference
@@ -73,7 +80,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
             NumberPickerPreference numberPickerPreference = (NumberPickerPreference) preference;
             int selectedValue = numberPickerPreference.getValue();
 
-            if (preference.getKey().equals(getString(R.string.pref_start_period_buffer_key))) {
+            if (preference.getKey().equals(PreferencesUtility.getStartPeriodBufferKey(mContext))) {
                 //Adding custom text for the "Buffer to Start Period" Preference setting
                 numberPickerPreference.setSummary(getString(R.string.buffer_days_summary_text, selectedValue));
             } else {
@@ -81,7 +88,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 numberPickerPreference.setSummary(String.valueOf(selectedValue));
             }
 
-        } else if (preference.getKey().equals(getString(R.string.pref_start_period_manual_override_key))) {
+        } else if (preference.getKey().equals(PreferencesUtility.getStartPeriodOverrideKey(mContext))) {
             //Setting Summary for the "Start Period Preset/Manual" CheckBoxPreference
 
             //Updating the summary
@@ -102,13 +109,13 @@ public class SettingsFragment extends PreferenceFragmentCompat
      */
     private void updateStartPeriodSummary(long dateTimeInMillis) {
         //"Start Period Preset/Manual" CheckBoxPreference
-        CheckBoxPreference spOverridePreference = (CheckBoxPreference) findPreference(getString(R.string.pref_start_period_manual_override_key));
+        CheckBoxPreference spOverridePreference = (CheckBoxPreference) findPreference(PreferencesUtility.getStartPeriodOverrideKey(mContext));
 
         //Declaring the date instance for retrieving the date to be shown
         Date fromDateSet = null;
         if (dateTimeInMillis == -1) {
             //Retrieving the DateTime value from the "from-date" key when DateTime is not passed
-            DatePickerPreference datePickerPreference = (DatePickerPreference) findPreference(getString(R.string.pref_start_period_manual_key));
+            DatePickerPreference datePickerPreference = (DatePickerPreference) findPreference(PreferencesUtility.getStartPeriodKey(mContext));
             fromDateSet = new Date(datePickerPreference.getDateTimeInMillis());
         } else {
             //Honouring the DateTime when passed
@@ -137,11 +144,11 @@ public class SettingsFragment extends PreferenceFragmentCompat
      */
     private void updateStartPeriodDependencies() {
         //"Start Period Preset/Manual" CheckBoxPreference
-        CheckBoxPreference spOverridePreference = (CheckBoxPreference) findPreference(getString(R.string.pref_start_period_manual_override_key));
+        CheckBoxPreference spOverridePreference = (CheckBoxPreference) findPreference(PreferencesUtility.getStartPeriodOverrideKey(mContext));
         //Preferences dependent on the "Start Period Preset/Manual" CheckBoxPreference
-        ListPreference spPresetPreference = (ListPreference) findPreference(getString(R.string.pref_start_period_preset_key));
-        NumberPickerPreference spBufferPreference = (NumberPickerPreference) findPreference(getString(R.string.pref_start_period_buffer_key));
-        DatePickerPreference spManualPreference = (DatePickerPreference) findPreference(getString(R.string.pref_start_period_manual_key));
+        ListPreference spPresetPreference = (ListPreference) findPreference(PreferencesUtility.getPresetStartPeriodKey(mContext));
+        NumberPickerPreference spBufferPreference = (NumberPickerPreference) findPreference(PreferencesUtility.getStartPeriodBufferKey(mContext));
+        DatePickerPreference spManualPreference = (DatePickerPreference) findPreference(PreferencesUtility.getStartPeriodKey(mContext));
 
         //Enabling the preferences dependent on "Start Period Preset/Manual" CheckBoxPreference
         //based on the current setting of this CheckBox
@@ -171,17 +178,17 @@ public class SettingsFragment extends PreferenceFragmentCompat
         long dateTimeInMillis = -1; //Defaulting the DateTime value to be calculated, to -1
 
         //Retrieving the "Specify Start Period" DatePickerPreference
-        DatePickerPreference spManualPreference = (DatePickerPreference) findPreference(getString(R.string.pref_start_period_manual_key));
+        DatePickerPreference spManualPreference = (DatePickerPreference) findPreference(PreferencesUtility.getStartPeriodKey(mContext));
 
-        if (preference.getKey().equals(getString(R.string.pref_start_period_preset_key))
-                || preference.getKey().equals(getString(R.string.pref_start_period_buffer_key))) {
+        if (preference.getKey().equals(PreferencesUtility.getPresetStartPeriodKey(mContext))
+                || preference.getKey().equals(PreferencesUtility.getStartPeriodBufferKey(mContext))) {
             //When the "Preset Start Period" Preference or the "Buffer to Start Period" Preference is being changed
 
             //Updating the "from-date" key with the DateTime value calculated from the Preset Date setting
             dateTimeInMillis = getPresetStartPeriodValue();
             spManualPreference.setDateTimeInMillis(dateTimeInMillis);
 
-        } else if (preference.getKey().equals(getString(R.string.pref_start_period_manual_override_key))) {
+        } else if (preference.getKey().equals(PreferencesUtility.getStartPeriodOverrideKey(mContext))) {
             //When the "Start Period Preset/Manual" CheckBoxPreference is being changed
 
             //Retrieving the reference to the CheckBoxPreference
@@ -213,11 +220,11 @@ public class SettingsFragment extends PreferenceFragmentCompat
      */
     private long getPresetStartPeriodValue() {
         //Retrieving the reference to "Preset Start Period" Preference
-        Preference spPresetPreference = findPreference(getString(R.string.pref_start_period_preset_key));
+        Preference spPresetPreference = findPreference(PreferencesUtility.getPresetStartPeriodKey(mContext));
         //Retrieving the "Preset Start Period" Preference summary
         String spPresetPreferenceSummary = spPresetPreference.getSummary().toString();
         //Retrieving the list of values used in the preference
-        String[] availablePresets = getResources().getStringArray(R.array.pref_start_period_preset_entries);
+        String[] availablePresets = PreferencesUtility.getPossiblePresetStartPeriodValues(mContext);
 
         //Getting the current calendar instance
         Calendar dateCalendar = Calendar.getInstance();
@@ -236,7 +243,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
         //For the option "Start of Today", we are using the current day date AS-IS
 
         //Retrieving the reference to "Buffer to Start Period" Preference
-        NumberPickerPreference spBufferPreference = (NumberPickerPreference) findPreference(getString(R.string.pref_start_period_buffer_key));
+        NumberPickerPreference spBufferPreference = (NumberPickerPreference) findPreference(PreferencesUtility.getStartPeriodBufferKey(mContext));
         //Retrieving the "Buffer to Start Period" Preference summary
         String spBufferPreferenceSummary = spBufferPreference.getSummary().toString();
 
@@ -274,7 +281,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
             //Updating the Summary
             listPreference.setSummary(listPreference.getEntries()[selectedIndex]);
 
-            if (preference.getKey().equals(getString(R.string.pref_start_period_preset_key))) {
+            if (preference.getKey().equals(PreferencesUtility.getPresetStartPeriodKey(mContext))) {
                 //Retrieving the Start Period value and updating its summary when a Start Period Preset is selected
                 //in the "Preset Start Period" Preference setting
                 updateStartPeriodSummary(getStartPeriodValue(preference));
@@ -283,7 +290,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
         } else if (preference instanceof NumberPickerPreference) {
             //For Preferences of type NumberPickerPreference
 
-            if (preference.getKey().equals(getString(R.string.pref_start_period_buffer_key))) {
+            if (preference.getKey().equals(PreferencesUtility.getStartPeriodBufferKey(mContext))) {
                 //Adding custom text for the "Buffer to Start Period" Preference setting
                 preference.setSummary(getString(R.string.buffer_days_summary_text, (int) newValue));
                 //Retrieving the Start Period value and updating its summary accordingly
@@ -293,7 +300,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 preference.setSummary(String.valueOf(newValue));
             }
 
-        } else if (preference.getKey().equals(getString(R.string.pref_start_period_manual_override_key))) {
+        } else if (preference.getKey().equals(PreferencesUtility.getStartPeriodOverrideKey(mContext))) {
             //For the "Start Period Preset/Manual" CheckBoxPreference
             CheckBoxPreference spOverridePreference = (CheckBoxPreference) preference;
 
@@ -309,7 +316,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
             //Returning false as it has been already updated
             return false;
 
-        } else if (preference.getKey().equals(getString(R.string.pref_start_period_manual_key))) {
+        } else if (preference.getKey().equals(PreferencesUtility.getStartPeriodKey(mContext))) {
             //For the "Specify Start Period" DatePickerPreference
 
             //Updating the Summary of Start Period
@@ -341,29 +348,32 @@ public class SettingsFragment extends PreferenceFragmentCompat
         Set<String> prefKeySet = sharedPreferences.getAll().keySet();
         for (String prefKeyStr : prefKeySet) {
             //Switching based on the preference key and setting to their defaults
-            if (prefKeyStr.equals(getString(R.string.pref_sort_by_key))) {
-                bindPreferenceToDefaultValue(findPreference(prefKeyStr), getString(R.string.pref_sort_by_default));
-            } else if (prefKeyStr.equals(getString(R.string.pref_sort_on_key))) {
-                bindPreferenceToDefaultValue(findPreference(prefKeyStr), getString(R.string.pref_sort_on_default));
-            } else if (prefKeyStr.equals(getString(R.string.pref_items_per_page_key))) {
+            if (prefKeyStr.equals(PreferencesUtility.getSortByKey(mContext))) {
                 bindPreferenceToDefaultValue(findPreference(prefKeyStr),
-                        getResources().getInteger(R.integer.pref_items_per_page_default_value));
-            } else if (prefKeyStr.equals(getString(R.string.pref_start_period_manual_override_key))) {
+                        PreferencesUtility.getDefaultSortByValue(mContext));
+            } else if (prefKeyStr.equals(PreferencesUtility.getSortBasedOnKey(mContext))) {
                 bindPreferenceToDefaultValue(findPreference(prefKeyStr),
-                        getResources().getBoolean(R.bool.pref_start_period_manual_override_default));
-            } else if (prefKeyStr.equals(getString(R.string.pref_start_period_preset_key))) {
-                bindPreferenceToDefaultValue(findPreference(prefKeyStr), getString(R.string.pref_start_period_preset_default));
-            } else if (prefKeyStr.equals(getString(R.string.pref_start_period_buffer_key))) {
+                        PreferencesUtility.getDefaultSortBasedOnValue(mContext));
+            } else if (prefKeyStr.equals(PreferencesUtility.getItemsPerPageKey(mContext))) {
                 bindPreferenceToDefaultValue(findPreference(prefKeyStr),
-                        getResources().getInteger(R.integer.pref_start_period_buffer_default_value));
-            } else if (prefKeyStr.equals(getString(R.string.pref_start_period_manual_key))) {
+                        PreferencesUtility.getDefaultItemsPerPage(mContext));
+            } else if (prefKeyStr.equals(PreferencesUtility.getStartPeriodOverrideKey(mContext))) {
+                bindPreferenceToDefaultValue(findPreference(prefKeyStr),
+                        PreferencesUtility.getDefaultStartPeriodOverrideValue(mContext));
+            } else if (prefKeyStr.equals(PreferencesUtility.getPresetStartPeriodKey(mContext))) {
+                bindPreferenceToDefaultValue(findPreference(prefKeyStr),
+                        PreferencesUtility.getDefaultPresetStartPeriodValue(mContext));
+            } else if (prefKeyStr.equals(PreferencesUtility.getStartPeriodBufferKey(mContext))) {
+                bindPreferenceToDefaultValue(findPreference(prefKeyStr),
+                        PreferencesUtility.getDefaultStartPeriodBufferValue(mContext));
+            } else if (prefKeyStr.equals(PreferencesUtility.getStartPeriodKey(mContext))) {
                 bindPreferenceToDefaultValue(findPreference(prefKeyStr), Calendar.getInstance().getTimeInMillis());
             }
         }
         //Iterating over the Preference Keys to reset them to their defaults: END
 
         //Forcibly marking all preferences to their defaults using PreferenceManager
-        PreferenceManager.setDefaultValues(getContext(), R.xml.preferences, true);
+        PreferenceManager.setDefaultValues(mContext, R.xml.preferences, true);
     }
 
     /**
@@ -391,7 +401,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
             //Setting the Default value
             ((NumberPickerPreference) preference).setValue((int) defaultValue);
 
-            if (preference.getKey().equals(getString(R.string.pref_start_period_buffer_key))) {
+            if (preference.getKey().equals(PreferencesUtility.getStartPeriodBufferKey(mContext))) {
                 //Adding custom text for the "Buffer to Start Period" Preference setting
                 preference.setSummary(getString(R.string.buffer_days_summary_text, (int) defaultValue));
             } else {
@@ -399,7 +409,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 preference.setSummary(String.valueOf(defaultValue));
             }
 
-        } else if (preference.getKey().equals(getString(R.string.pref_start_period_manual_override_key))) {
+        } else if (preference.getKey().equals(PreferencesUtility.getStartPeriodOverrideKey(mContext))) {
             //For the "Start Period Preset/Manual" CheckBoxPreference
             CheckBoxPreference spOverridePreference = (CheckBoxPreference) preference;
 
@@ -409,7 +419,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
             //Updating the dependencies accordingly
             updateStartPeriodDependencies();
 
-        } else if (preference.getKey().equals(getString(R.string.pref_start_period_manual_key))) {
+        } else if (preference.getKey().equals(PreferencesUtility.getStartPeriodKey(mContext))) {
             //For the "Specify Start Period" DatePickerPreference
 
             //Setting the Default value
@@ -441,19 +451,19 @@ public class SettingsFragment extends PreferenceFragmentCompat
             if (!anyDialogActive()) {
                 //Initializing the NumberPicker DialogFragment based on the Preference Key
                 //when no Dialog is found to be active
-                if (preferenceKey.equals(getString(R.string.pref_items_per_page_key))) {
+                if (preferenceKey.equals(PreferencesUtility.getItemsPerPageKey(mContext))) {
                     //Initializing the NumberPicker DialogFragment for "News items per page" Preference setting
                     dialogFragment = NumberPickerPreferenceDialogFragmentCompat.newInstance(
                             preferenceKey,
-                            getResources().getInteger(R.integer.pref_items_per_page_min_value),
-                            getResources().getInteger(R.integer.pref_items_per_page_max_value)
+                            PreferencesUtility.getItemsPerPageMinValue(mContext),
+                            PreferencesUtility.getItemsPerPageMaxValue(mContext)
                     );
-                } else if (preferenceKey.equals(getString(R.string.pref_start_period_buffer_key))) {
+                } else if (preferenceKey.equals(PreferencesUtility.getStartPeriodBufferKey(mContext))) {
                     //Initializing the NumberPicker DialogFragment for "Buffer to Start Period" Preference setting
                     dialogFragment = NumberPickerPreferenceDialogFragmentCompat.newInstance(
                             preferenceKey,
-                            getResources().getInteger(R.integer.pref_start_period_buffer_min_value),
-                            getResources().getInteger(R.integer.pref_start_period_buffer_max_value)
+                            PreferencesUtility.getStartPeriodBufferMinValue(mContext),
+                            PreferencesUtility.getStartPeriodBufferMaxValue(mContext)
                     );
                 }
             }

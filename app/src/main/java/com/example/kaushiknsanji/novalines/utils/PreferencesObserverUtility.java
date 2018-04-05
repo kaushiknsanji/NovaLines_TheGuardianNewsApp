@@ -3,8 +3,6 @@ package com.example.kaushiknsanji.novalines.utils;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.example.kaushiknsanji.novalines.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,15 +27,15 @@ public class PreferencesObserverUtility {
 
         //Adding the Preference Keys to be excluded : START
         //Excluding the maximum value of "Page To Display" preference setting by default
-        keysToExclude.add(context.getString(R.string.pref_page_max_value_key));
+        keysToExclude.add(PreferencesUtility.getLastPageIndexKey(context));
         //Excluding the keys pertaining to the calculation of Preset Start Date of the News by default
-        keysToExclude.add(context.getString(R.string.pref_start_period_manual_override_key));
-        keysToExclude.add(context.getString(R.string.pref_start_period_preset_key));
-        keysToExclude.add(context.getString(R.string.pref_start_period_buffer_key));
+        keysToExclude.add(PreferencesUtility.getStartPeriodOverrideKey(context));
+        keysToExclude.add(PreferencesUtility.getPresetStartPeriodKey(context));
+        keysToExclude.add(PreferencesUtility.getStartPeriodBufferKey(context));
         //Excluding the preference key that saves current day's date
-        keysToExclude.add(context.getString(R.string.pref_today_date_key));
+        keysToExclude.add(PreferencesUtility.getCurrentDayDateKey(context));
         //Excluding the preference key that does the reset of all Settings
-        keysToExclude.add(context.getString(R.string.pref_reset_settings_key));
+        keysToExclude.add(PreferencesUtility.getResetSettingsKey(context));
         //Adding the Preference Keys to be excluded : END
 
         //Returning the exclusion list

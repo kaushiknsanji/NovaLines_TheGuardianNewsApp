@@ -26,6 +26,7 @@ import com.example.kaushiknsanji.novalines.adapterviews.HighlightsFragment;
 import com.example.kaushiknsanji.novalines.adapterviews.MoreNewsFragment;
 import com.example.kaushiknsanji.novalines.interfaces.IPaginationView;
 import com.example.kaushiknsanji.novalines.presenters.PaginationPresenter;
+import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -503,7 +504,7 @@ public class HeadlinesFragment extends Fragment
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.pref_page_index_key)) || key.equals(getString(R.string.pref_page_max_value_key))) {
+        if (key.equals(PreferencesUtility.getStartPageIndexKey(getContext())) || key.equals(PreferencesUtility.getLastPageIndexKey(getContext()))) {
             //When the 'page' (Page to Display) setting  or the 'endIndex' setting value is changed
             Log.d(LOG_TAG, "onSharedPreferenceChanged: Updating " + key);
 
