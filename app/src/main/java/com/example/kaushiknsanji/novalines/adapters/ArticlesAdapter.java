@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -197,9 +198,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
         //Updating the Trailing Text of the News Article
         updateTrailText(holder.articleTrailTextView, newsArticleInfo.getTrailText());
 
-        //Hiding the TextView of Trailing Text
-        holder.articleTrailTextView.setVisibility(View.GONE);
-
         //Updating the Author of the News Article
         holder.articlePublisherTextView.setText(newsArticleInfo.getAuthor(mContext.getString(R.string.no_authors_found_default_text)));
 
@@ -315,6 +313,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
             //Updating with the embedded Html formatting when the content is present
             TextAppearanceUtility.setHtmlText(textView, trailTextStr);
         }
+
+        //Hiding the TextView of Trailing Text
+        textView.setVisibility(View.GONE);
     }
 
     /**
@@ -332,15 +333,19 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
             //or the Title Trail Text is present
             holder.contentExpandButton.setVisibility(View.VISIBLE);
 
-            //Looking for the Tag object to see if the image was rotated
+            //Looking for the Tag object to see if the image was rotated/expanded
             Object contentExpandButtonTagObj = holder.contentExpandButton.getTag();
             if (contentExpandButtonTagObj != null && (Boolean) contentExpandButtonTagObj) {
-                //Rotating the Image Anchor from 180 to 0 when the image was previously rotated
+                //Rotating the Image Anchor from 180 to 0 when the image was previously rotated/expanded
                 Animator rotateTo0AnimImmediate = mRotateTo0Anim.clone();
                 rotateTo0AnimImmediate.setDuration(0);
                 rotateTo0AnimImmediate.setTarget(holder.contentExpandButton);
                 rotateTo0AnimImmediate.start();
                 holder.contentExpandButton.setTag(Boolean.FALSE); //Resetting the Tag to FALSE
+
+                //Resetting the Max Lines on Publisher Text
+                holder.articlePublisherTextView.setMaxLines(mContext.getResources().getInteger(
+                        R.integer.article_publisher_text_max_lines_collapsed));
             }
 
         } else {
@@ -513,11 +518,17 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
         //Evaluating whether the Publisher Text is expanded (Line count is greater than the collapsed setting)
         boolean publisherTextExpandState = (articlePublisherTextView.getLineCount() > publisherTextCollapsedStateLineCountSetting);
 
+        //Retrieving the parent RecyclerView to set up Transition Animations
+        ViewGroup containerViewGroup = (ViewGroup) articleTrailTextView.getParent().getParent();
+
         if (trailTextExpandState || publisherTextExpandState) {
             //Collapse/Hide the content as they are in expanded state
 
             //Hiding the content of Trailing Text
             articleTrailTextView.setVisibility(View.GONE);
+
+            //Applying the Transition Animation for collapse (After hiding the Trailing Text)
+            TransitionManager.beginDelayedTransition(containerViewGroup);
 
             //Resetting the Max Lines on Publisher Text
             articlePublisherTextView.setMaxLines(publisherTextCollapsedStateLineCountSetting);
@@ -529,6 +540,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
 
         } else {
             //Expand the content as they are in collapsed state
+
+            //Applying the Transition Animation for expand
+            TransitionManager.beginDelayedTransition(containerViewGroup);
 
             //Revealing the content of Trailing Text if any
             if (!TextUtils.isEmpty(articleTrailTextView.getText())) {
@@ -543,6 +557,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
             mRotateTo180Anim.start();
             //Setting an Expanded State (TRUE) Identifier on the ImageButton's Tag
             anchorButton.setTag(Boolean.TRUE);
+
         }
     }
 
