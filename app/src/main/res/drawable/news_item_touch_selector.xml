@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Colors shown when the News Item Cards are clicked -->
+    <item android:drawable="@color/newsItemTouchColor" android:state_pressed="true" />
+    <item android:drawable="@color/newsItemTouchColor" android:state_selected="true" />
+    <item android:drawable="@color/newsItemTouchColor" android:state_activated="true" />
+    <!-- The Default color when there is no action done on News Item Cards -->
+    <item android:drawable="@android:color/background_light" />
+</selector>

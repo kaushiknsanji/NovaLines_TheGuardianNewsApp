@@ -2,13 +2,14 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BaseCardViewStyle"
+    style="@style/NewsItemCardStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/news_item_touch_selector">
 
         <com.example.kaushiknsanji.novalines.customviews.WindowBoxedImageView
             android:id="@+id/article_thumb_id"

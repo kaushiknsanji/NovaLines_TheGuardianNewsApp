@@ -97,6 +97,8 @@
     <color name="subscribeNewsMsgTextColor">@color/nearBlackColor</color>
     <!-- Color used for the Text shown in "No Feed Help item" -->
     <color name="nfhiResolutionTextColor">@color/nearBlackColor</color>
+    <!-- Color used as a background when any News Item Cards are clicked -->
+    <color name="newsItemTouchColor">#FFF9C4</color>
 
 
 </resources>

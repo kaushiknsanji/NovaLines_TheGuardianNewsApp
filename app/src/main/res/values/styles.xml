@@ -98,6 +98,12 @@
         <item name="cardUseCompatPadding">true</item>
     </style>
 
+    <!-- Child Style used for the News Item cards and also for the cards
+    shown in HighlightsFragment -->
+    <style name="NewsItemCardStyle" parent="BaseCardViewStyle">
+        <item name="android:foreground">?android:selectableItemBackground</item>
+    </style>
+
     <!-- Child Style for the Info Cards used in the app -->
     <style name="InfoCardStyle" parent="BaseCardViewStyle">
         <item name="cardBackgroundColor">@color/infoCardBackgroundColor</item>
