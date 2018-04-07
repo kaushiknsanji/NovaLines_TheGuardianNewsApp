@@ -22,6 +22,7 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/hl_article_count_text_size"
             android:textStyle="bold"
+            app:layout_constraintHeight_min="wrap"
             tools:text="88" />
 
         <TextView
