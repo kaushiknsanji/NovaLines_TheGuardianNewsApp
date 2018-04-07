@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_refresh_white"
         android:orderInCategory="1"
         android:title="@string/action_refresh"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/subscribe_action_id"
         android:icon="@drawable/ic_newspaper_add_white"
