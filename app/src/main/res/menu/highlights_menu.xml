@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/refresh_action_id"
+        android:icon="@drawable/ic_refresh_white"
+        android:orderInCategory="1"
+        android:title="@string/action_refresh"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/subscribe_action_id"
+        android:icon="@drawable/ic_newspaper_add_white"
+        android:orderInCategory="2"
+        android:title="@string/more_news_action_subscribe"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/settings_action_id"
+        android:orderInCategory="3"
+        android:title="@string/settings_title_str"
+        app:showAsAction="never" />
+</menu>

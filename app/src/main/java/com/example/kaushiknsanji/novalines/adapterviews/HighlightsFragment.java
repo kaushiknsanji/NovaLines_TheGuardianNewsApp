@@ -264,8 +264,8 @@ public class HighlightsFragment extends Fragment
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //Inflating the Menu options from headlines_main_menu.xml
-        inflater.inflate(R.menu.headlines_main_menu, menu);
+        //Inflating the Menu options from highlights_menu.xml
+        inflater.inflate(R.menu.highlights_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -286,6 +286,15 @@ public class HighlightsFragment extends Fragment
             case R.id.refresh_action_id:
                 //For the refresh menu option
                 triggerLoad(true);
+                return true;
+            case R.id.subscribe_action_id:
+                //For the subscribe menu option
+
+                //Navigating to the MoreNewsFragment
+                ((HeadlinesFragment) getParentFragment()).openNewsCategoryTabByTitle(
+                        getString(R.string.more_news_tab_title_text),
+                        getString(R.string.more_news_tab_title_text)
+                );
                 return true;
             case R.id.settings_action_id:
                 //For the settings menu option

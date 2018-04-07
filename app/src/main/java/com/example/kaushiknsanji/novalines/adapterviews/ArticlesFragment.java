@@ -341,8 +341,8 @@ public class ArticlesFragment extends Fragment
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //Inflating the Menu options from headlines_main_menu.xml
-        inflater.inflate(R.menu.headlines_main_menu, menu);
+        //Inflating the Menu options from section_news_menu.xml
+        inflater.inflate(R.menu.section_news_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

@@ -255,7 +255,7 @@
     <string name="more_news_subscribe_btn_text">Subscribe More</string>
 
     <!-- Title of the action menu item for Subscribing to More News Feeds -->
-    <string name="more_news_action_subscribe">Subscribe</string>
+    <string name="more_news_action_subscribe">@string/more_news_subscribe_btn_text</string>
 
     <!-- Message displayed when the user requests to subscribe to more News Categories/Sections -->
     <string name="more_news_subscribe_acton_toast">Multiple News Category Feed subscription will be available in the future</string>
