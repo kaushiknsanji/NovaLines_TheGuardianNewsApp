@@ -178,8 +178,7 @@ News Article card items supports the same set of features as available in `Headl
 The Results shown in the Fragments of `HeadlinesFragment` and `RandomNewsFragment` can be controlled by varying certain parameters embedded in the Request URL. This is defined by the [Guardian News API](http://open-platform.theguardian.com/documentation/) which this application is based on and is acting as a client that receives the data for the request executed.
 
 <!-- Image for the Settings -->
-<img src="https://user-images.githubusercontent.com/26028981/38467697-cfb82272-3b59-11e8-81f5-07e9a7a85326.png" width="40%" />
-![settings](https://user-images.githubusercontent.com/26028981/38467698-d5182906-3b59-11e8-93b2-cc69ffdfbf22.gif)
+<img src="https://user-images.githubusercontent.com/26028981/38467697-cfb82272-3b59-11e8-81f5-07e9a7a85326.png" width="40%" />  <img src="https://user-images.githubusercontent.com/26028981/38467698-d5182906-3b59-11e8-93b2-cc69ffdfbf22.gif"/>
 
 All the parameters affecting the results can be altered by the **"Settings"** menu item available in each of the News Fragments and also on the Drawer menu. The **Settings** menu item, opens up the [preferences.xml](/app/src/main/res/xml/preferences.xml) loaded by the activity [SettingsActivity](/app/src/main/java/com/example/kaushiknsanji/novalines/settings/SettingsActivity.java). It implements the `android.support.v7.preference.Preference` Preferences. As such all the values are stored in the default `SharedPreferences`. These preferences provides options to override the parameters used in the news feed request, and following are the ones that can be changed -
 * `order-by` parameter defines the sorting order of results. This is controlled by the **"Sort by"** ListPreference.
@@ -236,15 +235,12 @@ _As per the Rubric, no third party library is used for loading images._
 * If the Search entered in the `RandomNewsFragment` did not yield any result, (or) if the request from the `HeadlinesFragment` did not return any News items, then a **"No Feed Available"** page will be shown with several `CardView`s that provide information on how to resolve the issue. This is displayed by the Fragment [NoFeedResolutionFragment](/app/src/main/java/com/example/kaushiknsanji/novalines/errorviews/NoFeedResolutionFragment.java) that inflates the layout [no_feed_layout.xml](/app/src/main/res/layout/no_feed_layout.xml).
 
 <!-- Image/GIF for No Feed Available -->
-![no_feed_1](https://user-images.githubusercontent.com/26028981/38467702-dadad65e-3b59-11e8-9fcf-cf3aba5bd960.gif)
-![no_feed_2](https://user-images.githubusercontent.com/26028981/38467703-dc7b883c-3b59-11e8-81c3-9b44ff2773bd.gif)
-<img src="https://user-images.githubusercontent.com/26028981/38468457-f9a08778-3b63-11e8-8f40-927426868868.png" width="40%" />
+<img src="https://user-images.githubusercontent.com/26028981/38468457-f9a08778-3b63-11e8-8f40-927426868868.png" width="40%" />  <img src="https://user-images.githubusercontent.com/26028981/38467702-dadad65e-3b59-11e8-9fcf-cf3aba5bd960.gif"/>  <img src="https://user-images.githubusercontent.com/26028981/38467703-dc7b883c-3b59-11e8-81c3-9b44ff2773bd.gif"/>
 
 * While initiating a request, if a network connectivity issue is encountered, then a **"Network Error"** page will be shown, with information on how to resolve the issue. This is displayed by the Fragment [NetworkErrorFragment](/app/src/main/java/com/example/kaushiknsanji/novalines/errorviews/NetworkErrorFragment.java) that inflates the layout [network_error_layout.xml](/app/src/main/res/layout/network_error_layout.xml).
 
 <!-- Image/GIF for Network Error page -->
-![network_error](https://user-images.githubusercontent.com/26028981/38467711-f3036282-3b59-11e8-96b6-246806b01a00.gif)
-<img src="https://user-images.githubusercontent.com/26028981/38468459-fc768268-3b63-11e8-9195-2d54143e81ce.png" width="40%" />
+<img src="https://user-images.githubusercontent.com/26028981/38468459-fc768268-3b63-11e8-9195-2d54143e81ce.png" width="40%" />  <img src="https://user-images.githubusercontent.com/26028981/38467711-f3036282-3b59-11e8-96b6-246806b01a00.gif"/>
 
 ### The About Page
 
