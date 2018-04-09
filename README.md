@@ -249,6 +249,6 @@ This can be viewed by going into the Drawer menu item **"About"** of the `NewsAc
 <!-- Image for About page -->
 <img src="https://user-images.githubusercontent.com/26028981/38467715-f911b228-3b59-11e8-9945-e3089e880188.png" width="40%" />
 	
-## Bug Fixes
+## Bugs Found
 
 * Any News Article with the Topic **"Global"** when subscribed is currently causing a crash, since **"Global"** is not found to be there in any of the Sections supported by the Guardian News API. We do have something called as **"Global development"**, but this is different.
