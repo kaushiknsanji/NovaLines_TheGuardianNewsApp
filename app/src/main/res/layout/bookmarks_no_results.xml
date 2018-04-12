@@ -8,10 +8,9 @@
 
     <ImageView
         android:id="@+id/newspaper_image_id"
-        android:layout_width="@dimen/match_constraint_0dp"
+        android:layout_width="@dimen/caption_image_size"
         android:layout_height="@dimen/match_constraint_0dp"
         app:layout_constraintBottom_toBottomOf="@+id/bookmark_image_id"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/bookmark_image_id"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toLeftOf="parent"
