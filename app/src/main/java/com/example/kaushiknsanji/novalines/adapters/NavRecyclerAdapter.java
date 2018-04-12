@@ -15,7 +15,7 @@ import com.example.kaushiknsanji.novalines.models.NavDrawerItem;
 import java.util.List;
 
 /**
- * Adapter Class of the Heterogenous RecyclerView used as a Navigation Drawer
+ * Adapter Class of the Heterogeneous RecyclerView used as a Navigation Drawer
  * for the entire app by the Activity {@link com.example.kaushiknsanji.novalines.NewsActivity}
  * to bind and display the Navigation Drawer Items.
  *
