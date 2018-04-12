@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp"
+    android:paddingBottom="@dimen/random_news_intro_padding_bottom"
+    android:paddingTop="@dimen/random_news_intro_padding_top"
     tools:background="@color/defaultBackgroundColor">
 
     <include
@@ -22,12 +22,9 @@
 
     <ImageView
         android:id="@+id/newspaper_image_id"
-        android:layout_width="@dimen/match_constraint_0dp"
+        android:layout_width="@dimen/caption_image_size"
         android:layout_height="@dimen/match_constraint_0dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/search_image_id"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/search_image_id"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -40,8 +37,6 @@
         android:id="@+id/search_image_id"
         android:layout_width="@dimen/caption_image_size"
         android:layout_height="@dimen/caption_image_size"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         app:layout_constraintBottom_toTopOf="@+id/message_text_id"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/newspaper_image_id"
@@ -57,10 +52,10 @@
         android:layout_width="@dimen/match_constraint_0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/search_msg_text_margin_bottom"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="@dimen/search_msg_text_margin_right"
+        android:layout_marginLeft="@dimen/search_msg_text_margin_left"
+        android:layout_marginRight="@dimen/search_msg_text_margin_right"
+        android:layout_marginStart="@dimen/search_msg_text_margin_left"
         android:layout_marginTop="@dimen/search_msg_text_margin_top"
         android:gravity="center"
         android:textColor="@color/searchMsgIntroTextColor"

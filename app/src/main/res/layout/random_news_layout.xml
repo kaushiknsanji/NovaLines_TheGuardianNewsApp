@@ -23,7 +23,7 @@
             android:id="@+id/search_container_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
+            android:layout_marginBottom="@dimen/search_container_margin_bottom"
             android:background="@android:color/white">
 
             <android.support.v7.widget.SearchView
