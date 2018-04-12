@@ -6,6 +6,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <!-- Makes the content flow behind the status bar -->
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 </resources>
