@@ -1,6 +1,7 @@
 package com.example.kaushiknsanji.novalines.adapterviews;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -87,7 +88,7 @@ public class MoreNewsFragment extends Fragment
      */
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView: Started with savedInstanceState as " + savedInstanceState);
         //Inflating the layout 'R.layout.more_news_layout'
         View rootView = inflater.inflate(R.layout.more_news_layout, container, false);
@@ -132,7 +133,7 @@ public class MoreNewsFragment extends Fragment
      * @param outState Bundle in which to place your saved state.
      */
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         //Saving the info of the News Topic Feed requested
         outState.putString(NEWS_TOPIC_NAME_REQ_STRING_KEY, mNewsTopicNameRequested);
         outState.putString(NEWS_TOPIC_ID_REQ_STRING_KEY, mNewsTopicIdRequested);

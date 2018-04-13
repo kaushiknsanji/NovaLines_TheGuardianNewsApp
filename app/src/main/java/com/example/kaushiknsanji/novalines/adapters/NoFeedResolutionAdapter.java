@@ -87,8 +87,9 @@ public class NoFeedResolutionAdapter extends RecyclerView.Adapter<NoFeedResoluti
      * @param viewType The view type of the new View.
      * @return A new ViewHolder that holds a View of the given view type.
      */
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //Inflating the item Layout view
         //Passing False as we are attaching the View ourselves
         View itemView = LayoutInflater.from(mContext).inflate(mLayoutRes, parent, false);
@@ -108,7 +109,7 @@ public class NoFeedResolutionAdapter extends RecyclerView.Adapter<NoFeedResoluti
      * @param position The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //Retrieving the NoFeedInfo object at the current item position
         NoFeedInfo noFeedInfo = mNoFeedInfoList.get(position);
 
@@ -218,7 +219,7 @@ public class NoFeedResolutionAdapter extends RecyclerView.Adapter<NoFeedResoluti
          * @param itemView is the inflated item layout View passed
          *                 for caching its View components
          */
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             //Doing the view lookup for each of the item layout view's components

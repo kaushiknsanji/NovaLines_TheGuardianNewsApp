@@ -93,8 +93,9 @@ public class NavRecyclerAdapter extends RecyclerView.Adapter<NavRecyclerAdapter.
      * @param viewType The view type of the new View.
      * @return A new ViewHolder that holds a View of the given view type.
      */
+    @NonNull
     @Override
-    public NavRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NavRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //Inflating the item Layout view
         //Passing False as we are attaching the View ourselves
         View itemView = LayoutInflater.from(getContext()).inflate(viewType, parent, false);
@@ -114,7 +115,7 @@ public class NavRecyclerAdapter extends RecyclerView.Adapter<NavRecyclerAdapter.
      * @param position The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(NavRecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull NavRecyclerAdapter.ViewHolder holder, int position) {
         if (holder.getItemViewType() == R.layout.nav_item) {
             //Binding of data is required only for the Navigation Drawer Item
 
@@ -235,7 +236,7 @@ public class NavRecyclerAdapter extends RecyclerView.Adapter<NavRecyclerAdapter.
          * @param viewType is the integer value of the layout resource id
          *                 that identifies the type of the view
          */
-        public ViewHolder(View itemView, int viewType) {
+        ViewHolder(View itemView, int viewType) {
             super(itemView);
 
             if (viewType == R.layout.nav_item) {

@@ -2,6 +2,7 @@ package com.example.kaushiknsanji.novalines.errorviews;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -77,7 +78,7 @@ public class NoFeedResolutionFragment extends Fragment
      */
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //Inflating the layout 'R.layout.no_feed_layout'
         View rootView = inflater.inflate(R.layout.no_feed_layout, container, false);
 

@@ -2,6 +2,7 @@ package com.example.kaushiknsanji.novalines.adapters;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -97,7 +98,7 @@ public class HeadlinesPagerAdapter extends FragmentStatePagerAdapter {
      * or {@link #POSITION_NONE} if the item is no longer present.
      */
     @Override
-    public int getItemPosition(Object object) {
+    public int getItemPosition(@NonNull Object object) {
         //Casting to a Fragment (assuming that it is always a Fragment)
         Fragment fragment = (Fragment) object;
 
@@ -159,8 +160,9 @@ public class HeadlinesPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     //Registers the Fragment when the item is instantiated (for the first time) using #getItem
+    @NonNull
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
         Fragment fragment = (Fragment) super.instantiateItem(container, position);
         mRegisteredFragments.put(position, fragment);
         return fragment;

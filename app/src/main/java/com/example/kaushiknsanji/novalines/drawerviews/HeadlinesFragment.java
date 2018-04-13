@@ -3,6 +3,7 @@ package com.example.kaushiknsanji.novalines.drawerviews;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -104,7 +105,7 @@ public class HeadlinesFragment extends Fragment
      */
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //Inflating the layout 'R.layout.headlines_layout'
         View rootView = inflater.inflate(R.layout.headlines_layout, container, false);
 
@@ -186,7 +187,7 @@ public class HeadlinesFragment extends Fragment
      * @param outState Bundle in which to place your saved state.
      */
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         //Saving the current tab position
         outState.putInt(ACTIVE_TAB_POSITION_INT_KEY, mViewPager.getCurrentItem());
         //Saving the subscribed list of News Categories
