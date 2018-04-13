@@ -27,8 +27,6 @@ public class AboutActivity extends AppCompatActivity
     //Constant used as a Request Code for activities launching this
     //with an Intent that waits for a result
     public static final int REQ_CODE = 20;
-    //Constant used for Logs
-    private static final String LOG_TAG = AboutActivity.class.getSimpleName();
     //For the custom Toolbar used as ActionBar
     private Toolbar mToolbar;
 
