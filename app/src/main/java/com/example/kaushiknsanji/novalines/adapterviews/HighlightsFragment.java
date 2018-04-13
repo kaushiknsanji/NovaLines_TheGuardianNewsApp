@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -135,7 +136,7 @@ public class HighlightsFragment extends Fragment
      */
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView: Started");
         //Inflating the layout 'R.layout.highlights_layout'
         View rootView = inflater.inflate(R.layout.highlights_layout, container, false);
@@ -246,7 +247,7 @@ public class HighlightsFragment extends Fragment
      * @param outState Bundle in which to place your saved state.
      */
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         //Saving the current position of the top Adapter item partially/completely visible
         outState.putInt(VISIBLE_ITEM_VIEW_POSITION_INT_KEY, RecyclerViewUtility.getFirstVisibleItemPosition(mRecyclerView));
         //Saving the visibility state of the "Network Error Layout"
@@ -408,7 +409,7 @@ public class HighlightsFragment extends Fragment
         ArrayList<NewsSectionInfo> newsSectionInfoList = new ArrayList<>();
 
         //Initializing the Adapter for the List view
-        mRecyclerAdapter = new HighlightsAdapter(getContext(), R.layout.highlights_item, newsSectionInfoList);
+        mRecyclerAdapter = new HighlightsAdapter(getContext(), R.layout.highlights_item, getLoaderManager(), newsSectionInfoList);
 
         //Registering the OnAdapterItemDataSwapListener
         mRecyclerAdapter.setOnAdapterItemDataSwapListener(this);
@@ -466,7 +467,7 @@ public class HighlightsFragment extends Fragment
     private void triggerLoad(boolean forceLoad) {
         if (getActivity() != null) {
             //Triggering only when attached to an Activity
-            LoaderManager loaderManager = getActivity().getSupportLoaderManager();
+            LoaderManager loaderManager = getLoaderManager();
             if (forceLoad) {
                 //When forcefully triggered, restart the loader
                 loaderManager.restartLoader(NewsHighlightsLoader.HIGHLIGHTS_LOADER, null, this);
@@ -539,7 +540,7 @@ public class HighlightsFragment extends Fragment
      * @param newsSectionInfos The List of {@link NewsSectionInfo} objects extracted by the Loader.
      */
     @Override
-    public void onLoadFinished(Loader<List<NewsSectionInfo>> loader, List<NewsSectionInfo> newsSectionInfos) {
+    public void onLoadFinished(@NonNull Loader<List<NewsSectionInfo>> loader, List<NewsSectionInfo> newsSectionInfos) {
         switch (loader.getId()) {
             case NewsHighlightsLoader.HIGHLIGHTS_LOADER:
                 if (getActivity() != null) {
@@ -578,7 +579,7 @@ public class HighlightsFragment extends Fragment
      * @param loader The Loader that is being reset.
      */
     @Override
-    public void onLoaderReset(Loader<List<NewsSectionInfo>> loader) {
+    public void onLoaderReset(@NonNull Loader<List<NewsSectionInfo>> loader) {
         //Creating an Empty list of NewsSectionInfo objects to clear the content in the Adapter
         ArrayList<NewsSectionInfo> newsSectionInfoList = new ArrayList<>();
         //Calling the Adapter's swap method to clear the data
@@ -617,6 +618,12 @@ public class HighlightsFragment extends Fragment
             mHeadlineTextView.setVisibility(View.GONE);
             mHeadlineContentDivider.setVisibility(View.GONE);
             mSwipeContainer.setVisibility(View.GONE);
+            //Clearing the RecyclerView Pool if present : START
+            RecyclerView.RecycledViewPool recycledViewPool = mRecyclerView.getRecycledViewPool();
+            if (recycledViewPool != null) {
+                recycledViewPool.clear();
+            }
+            //Clearing the RecyclerView Pool if present : END
         }
     }
 
@@ -726,7 +733,7 @@ public class HighlightsFragment extends Fragment
             //When attached to an Activity
 
             //Retrieving the current loader of the Fragment
-            LoaderManager loaderManager = getActivity().getSupportLoaderManager();
+            LoaderManager loaderManager = getLoaderManager();
             Loader<List<NewsSectionInfo>> loader = loaderManager.getLoader(NewsHighlightsLoader.HIGHLIGHTS_LOADER);
             if (loader != null) {
                 //When loader was previously registered with the loader id used
