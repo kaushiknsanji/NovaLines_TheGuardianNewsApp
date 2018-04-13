@@ -19,9 +19,6 @@ import java.util.Calendar;
 public class DatePickerPreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat
         implements DatePicker.OnDateChangedListener {
 
-    //Constant used for logs
-    private static final String LOG_TAG = DatePickerPreferenceDialogFragmentCompat.class.getSimpleName();
-
     //Bundle Key constants
     private static final String DATE_PICKER_YEAR_INT_KEY = "datePicker.year";
     private static final String DATE_PICKER_MONTH_INT_KEY = "datePicker.month";

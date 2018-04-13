@@ -24,9 +24,6 @@ public class NewsHighlightsLoader extends AsyncTaskLoader<List<NewsSectionInfo>>
     //Integer Constant of the Loader
     public final static int HIGHLIGHTS_LOADER = 1;
 
-    //Constant used for Logs
-    private static final String LOG_TAG = NewsHighlightsLoader.class.getSimpleName();
-
     //Saves the query result which is a List of NewsSectionInfo objects
     private List<NewsSectionInfo> mNewsSectionInfoList;
 

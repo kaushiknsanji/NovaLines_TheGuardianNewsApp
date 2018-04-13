@@ -25,9 +25,6 @@ import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
  */
 public class PaginationPresenter implements IGenericPresenter<IPaginationView> {
 
-    //Constant used for logs
-    private static final String LOG_TAG = PaginationPresenter.class.getSimpleName();
-
     //For the view that displays the Pagination Panel
     private IPaginationView mPaginationView;
     //For the Context of the Activity/Fragment

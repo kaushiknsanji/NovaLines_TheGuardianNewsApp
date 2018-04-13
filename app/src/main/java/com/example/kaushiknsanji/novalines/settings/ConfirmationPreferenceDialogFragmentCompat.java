@@ -12,9 +12,6 @@ import android.view.View;
  */
 public class ConfirmationPreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat {
 
-    //Constant used for logs
-    private static final String LOG_TAG = ConfirmationPreferenceDialogFragmentCompat.class.getSimpleName();
-
     /**
      * Static Constructor of the PreferenceDialogFragmentCompat {@link ConfirmationPreferenceDialogFragmentCompat}
      *

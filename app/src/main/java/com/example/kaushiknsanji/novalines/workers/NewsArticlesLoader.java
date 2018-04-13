@@ -18,9 +18,6 @@ import java.util.List;
  */
 public class NewsArticlesLoader extends AsyncTaskLoader<List<NewsArticleInfo>> {
 
-    //Constant used for Logs
-    private static final String LOG_TAG = NewsArticlesLoader.class.getSimpleName();
-
     //Saves the query result which is a List of NewsArticleInfo objects
     private List<NewsArticleInfo> mNewsArticleInfoList;
 

@@ -16,8 +16,6 @@ import com.example.kaushiknsanji.novalines.R;
  */
 public class NumberPickerPreference extends DialogPreference {
 
-    //Constant used for logs
-    private static final String LOG_TAG = NumberPickerPreference.class.getSimpleName();
     //Constant used as the default fallback value when the preference value is not available
     private static final int FALLBACK_VALUE = 1;
     //Stores the reference to the Number Picker Layout Resource

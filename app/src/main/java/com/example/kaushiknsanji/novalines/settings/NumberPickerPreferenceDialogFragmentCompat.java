@@ -16,9 +16,6 @@ import com.example.kaushiknsanji.novalines.R;
  */
 public class NumberPickerPreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat {
 
-    //Constant used for logs
-    private static final String LOG_TAG = NumberPickerPreferenceDialogFragmentCompat.class.getSimpleName();
-
     //Bundle Key constants
     private static final String NUMBER_PICKER_MAX_INT_KEY = "numberPicker.maxValue";
     private static final String NUMBER_PICKER_MIN_INT_KEY = "numberPicker.minValue";

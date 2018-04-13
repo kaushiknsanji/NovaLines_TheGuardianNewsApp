@@ -16,8 +16,6 @@ import com.example.kaushiknsanji.novalines.R;
  */
 public class ConfirmationPreference extends DialogPreference {
 
-    //Constant used for logs
-    private static final String LOG_TAG = ConfirmationPreference.class.getSimpleName();
     //Constant used as the Default fallback value when the preference value is not available
     private static final boolean FALLBACK_VALUE = false;
     //Stores the confirmation value given by the user

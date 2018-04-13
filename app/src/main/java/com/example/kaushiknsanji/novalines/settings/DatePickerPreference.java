@@ -18,8 +18,6 @@ import java.util.Calendar;
  */
 public class DatePickerPreference extends DialogPreference {
 
-    //Constant used for logs
-    private static final String LOG_TAG = DatePickerPreference.class.getSimpleName();
     //Constant used as the default fallback value when the preference value is not available
     private static final long FALLBACK_VALUE = Calendar.getInstance().getTimeInMillis();
     //Stores the reference to the Date Picker Layout Resource

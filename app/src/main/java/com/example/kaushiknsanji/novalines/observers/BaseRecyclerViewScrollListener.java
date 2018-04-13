@@ -13,9 +13,6 @@ import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
  */
 public abstract class BaseRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
 
-    //Constant used for logs
-    private static final String LOG_TAG = BaseRecyclerViewScrollListener.class.getSimpleName();
-
     //Flag to keep a tab on the scroll, whether it has reached the bottom or not
     //to avoid invoking callbacks multiple times
     private boolean mIsScrolledToBottomEnd = false;
