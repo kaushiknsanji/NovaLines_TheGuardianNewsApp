@@ -90,7 +90,7 @@ public class ImageDownloaderFragment extends Fragment
             LoaderManager loaderManager = ((FragmentActivity) mImageView.getContext()).getSupportLoaderManager();
             boolean isNewImageURLStr = false; //Boolean to check if we need to restart the loader
             Loader<Bitmap> loader = loaderManager.getLoader(loaderId); //Getting the loader at the loaderId
-            if (loader != null && loader instanceof ImageDownloader) {
+            if (loader instanceof ImageDownloader) {
                 //Validating the loader and casting to ImageDownloader
                 ImageDownloader imageDownloader = (ImageDownloader) loader;
                 //Checking for inequality of the Image URL with the one from the loader

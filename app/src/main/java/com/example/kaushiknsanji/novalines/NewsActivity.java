@@ -562,7 +562,7 @@ public class NewsActivity extends AppCompatActivity
 
             //Retrieving the fragment shown
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(HeadlinesFragment.NAV_FRAGMENT_TAG);
-            if (fragment != null && fragment instanceof HeadlinesFragment) {
+            if (fragment instanceof HeadlinesFragment) {
                 //Casting to HeadlinesFragment
                 HeadlinesFragment headlinesFragment = (HeadlinesFragment) fragment;
 

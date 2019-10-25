@@ -88,7 +88,7 @@ public class NoFeedResolutionFragment extends Fragment
 
         //Finding the No Feed Reason TextView to set the Font
         TextView noFeedReasonTextView = rootView.findViewById(R.id.no_feed_reason_text_id);
-        noFeedReasonTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.gabriela), Typeface.BOLD);
+        noFeedReasonTextView.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.gabriela), Typeface.BOLD);
 
         //Finding the RecyclerView to show the resolution items
         mRecyclerView = rootView.findViewById(R.id.no_feed_recycler_view_id);
@@ -109,7 +109,7 @@ public class NoFeedResolutionFragment extends Fragment
         List<String> resolutionButtonDrawablePathList = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.nf_resolution_btn_drawables)));
 
         //Adding resolution data specific to the requesting Parent Fragment: START
-        String parentFragmentTitleStr = getArguments().getString(PARENT_FRAG_TITLE_STR_KEY);
+        String parentFragmentTitleStr = getArguments() != null ? getArguments().getString(PARENT_FRAG_TITLE_STR_KEY) : null;
         if (parentFragmentTitleStr != null && parentFragmentTitleStr.equals(getString(R.string.random_news_title_str))) {
             //For RandomNewsFragment
             resolutionTextList.add(getString(R.string.nf_search_resolution_text));
@@ -144,7 +144,7 @@ public class NoFeedResolutionFragment extends Fragment
                         getResources().getIdentifier(
                                 resolutionButtonDrawablePathList.get(index).substring(startIndex + 1, endIndex),
                                 "drawable",
-                                getActivity().getPackageName()
+                                requireActivity().getPackageName()
                         )
                 );
             } else {
@@ -157,7 +157,7 @@ public class NoFeedResolutionFragment extends Fragment
         }
 
         //Initializing the Adapter with the data loaded
-        NoFeedResolutionAdapter noFeedResolutionAdapter = new NoFeedResolutionAdapter(getContext(), R.layout.no_feed_help_item, noFeedInfoList);
+        NoFeedResolutionAdapter noFeedResolutionAdapter = new NoFeedResolutionAdapter(requireContext(), R.layout.no_feed_help_item, noFeedInfoList);
 
         //Registering the OnAdapterItemResolutionButtonClickListener
         noFeedResolutionAdapter.setOnAdapterItemResolutionButtonClickListener(this);
@@ -183,7 +183,7 @@ public class NoFeedResolutionFragment extends Fragment
         infoCardTextView.setText(getString(R.string.no_feed_title_text));
         //Setting the Left Compound Drawable
         infoCardTextView.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(getContext(), R.drawable.ic_alert_orange),
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_alert_orange),
                 null, null, null
         );
         //Setting the Compound Drawable Padding
@@ -207,11 +207,11 @@ public class NoFeedResolutionFragment extends Fragment
             IntentUtility.openAppSettings(getContext());
         } else if (resolutionButtonText.equals(getString(R.string.nf_nw_settings_btn_text))) {
             //Launching Network Settings
-            IntentUtility.openNetworkSettings(getContext());
+            IntentUtility.openNetworkSettings(requireContext());
         } else if (resolutionButtonText.equals(getString(R.string.nf_refresh_btn_text))) {
             //Triggering a refresh based on the Parent Fragment type
             Fragment parentFragment = getParentFragment();
-            if (parentFragment != null && parentFragment instanceof IRefreshActionView) {
+            if (parentFragment instanceof IRefreshActionView) {
                 ((IRefreshActionView) parentFragment).triggerRefresh();
             }
         }

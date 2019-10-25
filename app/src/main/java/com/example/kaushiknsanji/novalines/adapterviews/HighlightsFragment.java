@@ -142,7 +142,7 @@ public class HighlightsFragment extends Fragment
         View rootView = inflater.inflate(R.layout.highlights_layout, container, false);
 
         //Retrieving the instance of SharedPreferences
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
         //Finding the headline text id
         mHeadlineTextView = rootView.findViewById(R.id.headline_text_id);
@@ -292,10 +292,12 @@ public class HighlightsFragment extends Fragment
                 //For the subscribe menu option
 
                 //Navigating to the MoreNewsFragment
-                ((HeadlinesFragment) getParentFragment()).openNewsCategoryTabByTitle(
-                        getString(R.string.more_news_tab_title_text),
-                        getString(R.string.more_news_tab_title_text)
-                );
+                if (getParentFragment() != null) {
+                    ((HeadlinesFragment) getParentFragment()).openNewsCategoryTabByTitle(
+                            getString(R.string.more_news_tab_title_text),
+                            getString(R.string.more_news_tab_title_text)
+                    );
+                }
                 return true;
             case R.id.settings_action_id:
                 //For the settings menu option
@@ -337,7 +339,7 @@ public class HighlightsFragment extends Fragment
                     String presetStartPeriodSelected = PreferencesUtility.getPresetStartPeriodValue(getContext(), mPreferences);
 
                     //Retrieving the list of values used in the "Preset Start Period" Preference
-                    String[] availablePresets = PreferencesUtility.getPossiblePresetStartPeriodValues(getContext());
+                    String[] availablePresets = PreferencesUtility.getPossiblePresetStartPeriodValues(requireContext());
 
                     if (presetStartPeriodSelected.equals(availablePresets[0])) {
                         //When the option selected was "Start of the Week"
@@ -409,7 +411,7 @@ public class HighlightsFragment extends Fragment
         ArrayList<NewsSectionInfo> newsSectionInfoList = new ArrayList<>();
 
         //Initializing the Adapter for the List view
-        mRecyclerAdapter = new HighlightsAdapter(getContext(), R.layout.highlights_item, getLoaderManager(), newsSectionInfoList);
+        mRecyclerAdapter = new HighlightsAdapter(requireContext(), R.layout.highlights_item, getLoaderManager(), newsSectionInfoList);
 
         //Registering the OnAdapterItemDataSwapListener
         mRecyclerAdapter.setOnAdapterItemDataSwapListener(this);
@@ -454,7 +456,7 @@ public class HighlightsFragment extends Fragment
         }
 
         //Setting the Font
-        mHeadlineTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.gabriela), Typeface.BOLD);
+        mHeadlineTextView.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.gabriela), Typeface.BOLD);
     }
 
     /**
@@ -527,7 +529,9 @@ public class HighlightsFragment extends Fragment
         switch (id) {
             case NewsHighlightsLoader.HIGHLIGHTS_LOADER:
                 //Returning the instance of NewsHighlightsLoader
-                return new NewsHighlightsLoader(getActivity(), ((HeadlinesFragment) getParentFragment()).getSubscribedNewsSectionIdsList());
+                return new NewsHighlightsLoader(requireActivity(),
+                        getParentFragment() != null ? ((HeadlinesFragment) getParentFragment()).getSubscribedNewsSectionIdsList() : null
+                );
             default:
                 return null;
         }
@@ -700,7 +704,9 @@ public class HighlightsFragment extends Fragment
     public void onItemClick(NewsSectionInfo newsSectionInfo) {
         Log.d(LOG_TAG, "onItemClick: Started");
         //Opening the News Category Tab for the News Section Title retrieved from the Item selected
-        ((HeadlinesFragment) getParentFragment()).openNewsCategoryTabByTitle(newsSectionInfo.getSectionName(), newsSectionInfo.getSectionId());
+        if (getParentFragment() != null) {
+            ((HeadlinesFragment) getParentFragment()).openNewsCategoryTabByTitle(newsSectionInfo.getSectionName(), newsSectionInfo.getSectionId());
+        }
     }
 
     /**
@@ -713,7 +719,7 @@ public class HighlightsFragment extends Fragment
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(PreferencesUtility.getStartPeriodKey(getContext()))) {
+        if (key.equals(PreferencesUtility.getStartPeriodKey(requireContext()))) {
             //When the Start Date of the News is changed
             Log.d(LOG_TAG, "onSharedPreferenceChanged: Updating " + key);
 
@@ -747,7 +753,7 @@ public class HighlightsFragment extends Fragment
                 long fromDatePrefInMillis = PreferencesUtility.getStartPeriodValue(getContext(), mPreferences, Calendar.getInstance().getTimeInMillis());
 
                 //Retrieving the current list of Subscribed News Category Ids
-                List<String> currSubsNewsSectionIds = ((HeadlinesFragment) getParentFragment()).getSubscribedNewsSectionIdsList();
+                List<String> currSubsNewsSectionIds = getParentFragment() != null ? ((HeadlinesFragment) getParentFragment()).getSubscribedNewsSectionIdsList() : null;
 
                 //Retrieving the current list of NewsSectionInfo objects from the Loader
                 List<NewsSectionInfo> newsSectionInfoListFromLoader = highlightsLoader.getNewsSectionInfoList();
@@ -759,7 +765,7 @@ public class HighlightsFragment extends Fragment
                     //Dispatching the content changed event to the loader to reload the content
                     highlightsLoader.onContentChanged();
 
-                } else if (newsSectionInfoListFromLoader != null && newsSectionInfoListFromLoader.size() != currSubsNewsSectionIds.size()) {
+                } else if (newsSectionInfoListFromLoader != null && currSubsNewsSectionIds != null && newsSectionInfoListFromLoader.size() != currSubsNewsSectionIds.size()) {
                     //If the number of items previously loaded does not match with
                     //that of the current list of Subscribed News Categories, then reload the data
                     triggerLoad(true);

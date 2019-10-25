@@ -23,7 +23,7 @@ public class NetworkUtility {
         //Retrieving the Connectivity Manager from the Context
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         //Retrieving the current active default data network
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        NetworkInfo activeNetworkInfo = connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
         //Checking the connectivity status and returning its state
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }

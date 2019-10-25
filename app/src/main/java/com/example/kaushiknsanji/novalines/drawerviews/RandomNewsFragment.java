@@ -227,13 +227,13 @@ public class RandomNewsFragment extends Fragment
         setupToolBar();
 
         //Retrieving the instance of SharedPreferences
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
         //Reading the List of Preference Keys to exclude while triggering the loader to load data
-        mKeysToExclude = PreferencesObserverUtility.getPreferenceKeysToExclude(getContext());
+        mKeysToExclude = PreferencesObserverUtility.getPreferenceKeysToExclude(requireContext());
 
         //Initializing the URL Generator for use with the NewsArticlesLoader
-        mUrlGenerator = new NewsURLGenerator(getContext());
+        mUrlGenerator = new NewsURLGenerator(requireContext());
 
         //Initializing the Array of Loader IDs: START
         mLoaderIds = new int[LOADER_COUNT_PER_FRAG];
@@ -567,7 +567,7 @@ public class RandomNewsFragment extends Fragment
         mInfoCardTextView.setText(getString(R.string.random_news_page_info_text));
         //Setting the Left Compound Drawable
         mInfoCardTextView.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(getContext(), R.drawable.ic_info_outline_orange),
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_info_outline_orange),
                 null, null, null
         );
         //Setting the Compound Drawable Padding
@@ -584,7 +584,7 @@ public class RandomNewsFragment extends Fragment
         //Setting the Html Text to be displayed
         TextAppearanceUtility.setHtmlText(infoTextView, getString(R.string.random_news_intro_text));
         //Setting the Font for the Text
-        infoTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.gabriela));
+        infoTextView.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.gabriela));
     }
 
     /**
@@ -593,10 +593,10 @@ public class RandomNewsFragment extends Fragment
      */
     private void setupToolBar() {
         //Setting the Toolbar as the ActionBar
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(mToolbar);
 
         //Retrieving the Action Bar
-        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        ActionBar supportActionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         if (supportActionBar != null) {
             //Removing the default title text
             supportActionBar.setDisplayShowTitleEnabled(false);
@@ -642,7 +642,7 @@ public class RandomNewsFragment extends Fragment
         ArrayList<NewsArticleInfo> newsArticleInfoList = new ArrayList<>();
 
         //Initializing the Adapter for the List view
-        mRecyclerAdapter = new ArticlesAdapter(getContext(), R.layout.news_article_item, getLoaderManager(), newsArticleInfoList, mLoaderIds);
+        mRecyclerAdapter = new ArticlesAdapter(requireContext(), R.layout.news_article_item, getLoaderManager(), newsArticleInfoList, mLoaderIds);
 
         //Registering the OnAdapterItemDataSwapListener
         mRecyclerAdapter.setOnAdapterItemDataSwapListener(this);
@@ -824,7 +824,7 @@ public class RandomNewsFragment extends Fragment
     @Override
     public void onItemClick(NewsArticleInfo newsArticleInfo) {
         //Launching the News Article in a Web Browser
-        IntentUtility.openLink(getContext(), newsArticleInfo.getWebUrl());
+        IntentUtility.openLink(requireContext(), newsArticleInfo.getWebUrl());
     }
 
     /**
@@ -1245,7 +1245,7 @@ public class RandomNewsFragment extends Fragment
          *                                    for when the vertical scroll reaches/leaves
          *                                    the last y items in RecyclerView
          */
-        public RecyclerViewScrollListener(Fragment fragment, int bottomYEndItemPosForTrigger) {
+        RecyclerViewScrollListener(Fragment fragment, int bottomYEndItemPosForTrigger) {
             super(bottomYEndItemPosForTrigger);
             this.fragment = fragment;
         }

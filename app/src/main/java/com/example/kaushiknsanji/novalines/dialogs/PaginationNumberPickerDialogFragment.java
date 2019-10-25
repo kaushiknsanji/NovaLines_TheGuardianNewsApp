@@ -92,9 +92,10 @@ public class PaginationNumberPickerDialogFragment extends DialogFragment
         NumberPicker numberPicker = numberPickerLayoutView.findViewById(R.id.page_number_picker_id);
 
         //Initializing the NumberPicker with its parameters
-        Bundle bundleArgs = getArguments();
-        numberPicker.setMinValue(bundleArgs.getInt(NUMBER_PICKER_MIN_VALUE_INT_KEY));
-        numberPicker.setMaxValue(bundleArgs.getInt(NUMBER_PICKER_MAX_VALUE_INT_KEY));
+        if (getArguments() != null) {
+            numberPicker.setMinValue(getArguments().getInt(NUMBER_PICKER_MIN_VALUE_INT_KEY));
+            numberPicker.setMaxValue(getArguments().getInt(NUMBER_PICKER_MAX_VALUE_INT_KEY));
+        }
 
         //Updating the preselected value of the NumberPicker: START
         if (savedInstanceState != null) {

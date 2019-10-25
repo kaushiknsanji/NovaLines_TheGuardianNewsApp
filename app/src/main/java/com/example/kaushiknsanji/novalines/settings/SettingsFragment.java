@@ -48,7 +48,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
         //Load Preferences from XML Resource
         addPreferencesFromResource(R.xml.preferences);
         //Get Context
-        mContext = getContext();
+        mContext = requireContext();
         //Bind Preferences' summary to their value: START
         bindPreferenceSummaryToValue(findPreference(PreferencesUtility.getSortByKey(mContext)));
         bindPreferenceSummaryToValue(findPreference(PreferencesUtility.getSortBasedOnKey(mContext)));
@@ -112,7 +112,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
         CheckBoxPreference spOverridePreference = (CheckBoxPreference) findPreference(PreferencesUtility.getStartPeriodOverrideKey(mContext));
 
         //Declaring the date instance for retrieving the date to be shown
-        Date fromDateSet = null;
+        Date fromDateSet;
         if (dateTimeInMillis == -1) {
             //Retrieving the DateTime value from the "from-date" key when DateTime is not passed
             DatePickerPreference datePickerPreference = (DatePickerPreference) findPreference(PreferencesUtility.getStartPeriodKey(mContext));
@@ -471,7 +471,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
             //Displaying the NumberPicker Dialog
             if (dialogFragment != null) {
                 dialogFragment.setTargetFragment(this, 0);
-                dialogFragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
+                dialogFragment.show(requireFragmentManager(), DIALOG_FRAGMENT_TAG);
             }
 
         } else if (preference instanceof DatePickerPreference) {
@@ -495,7 +495,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
             //Displaying the DatePicker Dialog
             if (dialogFragment != null) {
                 dialogFragment.setTargetFragment(this, 0);
-                dialogFragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
+                dialogFragment.show(requireFragmentManager(), DIALOG_FRAGMENT_TAG);
             }
 
         } else if (preference instanceof ConfirmationPreference) {
@@ -513,7 +513,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
             //Displaying the Confirmation Dialog
             if (dialogFragment != null) {
                 dialogFragment.setTargetFragment(this, 0);
-                dialogFragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
+                dialogFragment.show(requireFragmentManager(), DIALOG_FRAGMENT_TAG);
             }
 
         } else {
@@ -528,6 +528,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
      * @return <b>TRUE</b> when there is a Dialog active and shown; <b>FALSE</b> otherwise
      */
     private boolean anyDialogActive() {
-        return (getFragmentManager().findFragmentByTag(DIALOG_FRAGMENT_TAG) != null);
+        return (requireFragmentManager().findFragmentByTag(DIALOG_FRAGMENT_TAG) != null);
     }
 }

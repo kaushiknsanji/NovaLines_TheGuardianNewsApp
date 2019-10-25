@@ -209,7 +209,9 @@ public class MoreNewsFragment extends Fragment
                 //For the subscribe menu option
 
                 //Launching an activity to allow the user to subscribe to the News Feeds of their choice
-                ((HeadlinesFragment) getParentFragment()).subscribeMoreNews();
+                if (getParentFragment() != null) {
+                    ((HeadlinesFragment) getParentFragment()).subscribeMoreNews();
+                }
                 return true;
             case R.id.settings_action_id:
                 //For the settings menu option
@@ -264,7 +266,7 @@ public class MoreNewsFragment extends Fragment
 
         //Setting the Left Compound Drawable
         mInfoCardTextView.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(getContext(), R.drawable.ic_info_outline_orange),
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_info_outline_orange),
                 null, null, null
         );
         //Setting the Compound Drawable Padding
@@ -290,7 +292,7 @@ public class MoreNewsFragment extends Fragment
         }
 
         //Setting the Font
-        mMessageTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.gabriela));
+        mMessageTextView.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.gabriela));
     }
 
     /**
@@ -328,12 +330,16 @@ public class MoreNewsFragment extends Fragment
                 if (TextUtils.isEmpty(mNewsTopicNameRequested)) {
                     //On the Default content, launching an activity
                     //to allow the user to subscribe to the News Feeds of their choice
-                    ((HeadlinesFragment) getParentFragment()).subscribeMoreNews();
+                    if (getParentFragment() != null) {
+                        ((HeadlinesFragment) getParentFragment()).subscribeMoreNews();
+                    }
                 } else {
                     //Else, subscribing the News Feed requested
-                    ((HeadlinesFragment) getParentFragment()).subscribeAndLaunchNewsCategory(
-                            mNewsTopicNameRequested, mNewsTopicIdRequested
-                    );
+                    if (getParentFragment() != null) {
+                        ((HeadlinesFragment) getParentFragment()).subscribeAndLaunchNewsCategory(
+                                mNewsTopicNameRequested, mNewsTopicIdRequested
+                        );
+                    }
                 }
                 break;
         }

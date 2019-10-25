@@ -1,6 +1,7 @@
 package com.example.kaushiknsanji.novalines.workers;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.content.AsyncTaskLoader;
 
 import com.example.kaushiknsanji.novalines.models.NewsSectionInfo;
@@ -42,7 +43,7 @@ public class NewsHighlightsLoader extends AsyncTaskLoader<List<NewsSectionInfo>>
      * @param context is the reference to Activity Context
      * @param subscribedNewsSectionIdsList is a List of Ids of the Subscribed News Categories
      */
-    public NewsHighlightsLoader(Context context, ArrayList<String> subscribedNewsSectionIdsList) {
+    public NewsHighlightsLoader(Context context, @Nullable ArrayList<String> subscribedNewsSectionIdsList) {
         super(context);
         mSubscribedNewsSectionIdsList = subscribedNewsSectionIdsList;
     }

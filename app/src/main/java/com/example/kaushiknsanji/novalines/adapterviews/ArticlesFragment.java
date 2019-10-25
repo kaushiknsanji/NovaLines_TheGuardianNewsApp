@@ -191,8 +191,8 @@ public class ArticlesFragment extends Fragment
 
         //Retrieving the Bundle arguments passed
         Bundle arguments = getArguments();
-        mNewsTopicId = arguments.getString(NEWS_TOPIC_ID_STRING_KEY);
-        int fragmentPosId = arguments.getInt(FRAGMENT_POS_INDEX_INT_KEY);
+        mNewsTopicId = arguments != null ? arguments.getString(NEWS_TOPIC_ID_STRING_KEY) : "";
+        int fragmentPosId = arguments != null ? arguments.getInt(FRAGMENT_POS_INDEX_INT_KEY) : 0;
         int fragmentId = getId(); //Getting the current Fragment ID constant
 
         if (!mNewsTopicId.equals(getString(R.string.top_stories_section_id))
@@ -221,13 +221,13 @@ public class ArticlesFragment extends Fragment
         setupRecyclerView();
 
         //Retrieving the instance of SharedPreferences
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
         //Reading the List of Preference Keys to exclude while triggering the loader to load data
         mKeysToExclude = PreferencesObserverUtility.getPreferenceKeysToExclude(getContext());
 
         //Initializing the URL Generator for use with the NewsArticlesLoader
-        mUrlGenerator = new NewsURLGenerator(getContext());
+        mUrlGenerator = new NewsURLGenerator(requireContext());
 
         //Finding the "Error View"
         mErrorView = rootView.findViewById(R.id.error_frame_id);
@@ -249,7 +249,9 @@ public class ArticlesFragment extends Fragment
                 mLastViewedPageIndex = savedInstanceState.getInt(LAST_VIEWED_PAGE_INT_KEY);
 
                 //Updating the state of Pagination Buttons on load
-                ((HeadlinesFragment) getParentFragment()).updatePaginationButtonsState();
+                if (getParentFragment() != null) {
+                    ((HeadlinesFragment) getParentFragment()).updatePaginationButtonsState();
+                }
             }
 
             //Restoring the value of the position of the top Adapter item position previously visible
@@ -417,7 +419,7 @@ public class ArticlesFragment extends Fragment
         ArrayList<NewsArticleInfo> newsArticleInfoList = new ArrayList<>();
 
         //Initializing the Adapter for the List view
-        mRecyclerAdapter = new ArticlesAdapter(getContext(), R.layout.news_article_item, getLoaderManager(), newsArticleInfoList, mLoaderIds, mNewsTopicId);
+        mRecyclerAdapter = new ArticlesAdapter(requireContext(), R.layout.news_article_item, getLoaderManager(), newsArticleInfoList, mLoaderIds, mNewsTopicId);
 
         //Registering the OnAdapterItemDataSwapListener
         mRecyclerAdapter.setOnAdapterItemDataSwapListener(this);
@@ -489,7 +491,9 @@ public class ArticlesFragment extends Fragment
             if (PreferencesUtility.getStartPageIndex(getContext(), mPreferences) > 1) {
                 //When not on first page, reset the 'page' setting value to 1
                 //to refresh the content and show the first page
-                ((HeadlinesFragment) getParentFragment()).resetStartPageIndex();
+                if (getParentFragment() != null) {
+                    ((HeadlinesFragment) getParentFragment()).resetStartPageIndex();
+                }
             } else {
                 //Else, forcefully trigger a new data load
                 triggerLoad(true);
@@ -553,33 +557,35 @@ public class ArticlesFragment extends Fragment
      * based on the position of the currently visible item at the top
      */
     public void checkAndEnablePaginationPanel() {
-        if (mIsPaginatedView) {
-            //For Paginated Results
+        if (getParentFragment() != null) {
+            if (mIsPaginatedView) {
+                //For Paginated Results
 
-            //Retrieving the current number of items in the RecyclerView
-            int totalItems = mRecyclerAdapter.getItemCount();
+                //Retrieving the current number of items in the RecyclerView
+                int totalItems = mRecyclerAdapter.getItemCount();
 
-            if (totalItems == 0) {
-                //Hiding the Pagination panel for no items
-                ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
-            } else if ((totalItems - VSCROLL_PAGINATION_TRIGGER_POS) <= 0) {
-                //Displaying the Pagination panel by default when the number of items are less
-                ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, true);
-            } else {
-                //When there are considerable number of items
-                if (mVisibleItemViewPosition >= totalItems - VSCROLL_PAGINATION_TRIGGER_POS) {
-                    //Displaying the Pagination panel when the Bottom Y items are reached
+                if (totalItems == 0) {
+                    //Hiding the Pagination panel for no items
+                    ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
+                } else if ((totalItems - VSCROLL_PAGINATION_TRIGGER_POS) <= 0) {
+                    //Displaying the Pagination panel by default when the number of items are less
                     ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, true);
                 } else {
-                    //Hiding the Pagination panel when away from the Bottom Y items
-                    ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
+                    //When there are considerable number of items
+                    if (mVisibleItemViewPosition >= totalItems - VSCROLL_PAGINATION_TRIGGER_POS) {
+                        //Displaying the Pagination panel when the Bottom Y items are reached
+                        ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, true);
+                    } else {
+                        //Hiding the Pagination panel when away from the Bottom Y items
+                        ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
+                    }
+
                 }
 
+            } else {
+                //Hiding the Pagination panel by default for Single Page Results
+                ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
             }
-
-        } else {
-            //Hiding the Pagination panel by default for Single Page Results
-            ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
         }
     }
 
@@ -621,7 +627,9 @@ public class ArticlesFragment extends Fragment
                     //and the current fragment is the one being viewed by the user
 
                     //Resetting the 'endIndex' preference setting value to the last page index determined
-                    ((HeadlinesFragment) getParentFragment()).resetEndPageIndex(mLastPageIndex);
+                    if (getParentFragment() != null) {
+                        ((HeadlinesFragment) getParentFragment()).resetEndPageIndex(mLastPageIndex);
+                    }
                 }
 
             } else {
@@ -645,7 +653,9 @@ public class ArticlesFragment extends Fragment
                     if (mIsPaginatedView && PreferencesUtility.getStartPageIndex(getContext(), mPreferences) > 1) {
                         //When not on first page, reset the 'page' setting value to 1,
                         //to refresh the content and show the first page if possible
-                        ((HeadlinesFragment) getParentFragment()).resetStartPageIndex();
+                        if (getParentFragment() != null) {
+                            ((HeadlinesFragment) getParentFragment()).resetStartPageIndex();
+                        }
 
                     } else {
                         //Otherwise, displaying the "No Feed Layout" when there is no data
@@ -686,7 +696,9 @@ public class ArticlesFragment extends Fragment
         //Ensuring the Progress is always not shown in this case
         mSwipeContainer.setRefreshing(false);
         //Hiding the Pagination Panel
-        ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
+        if (getParentFragment() != null) {
+            ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
+        }
         //Hiding other components
         enableDefaultComponents(false);
     }
@@ -704,7 +716,9 @@ public class ArticlesFragment extends Fragment
         //Ensuring the Progress is always not shown in this case
         mSwipeContainer.setRefreshing(false);
         //Hiding the Pagination Panel
-        ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
+        if (getParentFragment() != null) {
+            ((HeadlinesFragment) getParentFragment()).showPaginationPanel(this, false);
+        }
         //Hiding other components
         enableDefaultComponents(false);
     }
@@ -823,7 +837,7 @@ public class ArticlesFragment extends Fragment
     @Override
     public void onItemClick(NewsArticleInfo newsArticleInfo) {
         //Launching the News Article in a Web Browser
-        IntentUtility.openLink(getContext(), newsArticleInfo.getWebUrl());
+        IntentUtility.openLink(requireContext(), newsArticleInfo.getWebUrl());
     }
 
     /**
@@ -882,7 +896,9 @@ public class ArticlesFragment extends Fragment
     @Override
     public void onOpenNewsSectionRequest(NewsArticleInfo newsArticleInfo) {
         //Opening the News Category Tab for the News Section requested
-        ((HeadlinesFragment) getParentFragment()).openNewsCategoryTabByTitle(newsArticleInfo.getSectionName(), newsArticleInfo.getSectionId());
+        if (getParentFragment() != null) {
+            ((HeadlinesFragment) getParentFragment()).openNewsCategoryTabByTitle(newsArticleInfo.getSectionName(), newsArticleInfo.getSectionId());
+        }
     }
 
     /**
@@ -901,7 +917,7 @@ public class ArticlesFragment extends Fragment
 
             if (getUserVisibleHint()) {
                 //When the current fragment is the one viewed by the user
-                if (key.equals(PreferencesUtility.getStartPageIndexKey(getContext()))) {
+                if (key.equals(PreferencesUtility.getStartPageIndexKey(requireContext()))) {
                     //On the change in 'page' setting value
 
                     //Saving the 'page' setting value as the index of the last page viewed
@@ -963,7 +979,7 @@ public class ArticlesFragment extends Fragment
      */
     @Override
     public View getRootView() {
-        return getParentFragment().getView();
+        return getParentFragment() != null ? getParentFragment().getView() : null;
     }
 
     /**
@@ -983,7 +999,7 @@ public class ArticlesFragment extends Fragment
          *                                    for when the vertical scroll reaches/leaves
          *                                    the last y items in RecyclerView
          */
-        public RecyclerViewScrollListener(Fragment fragment, int bottomYEndItemPosForTrigger) {
+        RecyclerViewScrollListener(Fragment fragment, int bottomYEndItemPosForTrigger) {
             super(bottomYEndItemPosForTrigger);
             this.fragment = fragment;
         }
@@ -999,7 +1015,9 @@ public class ArticlesFragment extends Fragment
         @Override
         public void onBottomReached(int verticalScrollAmount) {
             //Propagating the call to the Parent Fragment - HeadlinesFragment
-            ((HeadlinesFragment) getParentFragment()).showPaginationPanel(fragment, verticalScrollAmount > 0);
+            if (getParentFragment() != null) {
+                ((HeadlinesFragment) getParentFragment()).showPaginationPanel(fragment, verticalScrollAmount > 0);
+            }
         }
 
     }

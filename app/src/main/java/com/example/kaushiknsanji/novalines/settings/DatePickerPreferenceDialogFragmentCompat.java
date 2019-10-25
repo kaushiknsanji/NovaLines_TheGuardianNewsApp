@@ -106,10 +106,12 @@ public class DatePickerPreferenceDialogFragmentCompat extends PreferenceDialogFr
         if (mYear == -1 && mMonth == -1 && mDay == -1) {
             //When Year, Month and Day are NOT initialized
             //Retrieving the values from the Bundle arguments
-            Bundle bundleArgs = getArguments();
-            mYear = bundleArgs.getInt(DATE_PICKER_YEAR_INT_KEY);
-            mMonth = bundleArgs.getInt(DATE_PICKER_MONTH_INT_KEY);
-            mDay = bundleArgs.getInt(DATE_PICKER_DAY_INT_KEY);
+            if (getArguments() != null) {
+                Bundle bundleArgs = getArguments();
+                mYear = bundleArgs.getInt(DATE_PICKER_YEAR_INT_KEY);
+                mMonth = bundleArgs.getInt(DATE_PICKER_MONTH_INT_KEY);
+                mDay = bundleArgs.getInt(DATE_PICKER_DAY_INT_KEY);
+            }
         }
         mDatePicker.init(mYear, mMonth, mDay, this);
 

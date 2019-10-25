@@ -155,7 +155,7 @@ public class FavoritesFragment extends Fragment {
         mInfoCardTextView.setText(getString(R.string.not_implemented_text_info));
         //Setting the Left Compound Drawable
         mInfoCardTextView.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(getContext(), R.drawable.ic_info_outline_orange),
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_info_outline_orange),
                 null, null, null
         );
         //Setting the Compound Drawable Padding
@@ -169,7 +169,7 @@ public class FavoritesFragment extends Fragment {
         //Setting the Html Text to be displayed for No Results
         TextAppearanceUtility.setHtmlText(mNoResultsTextView, getString(R.string.favorite_no_results_text));
         //Setting the Font for the Text
-        mNoResultsTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.gabriela));
+        mNoResultsTextView.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.gabriela));
         //Replacing the placeholder for drawables in Text with their corresponding image
         TextAppearanceUtility.replaceTextWithImage(getContext(), mNoResultsTextView);
     }
@@ -180,10 +180,10 @@ public class FavoritesFragment extends Fragment {
      */
     private void setupToolBar() {
         //Setting the Toolbar as the ActionBar
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(mToolbar);
 
         //Retrieving the Action Bar
-        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        ActionBar supportActionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         if (supportActionBar != null) {
             //Removing the default title text
             supportActionBar.setDisplayShowTitleEnabled(false);

@@ -89,9 +89,10 @@ public class NumberPickerPreferenceDialogFragmentCompat extends PreferenceDialog
         }
 
         //Setting the Min and Max values for the NumberPicker
-        Bundle bundleArgs = getArguments();
-        mNumberPicker.setMinValue(bundleArgs.getInt(NUMBER_PICKER_MIN_INT_KEY));
-        mNumberPicker.setMaxValue(bundleArgs.getInt(NUMBER_PICKER_MAX_INT_KEY));
+        if (getArguments() != null) {
+            mNumberPicker.setMinValue(getArguments().getInt(NUMBER_PICKER_MIN_INT_KEY));
+            mNumberPicker.setMaxValue(getArguments().getInt(NUMBER_PICKER_MAX_INT_KEY));
+        }
 
         //Setting the value of NumberPicker if previously set
         mNumberPicker.setValue(mNumberPickerValue > 0 ? mNumberPickerValue : getNumberPickerPreference().getValue());

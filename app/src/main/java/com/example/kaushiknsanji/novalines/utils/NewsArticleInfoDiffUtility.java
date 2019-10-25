@@ -31,11 +31,12 @@ public class NewsArticleInfoDiffUtility extends DiffUtil.Callback {
     public static final String PAYLOAD_ARTICLE_IMAGE_LINK_STR_KEY = "Payload.ArticleImageLink";
     //For the Trailing text of the News Headline
     public static final String PAYLOAD_ARTICLE_TRAIL_TEXT_STR_KEY = "Payload.ArticleTrailText";
+    //Bundle key constants used for the changes in payload content: END
+
     //Stores the Current list of NewsArticleInfo objects
     private List<NewsArticleInfo> mOldArticleInfoList;
     //Stores the New list of NewsArticleInfo objects
     private List<NewsArticleInfo> mNewArticleInfoList;
-    //Bundle key constants used for the changes in payload content: END
 
     /**
      * Constructor of {@link NewsArticleInfoDiffUtility}

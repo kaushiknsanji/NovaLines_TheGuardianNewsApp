@@ -115,7 +115,7 @@ public class HeadlinesFragment extends Fragment
         setupToolBar();
 
         //Retrieving the instance of SharedPreferences
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
         //ViewPager for swiping through the Fragments
         mViewPager = rootView.findViewById(R.id.view_pager_id);
@@ -348,10 +348,10 @@ public class HeadlinesFragment extends Fragment
      */
     private void setupToolBar() {
         //Setting the Toolbar as the ActionBar
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(mToolbar);
 
         //Retrieving the Action Bar
-        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        ActionBar supportActionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         if (supportActionBar != null) {
             //Removing the default title text
             supportActionBar.setDisplayShowTitleEnabled(false);
@@ -505,7 +505,7 @@ public class HeadlinesFragment extends Fragment
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(PreferencesUtility.getStartPageIndexKey(getContext())) || key.equals(PreferencesUtility.getLastPageIndexKey(getContext()))) {
+        if (key.equals(PreferencesUtility.getStartPageIndexKey(requireContext())) || key.equals(PreferencesUtility.getLastPageIndexKey(requireContext()))) {
             //When the 'page' (Page to Display) setting  or the 'endIndex' setting value is changed
             Log.d(LOG_TAG, "onSharedPreferenceChanged: Updating " + key);
 

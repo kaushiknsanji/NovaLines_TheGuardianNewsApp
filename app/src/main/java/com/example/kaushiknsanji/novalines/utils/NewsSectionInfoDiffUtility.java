@@ -23,11 +23,12 @@ public class NewsSectionInfoDiffUtility extends DiffUtil.Callback {
     public static final String PAYLOAD_ARTICLE_COUNT_INT_KEY = "Payload.ArticleCount";
     //For the Section Name
     public static final String PAYLOAD_SECTION_NAME_STR_KEY = "Payload.SectionName";
+    //Bundle key constants used for the changes in payload content: END
+
     //Stores the Current list of NewsSectionInfo objects
     private List<NewsSectionInfo> mOldSectionInfoList;
     //Stores the New list of NewsSectionInfo objects
     private List<NewsSectionInfo> mNewSectionInfoList;
-    //Bundle key constants used for the changes in payload content: END
 
     /**
      * Constructor of {@link NewsSectionInfoDiffUtility}

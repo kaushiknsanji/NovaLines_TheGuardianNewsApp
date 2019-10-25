@@ -67,7 +67,7 @@ public class NetworkErrorFragment extends Fragment
         //Replacing the placeholder for drawables in Text with their corresponding image
         TextAppearanceUtility.replaceTextWithImage(getContext(), networkErrorMsgTextView);
         //Setting the Font
-        networkErrorMsgTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.gabriela));
+        networkErrorMsgTextView.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.gabriela));
 
         //Finding the Network Settings button to set the listener
         Button networkSettingsButton = rootView.findViewById(R.id.network_settings_btn_id);
@@ -87,7 +87,7 @@ public class NetworkErrorFragment extends Fragment
         infoCardTextView.setText(getString(R.string.nw_error_title_text));
         //Setting the Left Compound Drawable
         infoCardTextView.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(getContext(), R.drawable.ic_alert_orange),
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_alert_orange),
                 null, null, null
         );
         //Setting the Compound Drawable Padding
@@ -105,7 +105,7 @@ public class NetworkErrorFragment extends Fragment
         switch (view.getId()) {
             case R.id.network_settings_btn_id:
                 //Launching Network Settings on click of this button
-                IntentUtility.openNetworkSettings(getContext());
+                IntentUtility.openNetworkSettings(requireContext());
                 break;
         }
     }
