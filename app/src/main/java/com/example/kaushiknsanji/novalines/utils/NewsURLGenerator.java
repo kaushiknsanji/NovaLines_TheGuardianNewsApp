@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.kaushiknsanji.novalines.BuildConfig;
 import com.example.kaushiknsanji.novalines.R;
 
 import java.net.MalformedURLException;
@@ -35,7 +36,8 @@ public class NewsURLGenerator {
     private static final String SEARCH_PATH_SEGMENT = "search";
     //Constants for the API KEY Query Parameter used for requesting data
     private static final String API_KEY_PARAM_NAME = "api-key";
-    private static final String API_KEY_PARAM_VALUE = "test";
+    private static final String API_KEY_PARAM_VALUE = BuildConfig.GUARDIAN_API_KEY; //The Actual API KEY value
+    private static final String API_KEY_PARAM_VALUE_DEMO = "test"; //The Demo API KEY used when Actual Key is not available
     //Stores reference to App Context
     private Context mAppContext;
     //Stores whether the URL Generation is required for only Article Count purposes
@@ -153,7 +155,11 @@ public class NewsURLGenerator {
      * @param uriBuilder is the Builder of URI which has some prebuilt URI
      */
     private void appendApiKeyParam(Uri.Builder uriBuilder) {
-        uriBuilder.appendQueryParameter(API_KEY_PARAM_NAME, API_KEY_PARAM_VALUE);
+        uriBuilder.appendQueryParameter(
+                API_KEY_PARAM_NAME,
+                //Using the Actual API KEY when available
+                TextUtils.isEmpty(API_KEY_PARAM_VALUE) ? API_KEY_PARAM_VALUE_DEMO : API_KEY_PARAM_VALUE
+        );
     }
 
     /**

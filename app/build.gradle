@@ -1,16 +1,28 @@
 apply plugin: 'com.android.application'
 
+// Load the details for Application properties
+def appPropertiesFile = rootProject.file("application.properties")
+def appProperties = new Properties()
+appProperties.load(new FileInputStream(appPropertiesFile))
+
 android {
-    compileSdkVersion 27
-    buildToolsVersion '26.0.2'
+    // Constants defined for use with buildConfigField
+    def STRING = "String"
+    def GUARDIAN_API_KEY = "GUARDIAN_API_KEY"
+    def GUARDIAN_API_KEY_VAL = '"' + appProperties['GUARDIAN_API_KEY_VAL'] + '"'
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.example.kaushiknsanji.novalines"
-        minSdkVersion 15
-        targetSdkVersion 27
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // Use the defined API KEY
+        buildConfigField STRING, GUARDIAN_API_KEY, GUARDIAN_API_KEY_VAL
     }
     buildTypes {
         release {
@@ -22,15 +34,21 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+
+    //Support Library dependencies
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:design:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:preference-v7:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:preference-v14:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
+
+    //ConstraintLayout Library dependency
+    implementation "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
+
+    //Test dependencies
+    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoCoreVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'com.android.support:preference-v7:27.1.1'
-    implementation 'com.android.support:preference-v14:27.1.1'
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
-    androidTestImplementation 'junit:junit:4.12'
 }
