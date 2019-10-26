@@ -21,11 +21,25 @@ def appPropertiesFile = rootProject.file("application.properties")
 def appProperties = new Properties()
 appProperties.load(new FileInputStream(appPropertiesFile))
 
+// Load the details for signing the APK
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     // Constants defined for use with buildConfigField
     def STRING = "String"
     def GUARDIAN_API_KEY = "GUARDIAN_API_KEY"
     def GUARDIAN_API_KEY_VAL = '"' + appProperties['GUARDIAN_API_KEY_VAL'] + '"'
+
+    signingConfigs {
+        release {
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+    }
 
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
@@ -36,14 +50,16 @@ android {
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        archivesBaseName = "$applicationId-v$versionName"
 
         // Use the defined API KEY
         buildConfigField STRING, GUARDIAN_API_KEY, GUARDIAN_API_KEY_VAL
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }

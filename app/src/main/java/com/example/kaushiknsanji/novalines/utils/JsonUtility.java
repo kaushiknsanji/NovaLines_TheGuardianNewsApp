@@ -122,7 +122,7 @@ public class JsonUtility {
         //Reading the response through BufferedReader
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnectionInputStream));
         try {
-            String readStr = "";
+            String readStr;
             while ((readStr = bufferedReader.readLine()) != null) {
                 //When Not Null, appending the line read to the Builder
                 responseBuilder.append(readStr);
