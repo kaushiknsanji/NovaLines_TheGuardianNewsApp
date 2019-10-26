@@ -1,12 +1,25 @@
 # NovaLines - TheGuardianNewsApp
 
-This App has been developed as part of the **Udacity Android Basics Nanodegree Course** for the Exercise Project **"News Feed App"**. App connects to the [Guardian News API](https://content.guardianapis.com/) to retrieve the News Feed based on the particular endpoint used and then displays them as a list.
+![GitHub](https://img.shields.io/github/license/kaushiknsanji/NovaLines_TheGuardianNewsApp)  ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/kaushiknsanji/NovaLines_TheGuardianNewsApp)  ![GitHub repo size](https://img.shields.io/github/repo-size/kaushiknsanji/NovaLines_TheGuardianNewsApp)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/kaushiknsanji/NovaLines_TheGuardianNewsApp)  ![GitHub All Releases](https://img.shields.io/github/downloads/kaushiknsanji/NovaLines_TheGuardianNewsApp/total) ![GitHub search hit counter](https://img.shields.io/github/search/kaushiknsanji/NovaLines_TheGuardianNewsApp/News%20App) ![Minimum API level](https://img.shields.io/badge/API-15+-yellow)
+
+This App has been developed as part of the **Udacity Android Basics Nanodegree Course** for the Exercise Project **"News Feed App"**. App connects to the [Guardian News API](https://open-platform.theguardian.com/documentation/) to retrieve the News Feed based on the particular endpoint used and then displays them as a list.
 
 ---
 
 ## App Compatibility
 
 Android device running with Android OS 4.0.4 (API Level 15) or above. Best experienced on Android Nougat 7.1 and above. Designed for Phones and NOT for Tablets.
+
+---
+
+## Getting Started
+
+* Register for the Developer API Key from the [Guardian Open Platform](https://open-platform.theguardian.com/access/). Registration is free of cost.
+* Create a Properties File named **application.properties** in the Project's root folder.
+* Define a property named **GUARDIAN_API_KEY_VAL** and assign it the value of the API Key obtained from the Registration process.
+* If the above API Key is not defined, then the App will use the default **"test"** API Key which is heavily rate-limited. Whenever the rate-limit is hit, the app may crash or not display proper results.
+* The Developer API Key is also rate-limited, but not as limited as the default **"test"** API Key.
 
 ---
 
@@ -34,16 +47,17 @@ Android device running with Android OS 4.0.4 (API Level 15) or above. Best exper
 ### Things explored/developed in addition to the above defined Rubric
 
 * Used `RecyclerView` in place of `ListView` (to display the News stories) for its advantages in performance and easy placeholders for custom item decoration.
-* Custom `RecyclerView.ItemDecoration` for adding space between the News List items.
+* Custom [RecyclerView.ItemDecoration](/app/src/main/java/com/example/kaushiknsanji/novalines/utils/RecyclerViewItemDecorUtility.java) for adding space between the News List items.
 * `CardView` for displaying the News stories content for each News List items.
-* Navigation Drawer Items implemented using `RecyclerView`.
-* Explored `FragmentStatePagerAdapter` that displays the Fragments \(retaining their state\) for the `ViewPager`. Also, mocks the dynamic adding of additional tab content to the `ViewPager`.
-* Implemented `android.support.v7.preference.Preference` Preferences for the Settings.
-* No external libraries are used for communicating with the REST API and also for loading the images. `AsyncTaskLoader` has been used for downloading the data and images in the background thread.
+* Custom Navigation Drawer Items implemented using `RecyclerView`.
+* Explored [FragmentStatePagerAdapter](/app/src/main/java/com/example/kaushiknsanji/novalines/adapters/HeadlinesPagerAdapter.java) that displays the Fragments \(retaining their state\) for the `ViewPager`. Also, mocks the dynamic adding of additional tab content to the `ViewPager`.
+* Implemented Settings using `android.support.v7.preference.Preference`.
+* No external libraries are used for communicating with the REST API and also for loading the images. `AsyncTaskLoader` has been used for downloading the data and images in the background thread. Images are downloaded using a Headless [Fragment](/app/src/main/java/com/example/kaushiknsanji/novalines/workers/ImageDownloaderFragment.java).
+* Developed [BitmapImageCache](/app/src/main/java/com/example/kaushiknsanji/novalines/cache/BitmapImageCache.java) utility that uses `android.util.LruCache` to cache the recent Bitmap Images downloaded.
 * Most layouts are designed using `ConstraintLayout` to flatten the layout hierarchy as far as possible.
-* Spannables for decorating `TextViews` - [TextAppearanceUtility](/app/src/main/java/com/example/kaushiknsanji/novalines/utils/TextAppearanceUtility.java) with image within text, html content in text.
-* Custom Fonts for `TextViews` using `ResourceCompat`
-* Explored `CoordinatorLayout`
+* [TextAppearanceUtility](/app/src/main/java/com/example/kaushiknsanji/novalines/utils/TextAppearanceUtility.java) for decorating `TextViews` using Spannables, for image within text and html content in text.
+* Custom Fonts for `TextViews` using `ResourceCompat`.
+* Explored `CoordinatorLayout`.
 * Used `RecyclerView` in a `SwipeRefreshLayout` to use the integrated Progress/Refresh indicator.
 * Used `DiffUtil` in `RecyclerView` to help rebind only the item views that have changed.
 
@@ -249,10 +263,51 @@ This can be viewed by going into the Drawer menu item **"About"** of the `NewsAc
 <!-- Image for About page -->
 <img src="https://user-images.githubusercontent.com/26028981/38467715-f911b228-3b59-11e8-9945-e3089e880188.png" width="40%" />
 
+---
+
+## Bugs Found within the API
+
+* Any News Article with the Topic **"Global"** when subscribed is currently causing a crash, since **"Global"** is not found to be there in any of the Sections supported by the Guardian News API. We do have something called as **"Global development"**, but this is different.
+
+---
+
+## Branches in this Repository
+
+* **[udacity](https://github.com/kaushiknsanji/NovaLines_TheGuardianNewsApp/tree/udacity)**
+	* Contains the code submitted for review.
+	* Updated Gradle version, made related changes and applied valid lint corrections.
+	* Added Copyright info.
+	* Regenerated App Icons.
+	
+---
+
+## Icon and Image credits
+
+* Some of the Icons used are from [Icons8](https://icons8.com) and from [Material Design Icons](https://materialdesignicons.com/).
+* App Icon and Navigation Header Image were self made.
+
+---
+
 ## Review from the Reviewer (Udacity)
 
 ![review](https://user-images.githubusercontent.com/26028981/38767016-63bfb7b2-3ff8-11e8-86cf-2930a6fc14fc.PNG)
 
-## Bugs Found
+---
 
-* Any News Article with the Topic **"Global"** when subscribed is currently causing a crash, since **"Global"** is not found to be there in any of the Sections supported by the Guardian News API. We do have something called as **"Global development"**, but this is different.
+## License
+
+```
+Copyright 2018 Kaushik N. Sanji
+
+Licensed under the Apache License, Version 2.0 (the "License"); 
+you may not use this file except in compliance with the License. 
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+   
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
