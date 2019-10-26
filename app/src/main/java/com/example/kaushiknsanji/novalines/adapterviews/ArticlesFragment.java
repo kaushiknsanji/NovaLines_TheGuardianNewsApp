@@ -59,6 +59,7 @@ import com.example.kaushiknsanji.novalines.utils.RecyclerViewItemDecorUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsArticlesLoader;
 
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -1002,10 +1003,10 @@ public class ArticlesFragment extends Fragment
      * Subclass of {@link BaseRecyclerViewScrollListener} that listens to the scroll event
      * received when the scroll reaches/leaves the last y items in the {@link RecyclerView}
      */
-    private class RecyclerViewScrollListener extends BaseRecyclerViewScrollListener {
+    private static class RecyclerViewScrollListener extends BaseRecyclerViewScrollListener {
 
-        //Stores the fragment that is registered to this ScrollListener
-        private Fragment fragment;
+        //Stores weak reference to the fragment that is registered to this ScrollListener
+        private final WeakReference<Fragment> mFragmentWeakReference;
 
         /**
          * Constructor of {@link BaseRecyclerViewScrollListener}
@@ -1017,7 +1018,7 @@ public class ArticlesFragment extends Fragment
          */
         RecyclerViewScrollListener(Fragment fragment, int bottomYEndItemPosForTrigger) {
             super(bottomYEndItemPosForTrigger);
-            this.fragment = fragment;
+            mFragmentWeakReference = new WeakReference<>(fragment);
         }
 
         /**
@@ -1031,8 +1032,9 @@ public class ArticlesFragment extends Fragment
         @Override
         public void onBottomReached(int verticalScrollAmount) {
             //Propagating the call to the Parent Fragment - HeadlinesFragment
-            if (getParentFragment() != null) {
-                ((HeadlinesFragment) getParentFragment()).showPaginationPanel(fragment, verticalScrollAmount > 0);
+            Fragment fragment = mFragmentWeakReference.get();
+            if (fragment != null && fragment.getParentFragment() != null) {
+                ((HeadlinesFragment) fragment.getParentFragment()).showPaginationPanel(fragment, verticalScrollAmount > 0);
             }
         }
 
