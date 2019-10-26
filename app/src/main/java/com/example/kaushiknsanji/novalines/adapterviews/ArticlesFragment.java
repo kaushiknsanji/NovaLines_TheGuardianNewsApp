@@ -32,7 +32,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,6 +51,7 @@ import com.example.kaushiknsanji.novalines.observers.BaseRecyclerViewScrollListe
 import com.example.kaushiknsanji.novalines.presenters.BookmarkActionPresenter;
 import com.example.kaushiknsanji.novalines.presenters.FavoriteActionPresenter;
 import com.example.kaushiknsanji.novalines.utils.IntentUtility;
+import com.example.kaushiknsanji.novalines.utils.Logger;
 import com.example.kaushiknsanji.novalines.utils.NewsURLGenerator;
 import com.example.kaushiknsanji.novalines.utils.PreferencesObserverUtility;
 import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
@@ -552,7 +552,7 @@ public class ArticlesFragment extends Fragment
                 //Updating the item position reference
                 mVisibleItemViewPosition = position;
 
-                Log.d(LOG_TAG + "_" + mNewsTopicId, "scrollToItemPosition: Updating to position " + mVisibleItemViewPosition);
+                Logger.d(LOG_TAG + "_" + mNewsTopicId, "scrollToItemPosition: Updating to position " + mVisibleItemViewPosition);
 
                 if (scrollImmediate) {
                     //Scrolling to the item position immediately
@@ -617,7 +617,7 @@ public class ArticlesFragment extends Fragment
         if (id == mLoaderIds[0]) {
             //Returning the Instance of NewsArticlesLoader
             URL sectionURL = mUrlGenerator.createSectionURL(mNewsTopicId);
-            Log.d(LOG_TAG + "_" + mNewsTopicId, "onCreateLoader: SectionURL " + sectionURL);
+            Logger.d(LOG_TAG + "_" + mNewsTopicId, "onCreateLoader: SectionURL " + sectionURL);
             return new NewsArticlesLoader(getActivity(), sectionURL);
         }
 
@@ -658,12 +658,12 @@ public class ArticlesFragment extends Fragment
 
                 if (!newsArticlesLoader.getNetworkConnectivityStatus()) {
                     //Reporting Network Failure when False
-                    Log.d(LOG_TAG + "_" + mNewsTopicId, "onLoadFinished: Network Failure");
+                    Logger.d(LOG_TAG + "_" + mNewsTopicId, "onLoadFinished: Network Failure");
                     //Displaying the "Network Error Layout"
                     showNetworkErrorLayout();
                 } else {
                     //When there is NO network issue and the current page has no data to be shown
-                    Log.d(LOG_TAG + "_" + mNewsTopicId, "onLoadFinished: NO DATA RETURNED");
+                    Logger.d(LOG_TAG + "_" + mNewsTopicId, "onLoadFinished: NO DATA RETURNED");
 
                     //Retrying for Paginated Results if the current page is not the first page
                     if (mIsPaginatedView && PreferencesUtility.getStartPageIndex(getContext(), mPreferences) > 1) {
@@ -765,7 +765,7 @@ public class ArticlesFragment extends Fragment
      * and takes care of setting the dependent view visibility flags to false
      */
     private void hideErrorView() {
-        Log.d(LOG_TAG + "_" + mNewsTopicId, "hideErrorView: Started");
+        Logger.d(LOG_TAG + "_" + mNewsTopicId, "hideErrorView: Started");
         //Hiding the "Error View"
         mErrorView.setVisibility(View.GONE);
         //Setting the "No Feed Layout" visibility flag to false
@@ -828,7 +828,7 @@ public class ArticlesFragment extends Fragment
      */
     @Override
     public void onItemDataSwapped() {
-        Log.d(LOG_TAG + "_" + mNewsTopicId, "onItemDataSwapped: News Articles data loaded successfully for " + mNewsTopicId);
+        Logger.d(LOG_TAG + "_" + mNewsTopicId, "onItemDataSwapped: News Articles data loaded successfully for " + mNewsTopicId);
         //Ensuring the "Error View" is hidden
         hideErrorView();
 
@@ -928,7 +928,7 @@ public class ArticlesFragment extends Fragment
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (!mKeysToExclude.contains(key)) {
-            Log.d(LOG_TAG + "_" + mNewsTopicId, "onSharedPreferenceChanged: key " + key);
+            Logger.d(LOG_TAG + "_" + mNewsTopicId, "onSharedPreferenceChanged: key " + key);
             mVisibleItemViewPosition = 0;
 
             if (getUserVisibleHint()) {
@@ -954,7 +954,7 @@ public class ArticlesFragment extends Fragment
     public void checkAndReloadData() {
         if (getActivity() != null && getUserVisibleHint()) {
             //When attached to an Activity and the current fragment is the one viewed by the user
-            Log.d(LOG_TAG + "_" + mNewsTopicId, "checkAndReloadData: Started");
+            Logger.d(LOG_TAG + "_" + mNewsTopicId, "checkAndReloadData: Started");
             //Retrieving the current loader of the Fragment
             LoaderManager loaderManager = getLoaderManager();
             Loader<List<NewsArticleInfo>> loader = loaderManager.getLoader(mLoaderIds[0]);
@@ -969,7 +969,7 @@ public class ArticlesFragment extends Fragment
                 String newRequestURLStr = mUrlGenerator.createSectionURL(mNewsTopicId).toExternalForm();
                 if (!newRequestURLStr.equals(requestURLStr)) {
                     //When the URLs are different, reload the data
-                    Log.d(LOG_TAG + "_" + mNewsTopicId, "checkAndReloadData: Reloading data");
+                    Logger.d(LOG_TAG + "_" + mNewsTopicId, "checkAndReloadData: Reloading data");
                     triggerLoad(true);
                 }
             }

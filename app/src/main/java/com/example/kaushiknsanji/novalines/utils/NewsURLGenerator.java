@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.example.kaushiknsanji.novalines.BuildConfig;
 import com.example.kaushiknsanji.novalines.R;
@@ -158,7 +157,7 @@ public class NewsURLGenerator {
         try {
             urlObject = new URL(uriBuilder.toString());
         } catch (MalformedURLException e) {
-            Log.e(LOG_TAG, "Error occurred while forming the URL\n", e);
+            Logger.e(LOG_TAG, "Error occurred while forming the URL\n", e);
         }
 
         //Returning the URL Object formed

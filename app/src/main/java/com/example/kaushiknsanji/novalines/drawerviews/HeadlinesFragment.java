@@ -28,7 +28,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +42,7 @@ import com.example.kaushiknsanji.novalines.adapterviews.HighlightsFragment;
 import com.example.kaushiknsanji.novalines.adapterviews.MoreNewsFragment;
 import com.example.kaushiknsanji.novalines.interfaces.IPaginationView;
 import com.example.kaushiknsanji.novalines.presenters.PaginationPresenter;
+import com.example.kaushiknsanji.novalines.utils.Logger;
 import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
 
 import java.util.ArrayList;
@@ -389,7 +389,7 @@ public class HeadlinesFragment extends Fragment
      */
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        Log.d(LOG_TAG, "onTabSelected: Started");
+        Logger.d(LOG_TAG, "onTabSelected: Started");
         //Fix added to correct the Position pointed by the ViewPager: START
         //(Directly touching the tab instead of swiping can result in this)
         int newPosition = tab.getPosition();
@@ -401,7 +401,7 @@ public class HeadlinesFragment extends Fragment
 
         //Retrieving the Current Fragment from ViewPager
         Fragment fragment = mViewPagerAdapter.getRegisteredFragment(newPosition);
-        Log.d(LOG_TAG, "onTabSelected: Current Fragment is " + fragment);
+        Logger.d(LOG_TAG, "onTabSelected: Current Fragment is " + fragment);
         if (fragment != null) {
             //When child fragment is attached
 
@@ -411,7 +411,7 @@ public class HeadlinesFragment extends Fragment
             if (fragment instanceof ArticlesFragment) {
                 //For ArticlesFragment instances
                 ArticlesFragment articlesFragment = (ArticlesFragment) fragment;
-                Log.d(LOG_TAG, "onTabSelected: Current ArticlesFragment is for " + articlesFragment.getNewsTopicId());
+                Logger.d(LOG_TAG, "onTabSelected: Current ArticlesFragment is for " + articlesFragment.getNewsTopicId());
                 if (articlesFragment.isPaginatedView()) {
                     //Resetting the 'page' setting and 'endIndex' setting when the fragment is
                     //for News Topics with Paginated results
@@ -449,7 +449,7 @@ public class HeadlinesFragment extends Fragment
      */
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-        Log.d(LOG_TAG, "onTabUnselected: Started");
+        Logger.d(LOG_TAG, "onTabUnselected: Started");
         //Retrieving the tab position
         int oldPosition = tab.getPosition();
         //Retrieving the Old Fragment from ViewPager
@@ -523,15 +523,15 @@ public class HeadlinesFragment extends Fragment
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(PreferencesUtility.getStartPageIndexKey(requireContext())) || key.equals(PreferencesUtility.getLastPageIndexKey(requireContext()))) {
             //When the 'page' (Page to Display) setting  or the 'endIndex' setting value is changed
-            Log.d(LOG_TAG, "onSharedPreferenceChanged: Updating " + key);
+            Logger.d(LOG_TAG, "onSharedPreferenceChanged: Updating " + key);
 
             //Retrieving the current Tab's Fragment
             Fragment fragment = mViewPagerAdapter.getRegisteredFragment(mViewPager.getCurrentItem());
             if (fragment instanceof ArticlesFragment) {
                 //Casting to ArticlesFragment
                 ArticlesFragment articlesFragment = (ArticlesFragment) fragment;
-                Log.d(LOG_TAG, "onSharedPreferenceChanged: Updating for " + articlesFragment.getNewsTopicId());
-                Log.d(LOG_TAG, "onSharedPreferenceChanged: isVisible " + articlesFragment.getUserVisibleHint());
+                Logger.d(LOG_TAG, "onSharedPreferenceChanged: Updating for " + articlesFragment.getNewsTopicId());
+                Logger.d(LOG_TAG, "onSharedPreferenceChanged: isVisible " + articlesFragment.getUserVisibleHint());
                 if (articlesFragment.isPaginatedView() && articlesFragment.getUserVisibleHint()) {
                     //When the fragment is having paginated results
                     //and is the one currently being viewed by the user
@@ -608,7 +608,7 @@ public class HeadlinesFragment extends Fragment
      * @param newsCategoryIdStr    The ID of the News Category Tab that is requested to be subscribed and launched
      */
     public void subscribeAndLaunchNewsCategory(String newsCategoryTitleStr, String newsCategoryIdStr) {
-        Log.d(LOG_TAG, "subscribeAndLaunchNewsCategory: Started");
+        Logger.d(LOG_TAG, "subscribeAndLaunchNewsCategory: Started");
         //Retrieving the current tab position of MoreNewsFragment
         int currentMoreFragmentPosition = mViewPagerAdapter.getItemPositionByTitle(getString(R.string.more_news_tab_title_text));
         //Creating the instance of the News Fragment for the News Category subscribed

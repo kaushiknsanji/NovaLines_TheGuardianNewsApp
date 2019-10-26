@@ -16,8 +16,6 @@
 
 package com.example.kaushiknsanji.novalines.utils;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,7 +46,7 @@ public class JsonUtility {
             //Making the HTTP Request to retrieve the JSON Response
             jsonResponse = makeHttpGetRequest(requestURLObject);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error occurred while closing the URL Stream\n", e);
+            Logger.e(LOG_TAG, "Error occurred while closing the URL Stream\n", e);
         }
 
         //If the response received is null or empty, then return as NULL
@@ -88,11 +86,11 @@ public class JsonUtility {
                 jsonResponse = readStream(urlConnectionInputStream);
             } else {
                 //When the response is not OK(200), then log the error code
-                Log.e(LOG_TAG, "HTTP GET Request failed with the code " + urlConnection.getResponseCode() + " for URL " + urlObject);
+                Logger.e(LOG_TAG, "HTTP GET Request failed with the code " + urlConnection.getResponseCode() + " for URL " + urlObject);
             }
 
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error occurred while opening connection to URL\n", e);
+            Logger.e(LOG_TAG, "Error occurred while opening connection to URL\n", e);
         } finally {
 
             if (urlConnection != null) {
@@ -130,7 +128,7 @@ public class JsonUtility {
                 responseBuilder.append(readStr);
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error occurred while reading the response stream\n", e);
+            Logger.e(LOG_TAG, "Error occurred while reading the response stream\n", e);
             //resetting the StringBuilder to empty string
             responseBuilder.delete(0, responseBuilder.length());
         }

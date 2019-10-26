@@ -39,7 +39,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,6 +61,7 @@ import com.example.kaushiknsanji.novalines.presenters.BookmarkActionPresenter;
 import com.example.kaushiknsanji.novalines.presenters.FavoriteActionPresenter;
 import com.example.kaushiknsanji.novalines.presenters.PaginationPresenter;
 import com.example.kaushiknsanji.novalines.utils.IntentUtility;
+import com.example.kaushiknsanji.novalines.utils.Logger;
 import com.example.kaushiknsanji.novalines.utils.NewsURLGenerator;
 import com.example.kaushiknsanji.novalines.utils.PreferencesObserverUtility;
 import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
@@ -744,7 +744,7 @@ public class RandomNewsFragment extends Fragment
      */
     @Override
     public void onItemDataSwapped() {
-        Log.d(LOG_TAG, "onItemDataSwapped: News Articles data loaded successfully");
+        Logger.d(LOG_TAG, "onItemDataSwapped: News Articles data loaded successfully");
         //Ensuring the "Error View" is hidden
         hideErrorView();
 
@@ -789,7 +789,7 @@ public class RandomNewsFragment extends Fragment
                 //Updating the item position reference
                 mVisibleItemViewPosition = position;
 
-                Log.d(LOG_TAG, "scrollToItemPosition: Updating to position " + mVisibleItemViewPosition);
+                Logger.d(LOG_TAG, "scrollToItemPosition: Updating to position " + mVisibleItemViewPosition);
 
                 if (scrollImmediate) {
                     //Scrolling to the item position immediately
@@ -914,7 +914,7 @@ public class RandomNewsFragment extends Fragment
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (!mKeysToExclude.contains(key)) {
-            Log.d(LOG_TAG, "onSharedPreferenceChanged: key " + key);
+            Logger.d(LOG_TAG, "onSharedPreferenceChanged: key " + key);
             //Resetting to the position of top item
             mVisibleItemViewPosition = 0;
 
@@ -931,7 +931,7 @@ public class RandomNewsFragment extends Fragment
     public void checkAndReloadData() {
         if (getActivity() != null && !TextUtils.isEmpty(mSearchQueryStr)) {
             //When attached to an Activity and there has been a search previously executed
-            Log.d(LOG_TAG, "checkAndReloadData: Started");
+            Logger.d(LOG_TAG, "checkAndReloadData: Started");
             //Retrieving the current loader of the Fragment
             LoaderManager loaderManager = getLoaderManager();
             Loader<List<NewsArticleInfo>> loader = loaderManager.getLoader(mLoaderIds[0]);
@@ -946,7 +946,7 @@ public class RandomNewsFragment extends Fragment
                 String newRequestURLStr = mUrlGenerator.createSearchURL(mSearchQueryStr).toExternalForm();
                 if (!newRequestURLStr.equals(requestURLStr)) {
                     //When the URLs are different, reload the data
-                    Log.d(LOG_TAG, "checkAndReloadData: Reloading data");
+                    Logger.d(LOG_TAG, "checkAndReloadData: Reloading data");
                     triggerLoad(true);
                 }
             }
@@ -987,7 +987,7 @@ public class RandomNewsFragment extends Fragment
         if (id == mLoaderIds[0]) {
             //Returning the Instance of NewsArticlesLoader
             URL searchURL = mUrlGenerator.createSearchURL(mSearchQueryStr);
-            Log.d(LOG_TAG, "onCreateLoader: SearchURL " + searchURL);
+            Logger.d(LOG_TAG, "onCreateLoader: SearchURL " + searchURL);
             return new NewsArticlesLoader(getActivity(), searchURL);
         }
         return null;
@@ -1024,12 +1024,12 @@ public class RandomNewsFragment extends Fragment
 
                 if (!newsArticlesLoader.getNetworkConnectivityStatus()) {
                     //Reporting Network Failure when False
-                    Log.d(LOG_TAG, "onLoadFinished: Network Failure");
+                    Logger.d(LOG_TAG, "onLoadFinished: Network Failure");
                     //Displaying the "Network Error Layout"
                     showNetworkErrorLayout();
                 } else {
                     //When there is NO network issue and the current page has no data to be shown
-                    Log.d(LOG_TAG, "onLoadFinished: NO DATA RETURNED");
+                    Logger.d(LOG_TAG, "onLoadFinished: NO DATA RETURNED");
 
                     //Retrying if the current page is not the first page
                     if (PreferencesUtility.getStartPageIndex(getContext(), mPreferences) > 1) {

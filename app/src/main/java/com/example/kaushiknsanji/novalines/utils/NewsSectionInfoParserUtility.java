@@ -17,7 +17,6 @@
 package com.example.kaushiknsanji.novalines.utils;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.models.NewsSectionInfo;
@@ -117,7 +116,7 @@ public class NewsSectionInfoParserUtility {
             //Retrieving the article count based on the Section: END
 
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "Error occurred while parsing the JSON Response\n", e);
+            Logger.e(LOG_TAG, "Error occurred while parsing the JSON Response\n", e);
         }
 
         //Returning the NewsSectionInfo object for the News Section URL

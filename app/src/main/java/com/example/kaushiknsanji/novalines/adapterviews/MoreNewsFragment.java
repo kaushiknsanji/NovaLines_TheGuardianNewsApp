@@ -23,7 +23,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +35,7 @@ import android.widget.TextView;
 import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.drawerviews.HeadlinesFragment;
 import com.example.kaushiknsanji.novalines.utils.IntentUtility;
+import com.example.kaushiknsanji.novalines.utils.Logger;
 import com.example.kaushiknsanji.novalines.utils.TextAppearanceUtility;
 
 /**
@@ -105,7 +105,7 @@ public class MoreNewsFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreateView: Started with savedInstanceState as " + savedInstanceState);
+        Logger.d(LOG_TAG, "onCreateView: Started with savedInstanceState as " + savedInstanceState);
         //Inflating the layout 'R.layout.more_news_layout'
         View rootView = inflater.inflate(R.layout.more_news_layout, container, false);
 

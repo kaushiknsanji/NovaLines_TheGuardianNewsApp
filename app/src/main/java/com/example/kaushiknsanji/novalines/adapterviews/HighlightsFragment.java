@@ -33,7 +33,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,6 +48,7 @@ import com.example.kaushiknsanji.novalines.errorviews.NetworkErrorFragment;
 import com.example.kaushiknsanji.novalines.models.NewsSectionInfo;
 import com.example.kaushiknsanji.novalines.utils.DateUtility;
 import com.example.kaushiknsanji.novalines.utils.IntentUtility;
+import com.example.kaushiknsanji.novalines.utils.Logger;
 import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
 import com.example.kaushiknsanji.novalines.utils.RecyclerViewUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsHighlightsLoader;
@@ -153,7 +153,7 @@ public class HighlightsFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreateView: Started");
+        Logger.d(LOG_TAG, "onCreateView: Started");
         //Inflating the layout 'R.layout.highlights_layout'
         View rootView = inflater.inflate(R.layout.highlights_layout, container, false);
 
@@ -244,7 +244,7 @@ public class HighlightsFragment extends Fragment
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(LOG_TAG, "onPause: Started");
+        Logger.d(LOG_TAG, "onPause: Started");
 
         //UnRegistering the Preference Change Listener
         mPreferences.unregisterOnSharedPreferenceChangeListener(this);
@@ -331,7 +331,7 @@ public class HighlightsFragment extends Fragment
      * and triggers the re-calculation of Start Date for the News if in Preset mode (False condition)
      */
     private void enforceDateSetting() {
-        Log.d(LOG_TAG, "enforceDateSetting: Started");
+        Logger.d(LOG_TAG, "enforceDateSetting: Started");
 
         if (!PreferencesUtility.getStartPeriodOverrideValue(getContext(), mPreferences)) {
             //When in Preset mode (False condition)
@@ -379,7 +379,7 @@ public class HighlightsFragment extends Fragment
                     //Updating the above value in the 'from-date' setting
                     PreferencesUtility.updateStartPeriodValue(getContext(), mPreferences, dateCalendar.getTimeInMillis());
 
-                    Log.d(LOG_TAG, "enforceDateSetting: Reapplied");
+                    Logger.d(LOG_TAG, "enforceDateSetting: Reapplied");
 
                     //Updating the 'date-today' setting to reflect the current day's date
                     PreferencesUtility.updateCurrentDayDateValue(getContext(), mPreferences, todayCalendar.getTimeInMillis());
@@ -580,7 +580,7 @@ public class HighlightsFragment extends Fragment
 
                         if (!highlightsLoader.getNetworkConnectivityStatus()) {
                             //Reporting Network Failure when False
-                            Log.d(LOG_TAG, "onLoadFinished: Network Failure");
+                            Logger.d(LOG_TAG, "onLoadFinished: Network Failure");
                             //Displaying the "Network Error Layout"
                             showNetworkErrorLayout();
                         }
@@ -694,7 +694,7 @@ public class HighlightsFragment extends Fragment
      */
     @Override
     public void onItemDataSwapped() {
-        Log.d(LOG_TAG, "onItemDataSwapped: News Highlights data loaded successfully");
+        Logger.d(LOG_TAG, "onItemDataSwapped: News Highlights data loaded successfully");
         //Ensuring the "Error View" is hidden
         hideErrorView();
 
@@ -718,7 +718,7 @@ public class HighlightsFragment extends Fragment
      */
     @Override
     public void onItemClick(NewsSectionInfo newsSectionInfo) {
-        Log.d(LOG_TAG, "onItemClick: Started");
+        Logger.d(LOG_TAG, "onItemClick: Started");
         //Opening the News Category Tab for the News Section Title retrieved from the Item selected
         if (getParentFragment() != null) {
             ((HeadlinesFragment) getParentFragment()).openNewsCategoryTabByTitle(newsSectionInfo.getSectionName(), newsSectionInfo.getSectionId());
@@ -737,7 +737,7 @@ public class HighlightsFragment extends Fragment
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(PreferencesUtility.getStartPeriodKey(requireContext()))) {
             //When the Start Date of the News is changed
-            Log.d(LOG_TAG, "onSharedPreferenceChanged: Updating " + key);
+            Logger.d(LOG_TAG, "onSharedPreferenceChanged: Updating " + key);
 
             //Triggering a new data load only if the Start date value has changed
             //(This also prevents duplicate triggers)

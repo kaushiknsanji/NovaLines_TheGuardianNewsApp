@@ -32,7 +32,6 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.kaushiknsanji.novalines.adapters.NavRecyclerAdapter;
@@ -43,6 +42,7 @@ import com.example.kaushiknsanji.novalines.drawerviews.HeadlinesFragment;
 import com.example.kaushiknsanji.novalines.drawerviews.RandomNewsFragment;
 import com.example.kaushiknsanji.novalines.models.NavDrawerItem;
 import com.example.kaushiknsanji.novalines.settings.SettingsActivity;
+import com.example.kaushiknsanji.novalines.utils.Logger;
 import com.example.kaushiknsanji.novalines.utils.PreferencesUtility;
 
 import java.util.ArrayList;
@@ -271,7 +271,7 @@ public class NewsActivity extends AppCompatActivity
      * @param toolbar is the {@link Toolbar} to which the Drawer Toggle needs to be setup with
      */
     private void setupDrawerToggle(Toolbar toolbar) {
-        Log.d(LOG_TAG, "setupDrawerToggle: Started");
+        Logger.d(LOG_TAG, "setupDrawerToggle: Started");
         if (mDrawerToggle != null) {
             //Removing any old Drawer Listener if present
             mDrawerLayout.removeDrawerListener(mDrawerToggle);

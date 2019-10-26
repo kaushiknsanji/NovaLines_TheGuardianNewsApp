@@ -26,7 +26,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +33,7 @@ import android.widget.TextView;
 
 import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.models.NewsSectionInfo;
+import com.example.kaushiknsanji.novalines.utils.Logger;
 import com.example.kaushiknsanji.novalines.utils.NewsSectionInfoDiffUtility;
 import com.example.kaushiknsanji.novalines.workers.NewsHighlightsDiffLoader;
 
@@ -248,7 +248,7 @@ public class HighlightsAdapter extends RecyclerView.Adapter<HighlightsAdapter.Vi
      * @param newSectionInfoList is the new list of {@link NewsSectionInfo} objects which is the Dataset of the Adapter
      */
     private void doSwapItemData(DiffUtil.DiffResult diffResult, @NonNull List<NewsSectionInfo> newSectionInfoList) {
-        Log.d(LOG_TAG, "doSwapItemData: Started");
+        Logger.d(LOG_TAG, "doSwapItemData: Started");
         //Informing the adapter about the changes required, so that it triggers the notify accordingly
         diffResult.dispatchUpdatesTo(this);
 
@@ -256,7 +256,7 @@ public class HighlightsAdapter extends RecyclerView.Adapter<HighlightsAdapter.Vi
         mNewsSectionInfoList.clear();
         mNewsSectionInfoList.addAll(newSectionInfoList);
 
-        Log.d(LOG_TAG, "doSwapItemData: mItemDataSwapListener " + mItemDataSwapListener);
+        Logger.d(LOG_TAG, "doSwapItemData: mItemDataSwapListener " + mItemDataSwapListener);
         //Dispatching the Item Data Swap event to the listener
         if (mItemDataSwapListener != null) {
             mItemDataSwapListener.onItemDataSwapped();
@@ -383,7 +383,7 @@ public class HighlightsAdapter extends RecyclerView.Adapter<HighlightsAdapter.Vi
             if (adapterPosition > RecyclerView.NO_POSITION) {
                 //Verifying the validity of the position before proceeding
 
-                Log.d(LOG_TAG, "onClick: mItemClickListener " + mItemClickListener);
+                Logger.d(LOG_TAG, "onClick: mItemClickListener " + mItemClickListener);
                 //Propagating the call to the listener with the selected item's data
                 if (mItemClickListener != null) {
                     mItemClickListener.onItemClick(mNewsSectionInfoList.get(adapterPosition));

@@ -32,7 +32,6 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,6 +44,7 @@ import android.widget.TextView;
 
 import com.example.kaushiknsanji.novalines.R;
 import com.example.kaushiknsanji.novalines.models.NewsArticleInfo;
+import com.example.kaushiknsanji.novalines.utils.Logger;
 import com.example.kaushiknsanji.novalines.utils.NewsArticleInfoDiffUtility;
 import com.example.kaushiknsanji.novalines.utils.TextAppearanceUtility;
 import com.example.kaushiknsanji.novalines.workers.ImageDownloaderFragment;
@@ -456,7 +456,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
      * @param newArticleInfoList is the new list of {@link NewsArticleInfo} objects which is the Dataset of the Adapter
      */
     private void doSwapItemData(DiffUtil.DiffResult diffResult, List<NewsArticleInfo> newArticleInfoList) {
-        Log.d(LOG_TAG + "_" + mNewsTopicId, "doSwapItemData: Started");
+        Logger.d(LOG_TAG + "_" + mNewsTopicId, "doSwapItemData: Started");
 
         //Informing the adapter about the changes required, so that it triggers the notify accordingly
         diffResult.dispatchUpdatesTo(this);
@@ -779,7 +779,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
                         break;
                     default:
                         //For the entire Item View
-                        Log.d(LOG_TAG, "onClick: mItemClickListener " + mItemClickListener);
+                        Logger.d(LOG_TAG, "onClick: mItemClickListener " + mItemClickListener);
                         //Propagating the call to the listener with the selected item's data
                         if (mItemClickListener != null) {
                             mItemClickListener.onItemClick(newsArticleInfo);
