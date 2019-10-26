@@ -32,8 +32,10 @@
     <TextView
         android:id="@+id/nav_item_text_id"
         style="@style/ConstraintRightCenterVerticalStyle"
-        android:layout_width="@dimen/match_constraint_0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="0"
         android:layout_marginLeft="@dimen/nav_item_text_margin_left"
         android:layout_marginStart="@dimen/nav_item_text_margin_left"
         android:textColor="@color/nav_item_text_color_selector"

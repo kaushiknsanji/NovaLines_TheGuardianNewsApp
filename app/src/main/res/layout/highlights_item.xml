@@ -55,8 +55,10 @@
 
         <TextView
             android:id="@+id/hl_article_section_text_id"
-            android:layout_width="@dimen/match_constraint_0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_bias="0"
             android:layout_marginBottom="@dimen/hl_article_section_text_margin_bottom"
             android:layout_marginTop="@dimen/hl_article_section_text_margin_top"
             android:ellipsize="end"

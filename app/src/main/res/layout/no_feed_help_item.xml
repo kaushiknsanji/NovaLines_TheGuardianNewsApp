@@ -53,8 +53,10 @@
 
         <TextView
             android:id="@+id/nfhi_resolution_text_id"
-            android:layout_width="@dimen/match_constraint_0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_bias="0"
             android:layout_marginLeft="@dimen/nfhi_internal_margin"
             android:layout_marginStart="@dimen/nfhi_internal_margin"
             android:textColor="@color/nfhiResolutionTextColor"

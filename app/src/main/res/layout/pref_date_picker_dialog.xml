@@ -32,7 +32,7 @@
     <DatePicker
         android:id="@+id/pref_date_picker_id"
         style="@style/ConstraintCenterHorizontalStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/match_constraint_0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/dp_bottom_space_id"
         app:layout_constraintTop_toBottomOf="@id/dp_top_space_id" />

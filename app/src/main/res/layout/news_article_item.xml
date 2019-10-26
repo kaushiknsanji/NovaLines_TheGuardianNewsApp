@@ -62,8 +62,10 @@
 
         <TextView
             android:id="@+id/article_title_text_id"
-            android:layout_width="@dimen/match_constraint_0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_bias="0"
             android:layout_marginTop="@dimen/news_item_8dip_margin"
             android:textColor="@color/newsTitleTextColor"
             android:textSize="@dimen/news_title_text_size"
@@ -77,8 +79,10 @@
 
         <TextView
             android:id="@+id/article_trail_text_id"
-            android:layout_width="@dimen/match_constraint_0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_bias="0"
             android:ellipsize="end"
             android:maxLines="@integer/article_trail_text_max_lines_expanded"
             android:textColor="@color/newsTrialTextColor"
@@ -92,9 +96,11 @@
 
         <TextView
             android:id="@+id/article_publisher_text_id"
-            android:layout_width="@dimen/match_constraint_0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
             android:layout_marginTop="@dimen/news_item_4dip_margin"
+            app:layout_constraintHorizontal_bias="0"
             android:ellipsize="end"
             android:maxLines="@integer/article_publisher_text_max_lines_collapsed"
             android:textColor="@color/newsPublisherTextColor"
@@ -110,8 +116,10 @@
 
         <TextView
             android:id="@+id/article_published_date_text_id"
-            android:layout_width="@dimen/match_constraint_0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_bias="0"
             android:layout_marginBottom="@dimen/news_item_4dip_margin"
             android:layout_marginTop="@dimen/news_item_8dip_margin"
             android:textColor="@color/newsDateTextColorTeal900"
