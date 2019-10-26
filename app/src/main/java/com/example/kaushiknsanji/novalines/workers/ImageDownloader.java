@@ -19,7 +19,10 @@ package com.example.kaushiknsanji.novalines.workers;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.content.AsyncTaskLoader;
+import android.text.TextUtils;
+import android.util.Log;
 
+import com.example.kaushiknsanji.novalines.cache.BitmapImageCache;
 import com.example.kaushiknsanji.novalines.utils.ImageUtility;
 import com.example.kaushiknsanji.novalines.utils.NetworkUtility;
 
@@ -30,6 +33,9 @@ import com.example.kaushiknsanji.novalines.utils.NetworkUtility;
  * @author Kaushik N Sanji
  */
 public class ImageDownloader extends AsyncTaskLoader<Bitmap> {
+
+    //Constant used for logs
+    private static final String LOG_TAG = ImageDownloader.class.getSimpleName();
 
     //Integer Constant of the Loader
     public final static int IMAGE_LOADER = 5;
@@ -61,15 +67,36 @@ public class ImageDownloader extends AsyncTaskLoader<Bitmap> {
      */
     @Override
     public Bitmap loadInBackground() {
-        //Proceeding to download when the Internet Connectivity is established
-        if (NetworkUtility.isNetworkConnected(getContext())) {
-            //Downloading the Image from URL and returning the Bitmap
-            Bitmap downloadedBitmap = ImageUtility.downloadFromURL(mImageURLStr);
-            if (downloadedBitmap != null) {
-                //Uploading the Bitmap to GPU for caching in background thread (for faster loads)
-                downloadedBitmap.prepareToDraw();
+        if (!TextUtils.isEmpty(mImageURLStr)) {
+            //When we have the Image URL
+            try {
+                //Proceeding to download when the Internet Connectivity is established
+                if (NetworkUtility.isNetworkConnected(getContext())) {
+                    //Looking up for the Image in Memory Cache
+                    Bitmap cachedBitmap = BitmapImageCache.getBitmapFromCache(mImageURLStr);
+                    if (cachedBitmap != null) {
+                        //When Bitmap image was present in Memory Cache, return the Bitmap retrieved
+                        return cachedBitmap;
+                    } else {
+                        //When Bitmap image was NOT present in Memory Cache, download the Image from URL
+                        Bitmap downloadedBitmap = ImageUtility.downloadFromURL(mImageURLStr);
+                        if (downloadedBitmap != null) {
+                            //On Successful download
+
+                            //Uploading the Bitmap to GPU for caching in background thread (for faster loads)
+                            downloadedBitmap.prepareToDraw();
+
+                            //Adding the downloaded Bitmap to cache
+                            BitmapImageCache.addBitmapToCache(mImageURLStr, downloadedBitmap);
+
+                            return downloadedBitmap; //Returning the Bitmap downloaded
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "loadInBackground: Failed while downloading the bitmap for the URL "
+                        + mImageURLStr, e);
             }
-            return downloadedBitmap; //Returning the Bitmap downloaded
         }
 
         //For all else, returning null
@@ -174,9 +201,8 @@ public class ImageDownloader extends AsyncTaskLoader<Bitmap> {
      */
     private void releaseResources() {
         //Invalidating the Loader data
-        if (mDownloadedBitmap != null) {
-            mDownloadedBitmap = null;
-        }
+        mDownloadedBitmap = null;
+        mImageURLStr = null;
     }
 
     /**

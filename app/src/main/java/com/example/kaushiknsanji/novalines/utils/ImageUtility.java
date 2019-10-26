@@ -22,8 +22,6 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.example.kaushiknsanji.novalines.cache.BitmapImageCache;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -96,11 +94,6 @@ public class ImageUtility {
                 } catch (IOException e) {
                     Log.e(LOG_TAG, "Error occurred while closing the Image Input Stream\n", e);
                 }
-            }
-
-            //Adding the Bitmap to Memory Cache if generated
-            if (bitmap != null) {
-                BitmapImageCache.addBitmapToCache(imageURLStr, bitmap);
             }
         }
 
@@ -219,10 +212,10 @@ public class ImageUtility {
 
         //Declaring Byte Array with a buffer size to buffer the content read
         byte[] byteBuff = new byte[4096];
-        int bytesRead = 0; //Initializing and defaulting the Bytes read to 0
+        int bytesRead; //Saves the Bytes read
 
         //Declaring the Byte Array to be returned for processing
-        byte[] imageByteArray = null;
+        byte[] imageByteArray;
 
         //Writing the Bytes read to the ByteArrayOutputStream
         try {
