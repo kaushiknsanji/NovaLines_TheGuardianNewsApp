@@ -278,6 +278,12 @@ This can be viewed by going into the Drawer menu item **"About"** of the `NewsAc
 	* Updated Gradle version, made related changes and applied valid lint corrections.
 	* Added Copyright info.
 	* Regenerated App Icons.
+* **[release_v1.0](https://github.com/kaushiknsanji/NovaLines_TheGuardianNewsApp/tree/release_v1.0)**
+	* Used `ConstrainedWidth`/`ConstrainedHeight` to enforce `WRAP_CONTENT` constraints for certain Item Views and Dialog Layouts - ([commit](https://github.com/kaushiknsanji/NovaLines_TheGuardianNewsApp/commit/d2557a64a9f13112326c3fc1d224ca9ffc259c58)).
+	* "Handling of Null Image links", and "Reading from and Writing Bitmaps to Memory cache" is now taken care by the `ImageDownloader` AsyncTaskLoader - ([commit](https://github.com/kaushiknsanji/NovaLines_TheGuardianNewsApp/commit/3687cdcea82a311b15218a7003c47a8d54c00bc1)).
+	* Enabled logging for debuggable build types only, through the use of custom [Logger](https://github.com/kaushiknsanji/NovaLines_TheGuardianNewsApp/blob/release_v1.0/app/src/main/java/com/example/kaushiknsanji/novalines/utils/Logger.java) which is a wrapper to the `android.util.Log` - ([commit](https://github.com/kaushiknsanji/NovaLines_TheGuardianNewsApp/commit/7122e6f9d86aba9539b875c41301dc812ac84bfb)).
+	* Changed certain inner classes to static nested classes to prevent memory leaks - ([commit](https://github.com/kaushiknsanji/NovaLines_TheGuardianNewsApp/commit/8239456ae7fb9121330a8e4b8431544056e1efb7)).
+	* Configured an Activity Alias to launch the `NewsActivity` - ([commit](https://github.com/kaushiknsanji/NovaLines_TheGuardianNewsApp/commit/145f01a3449a10dd4bd74e3871e564123ae75871)).
 	
 ---
 
